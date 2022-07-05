@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
 	"github.com/jmbarzee/show/common/vibe/span"
@@ -259,7 +259,7 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
 		Stabalizable: &Bounce{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Bounce{
 				ColorStart: color.Red,
 			},

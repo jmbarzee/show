@@ -3,8 +3,8 @@ package shifter
 import (
 	"testing"
 
-	"github.com/jmbarzee/show/common/ifaces"
-	"github.com/jmbarzee/show/common/light"
+	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/testutil"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 	"github.com/jmbarzee/space"
@@ -25,7 +25,7 @@ func TestDirectionalShift(t *testing.T) {
 			},
 			Instants: []Instant{
 				{
-					Light: &light.Basic{
+					Light: &testutil.Light{
 						Orientation: space.Spherical{
 							R: 1,
 							P: 1,
@@ -35,7 +35,7 @@ func TestDirectionalShift(t *testing.T) {
 					ExpectedShift: aFloat * 2,
 				},
 				{
-					Light: &light.Basic{
+					Light: &testutil.Light{
 						Orientation: space.Spherical{
 							R: 1,
 							P: -1,
@@ -45,7 +45,7 @@ func TestDirectionalShift(t *testing.T) {
 					ExpectedShift: aFloat * 2,
 				},
 				{
-					Light: &light.Basic{
+					Light: &testutil.Light{
 						Orientation: space.Spherical{
 							R: 1,
 							P: 0,
@@ -63,7 +63,7 @@ func TestDirectionalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
 		Stabalizable: &Directional{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Directional{
 				PhiBender: &bender.Static{},
 			},

@@ -3,7 +3,7 @@ package bender
 import (
 	"testing"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
@@ -40,7 +40,7 @@ func TestComboStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
 		Stabalizable: &Combo{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Combo{
 				A: &Static{},
 			},

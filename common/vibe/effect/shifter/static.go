@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 )
 
 // Static is a Shifter which provides shifts that relate to changing time, Directionally
@@ -12,18 +12,18 @@ type Static struct {
 	TheShift *float64
 }
 
-var _ ifaces.Shifter = (*Static)(nil)
+var _ common.Shifter = (*Static)(nil)
 
 // Shift returns a value representing some change or shift
-func (s Static) Shift(t time.Time, l ifaces.Light) float64 {
+func (s Static) Shift(t time.Time, obj common.Item) float64 {
 	return *s.TheShift
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (s *Static) GetStabilizeFuncs() []func(p ifaces.Palette) {
-	sFuncs := []func(p ifaces.Palette){}
+func (s *Static) GetStabilizeFuncs() []func(p common.Palette) {
+	sFuncs := []func(p common.Palette){}
 	if s.TheShift == nil {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			s.TheShift = p.SelectShift()
 		})
 	}

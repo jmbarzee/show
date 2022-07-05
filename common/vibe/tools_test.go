@@ -3,14 +3,14 @@ package vibe
 import (
 	"testing"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
 type StabilizeTest struct {
 	Name          string
-	ActualVibe    ifaces.Vibe
-	ExpectedVibes []ifaces.Vibe
+	ActualVibe    common.Vibe
+	ExpectedVibes []common.Vibe
 }
 
 func RunStabilizeTests(t *testing.T, cases []StabilizeTest) {
@@ -30,8 +30,8 @@ func RunStabilizeTests(t *testing.T, cases []StabilizeTest) {
 
 type MaterializeTest struct {
 	Name         string
-	ActualVibe   ifaces.Vibe
-	ExpectedVibe ifaces.Vibe
+	ActualVibe   common.Vibe
+	ExpectedVibe common.Vibe
 }
 
 func RunMaterializeTests(t *testing.T, cases []MaterializeTest) {

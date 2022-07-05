@@ -3,8 +3,8 @@ package shifter
 import (
 	"testing"
 
-	"github.com/jmbarzee/show/common/ifaces"
-	"github.com/jmbarzee/show/common/light"
+	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/testutil"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 	"github.com/jmbarzee/space"
@@ -28,7 +28,7 @@ func TestLocationalShift(t *testing.T) {
 			},
 			Instants: []Instant{
 				{
-					Light: &light.Basic{
+					Light: &testutil.Light{
 						Location: space.Cartesian{
 							X: 1,
 							Y: 2,
@@ -38,7 +38,7 @@ func TestLocationalShift(t *testing.T) {
 					ExpectedShift: aFloat * 3,
 				},
 				{
-					Light: &light.Basic{
+					Light: &testutil.Light{
 						Location: space.Cartesian{
 							X: -1,
 							Y: -2,
@@ -48,7 +48,7 @@ func TestLocationalShift(t *testing.T) {
 					ExpectedShift: aFloat * 3,
 				},
 				{
-					Light: &light.Basic{
+					Light: &testutil.Light{
 						Location: space.Cartesian{
 							X: 0,
 							Y: 0,
@@ -66,7 +66,7 @@ func TestLocationalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
 		Stabalizable: &Locational{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Locational{
 				XBender: &bender.Static{},
 			},

@@ -5,35 +5,35 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 )
 
 // Move is a Painter which provides shifting colors starting at colorStart
 type Move struct {
 	ColorStart color.Color
-	Shifter    ifaces.Shifter
+	Shifter    common.Shifter
 }
 
-var _ ifaces.Painter = (*Move)(nil)
+var _ common.Painter = (*Move)(nil)
 
-// Paint returns a color based on t
-func (p Move) Paint(t time.Time, l ifaces.Light) color.Color {
+// Paint returns a color based on t and obj
+func (p Move) Paint(t time.Time, obj common.Renderable) {
 	newColor := p.ColorStart.HSL()
-	shift := p.Shifter.Shift(t, l)
+	shift := p.Shifter.Shift(t, obj)
 	newColor.ShiftHue(shift)
-	return newColor
+	obj.SetColor(newColor)
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (p *Move) GetStabilizeFuncs() []func(p ifaces.Palette) {
-	sFuncs := []func(p ifaces.Palette){}
+func (p *Move) GetStabilizeFuncs() []func(p common.Palette) {
+	sFuncs := []func(p common.Palette){}
 	if p.ColorStart == nil {
-		sFuncs = append(sFuncs, func(pa ifaces.Palette) {
+		sFuncs = append(sFuncs, func(pa common.Palette) {
 			p.ColorStart = pa.SelectColor()
 		})
 	}
 	if p.Shifter == nil {
-		sFuncs = append(sFuncs, func(pa ifaces.Palette) {
+		sFuncs = append(sFuncs, func(pa common.Palette) {
 			p.Shifter = pa.SelectShifter()
 		})
 	} else {

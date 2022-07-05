@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	ifaces "github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/vibe/effect"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/painter"

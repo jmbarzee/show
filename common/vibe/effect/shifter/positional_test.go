@@ -3,8 +3,8 @@ package shifter
 import (
 	"testing"
 
-	"github.com/jmbarzee/show/common/ifaces"
-	"github.com/jmbarzee/show/common/light"
+	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/testutil"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
@@ -23,7 +23,7 @@ func TestPositionalShift(t *testing.T) {
 			},
 			Instants: []Instant{
 				{
-					Light: &light.Basic{
+					Light: &testutil.Light{
 						Position:     aPosition,
 						NumPositions: numPositions,
 					},
@@ -40,7 +40,7 @@ func TestPositionalShift(t *testing.T) {
 			},
 			Instants: []Instant{
 				{
-					Light: &light.Basic{
+					Light: &testutil.Light{
 						Position:     aPosition,
 						NumPositions: numPositions,
 					},
@@ -55,7 +55,7 @@ func TestPositionalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
 		Stabalizable: &Positional{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Positional{
 				Bender: &bender.Static{},
 			},

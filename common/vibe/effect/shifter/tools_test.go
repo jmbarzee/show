@@ -4,20 +4,20 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
 type (
 	ShiftTest struct {
 		Name     string
-		Shifter  ifaces.Shifter
+		Shifter  common.Shifter
 		Instants []Instant
 	}
 
 	Instant struct {
 		Time          time.Time
-		Light         ifaces.Light
+		Light         common.Item
 		ExpectedShift float64
 	}
 )

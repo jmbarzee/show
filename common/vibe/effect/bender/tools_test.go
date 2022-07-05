@@ -3,14 +3,14 @@ package bender
 import (
 	"testing"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
 type (
 	BenderTest struct {
 		Name     string
-		Bender   ifaces.Bender
+		Bender   common.Bender
 		Instants []Instant
 	}
 

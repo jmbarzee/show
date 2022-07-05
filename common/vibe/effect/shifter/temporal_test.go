@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/span"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
@@ -73,7 +73,7 @@ func TestTemporalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
 		Stabalizable: &Temporal{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Temporal{
 				Start: &aTime,
 			},

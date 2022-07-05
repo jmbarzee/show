@@ -5,21 +5,21 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 )
 
 // Group represents a group of devices who's effects will share traits
 type Group struct {
 	Basic
-	Children []Node
+	Children []common.Node
 }
 
-var _ Node = (*Group)(nil)
+var _ common.Node = (*Group)(nil)
 
 // NewGroup creates a new Group with a unique ID
-func NewGroup(deviceNodes ...Node) *Group {
+func NewGroup(deviceNodes ...common.Node) *Group {
 	if deviceNodes == nil {
-		deviceNodes = []Node{}
+		deviceNodes = []common.Node{}
 	}
 	return &Group{
 		Basic:    NewBasic(),
@@ -29,7 +29,7 @@ func NewGroup(deviceNodes ...Node) *Group {
 
 // Allocate passes Vibe into this device and its children
 // Allocate Stabilize the Vibe before passing it to children devices
-func (n Group) Allocate(vibe ifaces.Vibe) {
+func (n Group) Allocate(vibe common.Vibe) {
 	newVibe := vibe.Stabilize()
 
 	for _, child := range n.Children {
@@ -46,12 +46,12 @@ func (n Group) Clean(t time.Time) {
 }
 
 // GetChildren returns all groups under the GroupOption
-func (n Group) GetChildren() []Node {
+func (n Group) GetChildren() []common.Node {
 	return n.Children
 }
 
 // Insert will insert a node underneath a parent node.
-func (n *Group) Insert(parentID uuid.UUID, newNode Node) error {
+func (n *Group) Insert(parentID uuid.UUID, newNode common.Node) error {
 	if parentID == n.id {
 		n.Children = append(n.Children, newNode)
 		return nil

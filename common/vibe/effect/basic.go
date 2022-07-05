@@ -3,8 +3,7 @@ package effect
 import (
 	"time"
 
-	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/vibe/span"
 )
 
@@ -15,4 +14,5 @@ type BasicEffect struct {
 
 func (e BasicEffect) Priotity() int { return e.Rank }
 
-func (e BasicEffect) Render(time.Time, []ifaces.Light) []color.HSL { return nil }
+// Render will alter obj based on its information and alterability
+func (e BasicEffect) Render(time.Time, common.Renderable) {}

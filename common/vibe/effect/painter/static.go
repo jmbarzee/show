@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 )
 
 // Static is a Painter which provides unchangeing colors
@@ -13,18 +13,18 @@ type Static struct {
 	Color color.Color
 }
 
-var _ ifaces.Painter = (*Static)(nil)
+var _ common.Painter = (*Static)(nil)
 
 // Paint returns a color based on t
-func (p Static) Paint(t time.Time, l ifaces.Light) color.Color {
-	return p.Color.HSL()
+func (p Static) Paint(t time.Time, obj common.Renderable) {
+	obj.SetColor(p.Color.HSL())
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (p *Static) GetStabilizeFuncs() []func(p ifaces.Palette) {
-	sFuncs := []func(p ifaces.Palette){}
+func (p *Static) GetStabilizeFuncs() []func(p common.Palette) {
+	sFuncs := []func(p common.Palette){}
 	if p.Color == nil {
-		sFuncs = append(sFuncs, func(pa ifaces.Palette) {
+		sFuncs = append(sFuncs, func(pa common.Palette) {
 			p.Color = pa.SelectColor()
 		})
 	}

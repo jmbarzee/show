@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/repeatable"
 	"github.com/jmbarzee/show/common/vibe/effect"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
@@ -18,21 +18,21 @@ import (
 type Basic struct {
 	span.Span
 	count   int // incremented by StartAdvance()
-	Effects []ifaces.Effect
+	Effects []common.Effect
 }
 
-var _ ifaces.Vibe = (*Basic)(nil)
+var _ common.Vibe = (*Basic)(nil)
 
 // Duplicate creates a copy of a vibe and insures that
 // the dupliacted vibe will stabalize/materialize differently
-func (v *Basic) Duplicate() ifaces.Vibe {
+func (v *Basic) Duplicate() common.Vibe {
 	newVibe := *v
 	(&newVibe).count++
 	return &newVibe
 }
 
 // Stabilize locks in part of the visual representation of a vibe.
-func (v *Basic) Stabilize() ifaces.Vibe {
+func (v *Basic) Stabilize() common.Vibe {
 	newVibe := *v
 	sFuncs := newVibe.GetStabilizeFuncs()
 	if len(sFuncs) == 0 {
@@ -45,7 +45,7 @@ func (v *Basic) Stabilize() ifaces.Vibe {
 
 // Materialize locks all remaining unlocked visuals of a vibe
 // then returns the resulting effects
-func (v *Basic) Materialize() []ifaces.Effect {
+func (v *Basic) Materialize() []common.Effect {
 	for {
 		sFuncs := v.GetStabilizeFuncs()
 		if len(sFuncs) == 0 {
@@ -59,13 +59,13 @@ func (v *Basic) Materialize() []ifaces.Effect {
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (v *Basic) GetStabilizeFuncs() []func(p ifaces.Palette) {
-	sFuncs := []func(p ifaces.Palette){}
+func (v *Basic) GetStabilizeFuncs() []func(p common.Palette) {
+	sFuncs := []func(p common.Palette){}
 	for _, e := range v.Effects {
 		sFuncs = append(sFuncs, e.GetStabilizeFuncs()...)
 	}
 	if len(v.Effects) == 0 {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			v.Effects = append(v.Effects, v.SelectEffect())
 		})
 	}
@@ -89,11 +89,11 @@ func (v *Basic) randSeed() time.Time {
 	return v.Start().Add(time.Second * time.Duration(v.count))
 }
 
-// ======== ifaces.Palette implementation ========
+// ======== common.Palette implementation ========
 
 // SelectBender returns a Bender
-func (v *Basic) SelectBender() ifaces.Bender {
-	options := []ifaces.Bender{
+func (v *Basic) SelectBender() common.Bender {
+	options := []common.Bender{
 		//&bender.Static{},
 		&bender.Linear{},
 		&bender.Exponential{},
@@ -132,8 +132,8 @@ func (v *Basic) SelectShift() *float64 {
 }
 
 // SelectShifter returns a Shifter
-func (v *Basic) SelectShifter() ifaces.Shifter {
-	options := []ifaces.Shifter{
+func (v *Basic) SelectShifter() common.Shifter {
+	options := []common.Shifter{
 		//&shifter.Static{},
 		&shifter.Positional{},
 		&shifter.Locational{},
@@ -148,8 +148,8 @@ func (v *Basic) SelectShifter() ifaces.Shifter {
 }
 
 // SelectPainter returns a Painter
-func (v *Basic) SelectPainter() ifaces.Painter {
-	options := []ifaces.Painter{
+func (v *Basic) SelectPainter() common.Painter {
+	options := []common.Painter{
 		//&painter.Static{},
 		&painter.Move{},
 		&painter.Bounce{},
@@ -161,8 +161,8 @@ func (v *Basic) SelectPainter() ifaces.Painter {
 }
 
 // SelectEffect returns a Effect
-func (v *Basic) SelectEffect() ifaces.Effect {
-	options := []ifaces.Effect{
+func (v *Basic) SelectEffect() common.Effect {
+	options := []common.Effect{
 		&effect.Solid{
 			BasicEffect: effect.BasicEffect{
 				Span: v.Span,

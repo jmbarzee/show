@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/repeatable"
 )
 
@@ -15,7 +15,7 @@ type GroupOption struct {
 	Groups []*Group
 }
 
-var _ Node = (*Group)(nil)
+var _ common.Node = (*Group)(nil)
 
 // NewGroupOption creates a new GroupOption with a unique ID
 func NewGroupOption(groups ...*Group) *GroupOption {
@@ -30,7 +30,7 @@ func NewGroupOption(groups ...*Group) *GroupOption {
 
 // Allocate passes Vibe into this device and a single child group
 // Allocate Stabilize the Vibe before passing it to a child group
-func (n GroupOption) Allocate(vibe ifaces.Vibe) {
+func (n GroupOption) Allocate(vibe common.Vibe) {
 	if len(n.Groups) == 0 {
 		return
 	}
@@ -46,8 +46,8 @@ func (n GroupOption) Clean(t time.Time) {
 }
 
 // GetChildren returns all groups under the GroupOption
-func (n GroupOption) GetChildren() []Node {
-	nodes := make([]Node, len(n.Groups))
+func (n GroupOption) GetChildren() []common.Node {
+	nodes := make([]common.Node, len(n.Groups))
 	for i, group := range n.Groups {
 		nodes[i] = group
 	}
@@ -55,7 +55,7 @@ func (n GroupOption) GetChildren() []Node {
 }
 
 // Insert will insert a node underneath a parent node.
-func (n *GroupOption) Insert(parentID uuid.UUID, newNode Node) error {
+func (n *GroupOption) Insert(parentID uuid.UUID, newNode common.Node) error {
 	if parentID == n.id {
 		group := NewGroup(newNode)
 		n.Groups = append(n.Groups, group)

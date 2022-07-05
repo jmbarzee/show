@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/painter"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
@@ -102,7 +102,7 @@ func TestSolidEffect(t *testing.T) {
 func TestSolidGetStabilizeFuncs(t *testing.T) {
 	c := helper.StabilizeableTest{
 		Stabalizable: &Solid{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Solid{
 				Painter: &painter.Static{},
 			},

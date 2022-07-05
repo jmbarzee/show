@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
@@ -51,7 +51,7 @@ func TestSinusoidalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
 		Stabalizable: &Sinusoidal{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Sinusoidal{
 				Offset: &aFloat,
 			},

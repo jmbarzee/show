@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/repeatable"
 )
 
@@ -16,21 +16,22 @@ type Bounce struct {
 	ColorStart color.Color
 	ColorEnd   color.Color
 	Up         *bool
-	Shifter    ifaces.Shifter
+	Shifter    common.Shifter
 }
 
-var _ ifaces.Painter = (*Bounce)(nil)
+var _ common.Painter = (*Bounce)(nil)
 
-// Paint returns a color based on t
-func (p Bounce) Paint(t time.Time, l ifaces.Light) color.Color {
+// Paint returns a color based on t and obj
+func (p Bounce) Paint(t time.Time, obj common.Renderable) {
 	start := p.ColorStart.HSL()
 	end := p.ColorEnd.HSL()
+	var newC color.HSL
 	if *p.Up {
 		if start.H < end.H {
 			hDistance := end.H - start.H
 			sDistance := start.S - end.S
 			lDistance := start.L - end.L
-			totalShift := p.Shifter.Shift(t, l)
+			totalShift := p.Shifter.Shift(t, obj)
 			bounces := int(totalShift / hDistance)
 			remainingShift := math.Mod(totalShift, hDistance)
 
@@ -46,17 +47,16 @@ func (p Bounce) Paint(t time.Time, l ifaces.Light) color.Color {
 			sShift := sDistance * hShiftRatio
 			lShift := lDistance * hShiftRatio
 
-			c := start
-			c.ShiftHue(hShift)
-			c.SetSaturation(c.S + sShift)
-			c.SetLightness(c.L + lShift)
+			newC = start
+			newC.ShiftHue(hShift)
+			newC.SetSaturation(newC.S + sShift)
+			newC.SetLightness(newC.L + lShift)
 
-			return c
 		} else {
 			hDistance := (1 - start.H) + end.H
 			sDistance := start.S - end.S
 			lDistance := start.L - end.L
-			totalShift := p.Shifter.Shift(t, l)
+			totalShift := p.Shifter.Shift(t, obj)
 			bounces := int(totalShift / hDistance)
 			remainingShift := math.Mod(totalShift, hDistance)
 
@@ -72,19 +72,17 @@ func (p Bounce) Paint(t time.Time, l ifaces.Light) color.Color {
 			sShift := sDistance * hShiftRatio
 			lShift := lDistance * hShiftRatio
 
-			c := start
-			c.ShiftHue(-hShift) // shifting past 0
-			c.SetSaturation(c.S + sShift)
-			c.SetLightness(c.L + lShift)
-
-			return c
+			newC = start
+			newC.ShiftHue(-hShift) // shifting past 0
+			newC.SetSaturation(newC.S + sShift)
+			newC.SetLightness(newC.L + lShift)
 		}
 	} else {
 		if start.H > end.H {
 			hDistance := start.H - end.H
 			sDistance := start.S - end.S
 			lDistance := start.L - end.L
-			totalShift := p.Shifter.Shift(t, l)
+			totalShift := p.Shifter.Shift(t, obj)
 			bounces := int(totalShift / hDistance)
 			remainingShift := math.Mod(totalShift, hDistance)
 
@@ -100,17 +98,15 @@ func (p Bounce) Paint(t time.Time, l ifaces.Light) color.Color {
 			sShift := sDistance * hShiftRatio
 			lShift := lDistance * hShiftRatio
 
-			c := start
-			c.ShiftHue(hShift)
-			c.SetSaturation(c.S + sShift)
-			c.SetLightness(c.L + lShift)
-
-			return c
+			newC = start
+			newC.ShiftHue(hShift)
+			newC.SetSaturation(newC.S + sShift)
+			newC.SetLightness(newC.L + lShift)
 		} else {
 			hDistance := start.H + (1 - end.H)
 			sDistance := start.S - end.S
 			lDistance := start.L - end.L
-			totalShift := p.Shifter.Shift(t, l)
+			totalShift := p.Shifter.Shift(t, obj)
 			bounces := int(totalShift / hDistance)
 			remainingShift := math.Mod(totalShift, hDistance)
 
@@ -126,37 +122,36 @@ func (p Bounce) Paint(t time.Time, l ifaces.Light) color.Color {
 			sShift := sDistance * hShiftRatio
 			lShift := lDistance * hShiftRatio
 
-			c := start
-			c.ShiftHue(hShift) // shifting past 0
-			c.SetSaturation(c.S + sShift)
-			c.SetLightness(c.L + lShift)
-
-			return c
+			newC = start
+			newC.ShiftHue(hShift) // shifting past 0
+			newC.SetSaturation(newC.S + sShift)
+			newC.SetLightness(newC.L + lShift)
 		}
 	}
+	obj.SetColor(newC)
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (p *Bounce) GetStabilizeFuncs() []func(p ifaces.Palette) {
-	sFuncs := []func(p ifaces.Palette){}
+func (p *Bounce) GetStabilizeFuncs() []func(p common.Palette) {
+	sFuncs := []func(p common.Palette){}
 	if p.ColorStart == nil {
-		sFuncs = append(sFuncs, func(pa ifaces.Palette) {
+		sFuncs = append(sFuncs, func(pa common.Palette) {
 			p.ColorStart = pa.SelectColor().HSL()
 		})
 	}
 	if p.ColorEnd == nil {
-		sFuncs = append(sFuncs, func(pa ifaces.Palette) {
+		sFuncs = append(sFuncs, func(pa common.Palette) {
 			p.ColorEnd = pa.SelectColor().HSL()
 		})
 	}
 	if p.Up == nil {
-		sFuncs = append(sFuncs, func(pa ifaces.Palette) {
+		sFuncs = append(sFuncs, func(pa common.Palette) {
 			b := repeatable.Chance(pa.Start(), .5)
 			p.Up = &b
 		})
 	}
 	if p.Shifter == nil {
-		sFuncs = append(sFuncs, func(pa ifaces.Palette) {
+		sFuncs = append(sFuncs, func(pa common.Palette) {
 			p.Shifter = pa.SelectShifter()
 		})
 	} else {

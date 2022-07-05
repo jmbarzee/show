@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/vibe/span"
 )
 
 type StabilizeableTest struct {
-	Stabalizable     ifaces.Stabalizable
-	ExpectedVersions []ifaces.Stabalizable
+	Stabalizable     common.Stabalizable
+	ExpectedVersions []common.Stabalizable
 	Palette          TestPalette
 }
 
@@ -31,17 +31,17 @@ func RunStabilizeableTest(t *testing.T, c StabilizeableTest) {
 
 type TestPalette struct {
 	span.Span
-	Bender   ifaces.Bender
+	Bender   common.Bender
 	Color    color.HSL
 	Duration time.Duration
 	Shift    float64
-	Shifter  ifaces.Shifter
-	Painter  ifaces.Painter
-	Effect   ifaces.Effect
+	Shifter  common.Shifter
+	Painter  common.Painter
+	Effect   common.Effect
 }
 
 // SelectBender returns a Bender
-func (p TestPalette) SelectBender() ifaces.Bender {
+func (p TestPalette) SelectBender() common.Bender {
 	return p.Bender
 }
 
@@ -63,16 +63,16 @@ func (p TestPalette) SelectShift() *float64 {
 }
 
 // SelectShifter returns a Shifter
-func (p TestPalette) SelectShifter() ifaces.Shifter {
+func (p TestPalette) SelectShifter() common.Shifter {
 	return p.Shifter
 }
 
 // SelectPainter returns a Painter
-func (p TestPalette) SelectPainter() ifaces.Painter {
+func (p TestPalette) SelectPainter() common.Painter {
 	return p.Painter
 }
 
 // SelectEffect returns a Effect
-func (p TestPalette) SelectEffect() ifaces.Effect {
+func (p TestPalette) SelectEffect() common.Effect {
 	return p.Effect
 }

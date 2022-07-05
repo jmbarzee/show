@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
+	"github.com/jmbarzee/show/common"
 )
 
 var FindParentNodeError = errors.New("Failed to find parent node with matching ID")
@@ -23,12 +24,12 @@ func NewBasic() Basic {
 }
 
 // GetChildren returns any children under the node
-func (Basic) GetChildren() []Node {
+func (Basic) GetChildren() []common.Node {
 	return nil
 }
 
 // Insert will insert a node underneath a parent node.
-func (d Basic) Insert(parentID uuid.UUID, newNode Node) error {
+func (d Basic) Insert(parentID uuid.UUID, newNode common.Node) error {
 	if parentID == d.id {
 		return ParentCantHaveChildrenError
 	}

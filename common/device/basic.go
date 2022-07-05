@@ -1,6 +1,8 @@
 package device
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+)
 
 // Basic implements some traits and features which are shared between all nodes
 type Basic struct {

@@ -8,9 +8,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jmbarzee/show/device"
-	"github.com/jmbarzee/show/ifaces"
-	"github.com/jmbarzee/show/node"
+	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/node"
 	"github.com/jmbarzee/space"
 )
 
@@ -18,10 +17,10 @@ import (
 
 type Show struct {
 	mu *sync.RWMutex
-	// subs is the list of subscribers
-	subs []Subscriber
+	// devices is the list of devices
+	devices []common.Device
 	// nodeTree is the idealogical hieracy of show nodes
-	nodeTree node.Node
+	nodeTree common.Node
 }
 
 func NewShow() (*Show, error) {
@@ -29,14 +28,14 @@ func NewShow() (*Show, error) {
 
 	s := &Show{
 		mu:       &sync.RWMutex{},
-		subs:     []Subscriber{},
+		devices:  []common.Device{},
 		nodeTree: root,
 	}
 	return s, nil
 }
 
 // Allocate passes a vibe into the tree where it will be allocated to sub devices as it is Stabilized
-func (s *Show) Allocate(vibe ifaces.Vibe) {
+func (s *Show) Allocate(vibe common.Vibe) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.nodeTree.Allocate(vibe)
@@ -46,12 +45,9 @@ func (s *Show) Allocate(vibe ifaces.Vibe) {
 func (s *Show) DispatchRenders(ctx context.Context, t time.Time) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	for _, sub := range s.subs {
-		if !sub.IsConnected() {
-			continue
-		}
+	for _, device := range s.devices {
 
-		if err := sub.DispatchRender(t); err != nil {
+		if err := device.DispatchRender(t); err != nil {
 			// TODO handle errors
 		}
 	}
@@ -62,9 +58,9 @@ func (s *Show) InsertNode(parentID, childID uuid.UUID) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	var childNode node.Node
-	for _, sub := range s.subs {
-		nodes := sub.Device.GetNodes()
+	var childNode common.Node
+	for _, device := range s.devices {
+		nodes := device.GetNodes()
 		for _, n := range nodes {
 			if n.GetID() == childID {
 				childNode = n
@@ -91,34 +87,16 @@ func (s *Show) DeleteNode(parentID, childID uuid.UUID) error {
 }
 
 // MoveDevice changes a devices location and orientation (rotation implicitly also)
-func (s *Show) MoveDevice(deviceID uuid.UUID, loc space.Cartesian, ori space.Spherical) error {
+func (s *Show) MoveDevice(deviceID uuid.UUID, bearing space.Object) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	for _, sub := range s.subs {
-		if sub.GetID() != deviceID {
+	for _, device := range s.devices {
+		if device.GetID() != deviceID {
 			continue
 		}
-		sub.SetLocation(loc)
-		sub.SetOrientation(ori)
+		device.Move(bearing.GetBearings())
 		return nil
 	}
 	return fmt.Errorf("Device %v not found", deviceID.String())
-}
-
-// ConnectDevice attaches a sender to an existing device or creates a new one if not existing
-func (s *Show) ConnectDevice(dev device.Device, sender Sender) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	for _, sub := range s.subs {
-		if sub.GetID() == dev.GetID() && sub.GetType() == dev.GetType() {
-			return sub.Connect(sender)
-		}
-	}
-
-	// No previous device found, build new subscriber
-	newSub := Subscriber{Device: dev, Sender: sender}
-	s.subs = append(s.subs, newSub)
-	return nil
 }

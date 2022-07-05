@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 )
 
 // OneShift is just 1
@@ -13,32 +13,32 @@ const OneShift = 1.0
 
 // Directional is a Shifter which provides shifts that relate to changing time, Directionally
 type Directional struct {
-	PhiBender   ifaces.Bender
-	ThetaBender ifaces.Bender
+	PhiBender   common.Bender
+	ThetaBender common.Bender
 }
 
-var _ ifaces.Shifter = (*Directional)(nil)
+var _ common.Shifter = (*Directional)(nil)
 
 // Shift returns a value representing some change or shift
-func (s Directional) Shift(t time.Time, l ifaces.Light) float64 {
-	ori := l.GetOrientation()
+func (s Directional) Shift(t time.Time, obj common.Item) float64 {
+	ori := obj.GetOrientation()
 	bendPhi := s.PhiBender.Bend(ori.P)
 	bendTheta := s.ThetaBender.Bend(ori.T)
 	return bendPhi + bendTheta
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (s *Directional) GetStabilizeFuncs() []func(p ifaces.Palette) {
-	sFuncs := []func(p ifaces.Palette){}
+func (s *Directional) GetStabilizeFuncs() []func(p common.Palette) {
+	sFuncs := []func(p common.Palette){}
 	if s.PhiBender == nil {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			s.PhiBender = p.SelectBender()
 		})
 	} else {
 		sFuncs = append(sFuncs, s.PhiBender.GetStabilizeFuncs()...)
 	}
 	if s.ThetaBender == nil {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			s.ThetaBender = p.SelectBender()
 		})
 	} else {

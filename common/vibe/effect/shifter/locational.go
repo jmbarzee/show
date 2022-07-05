@@ -4,21 +4,21 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 )
 
 // Locational is a Shifter which provides shifts that relate to changing time, Directionally
 type Locational struct {
-	XBender ifaces.Bender
-	YBender ifaces.Bender
-	ZBender ifaces.Bender
+	XBender common.Bender
+	YBender common.Bender
+	ZBender common.Bender
 }
 
-var _ ifaces.Shifter = (*Locational)(nil)
+var _ common.Shifter = (*Locational)(nil)
 
 // Shift returns a value representing some change or shift
-func (s Locational) Shift(t time.Time, l ifaces.Light) float64 {
-	loc := l.GetLocation()
+func (s Locational) Shift(t time.Time, obj common.Item) float64 {
+	loc := obj.GetLocation()
 	bendX := s.XBender.Bend(loc.X)
 	bendY := s.YBender.Bend(loc.Y)
 	bendZ := s.ZBender.Bend(loc.Z)
@@ -26,24 +26,24 @@ func (s Locational) Shift(t time.Time, l ifaces.Light) float64 {
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (s *Locational) GetStabilizeFuncs() []func(p ifaces.Palette) {
-	sFuncs := []func(p ifaces.Palette){}
+func (s *Locational) GetStabilizeFuncs() []func(p common.Palette) {
+	sFuncs := []func(p common.Palette){}
 	if s.XBender == nil {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			s.XBender = p.SelectBender()
 		})
 	} else {
 		sFuncs = append(sFuncs, s.XBender.GetStabilizeFuncs()...)
 	}
 	if s.YBender == nil {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			s.YBender = p.SelectBender()
 		})
 	} else {
 		sFuncs = append(sFuncs, s.YBender.GetStabilizeFuncs()...)
 	}
 	if s.ZBender == nil {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			s.ZBender = p.SelectBender()
 		})
 	} else {

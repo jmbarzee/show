@@ -40,8 +40,8 @@ github.com/jmbarzee/color v0.0.0-20201112203453-1dae7cefa344 h1:aYagHSDUC9Hu1TOR
 github.com/jmbarzee/color v0.0.0-20201112203453-1dae7cefa344/go.mod h1:EHYR8AuK2ktJ2nQKoK3fkYCYAYOy3jSBCAQVto0Za90=
 github.com/jmbarzee/dominion v0.0.0-20210603000828-407825d4b584 h1:TFkQTx9aayIM3Z+yHwhRUynhRPn4GRDgpgZsnMKo5bs=
 github.com/jmbarzee/dominion v0.0.0-20210603000828-407825d4b584/go.mod h1:FEcucV6WKZqtuuhOfHbqCrrDk3dzC2U3bWrAhRG2LkM=
-github.com/jmbarzee/space v0.0.0-20210301175504-d913d0accd73 h1:Tou9WIeCyg90DkFE5s2nKcCMPgDfgTT4CNOVNNB2TKk=
-github.com/jmbarzee/space v0.0.0-20210301175504-d913d0accd73/go.mod h1:nt2DEDCCVVnBUaJ9OmwF8mb303yD6W9l1pymrla3vg0=
+github.com/jmbarzee/space v0.0.0-20220705025335-424ee4a7c1eb h1:WKenEEePFvTI5f+m9SmeqKdbKBQ42lQP4EMf572s4EY=
+github.com/jmbarzee/space v0.0.0-20220705025335-424ee4a7c1eb/go.mod h1:nt2DEDCCVVnBUaJ9OmwF8mb303yD6W9l1pymrla3vg0=
 github.com/miekg/dns v1.1.27/go.mod h1:KNUDUusw/aVsxyTYZM1oqvCicbwhgbNgztCETuNZ7xM=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

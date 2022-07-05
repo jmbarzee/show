@@ -5,7 +5,8 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/testutil"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/painter"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
@@ -70,44 +71,26 @@ func TestFutureEffect(t *testing.T) {
 			Instants: []Instant{
 				{
 					Time: aTime.Add(time.Second * 0 / 24),
-					ExpectedLights: []ifaces.Light{
-						&TestLight{
-							Color: color.Blue,
-						},
-						&TestLight{
-							Color: color.WarmBlue,
-						},
-						&TestLight{
-							Color: color.Violet,
-						},
+					ExpectedLights: []common.Renderable{
+						&testutil.Light{Color: color.Blue},
+						&testutil.Light{Color: color.WarmBlue},
+						&testutil.Light{Color: color.Violet},
 					},
 				},
 				{
 					Time: aTime.Add(time.Second * 1 / 24),
-					ExpectedLights: []ifaces.Light{
-						&TestLight{
-							Color: color.WarmBlue,
-						},
-						&TestLight{
-							Color: color.Violet,
-						},
-						&TestLight{
-							Color: color.CoolMagenta,
-						},
+					ExpectedLights: []common.Renderable{
+						&testutil.Light{Color: color.WarmBlue},
+						&testutil.Light{Color: color.Violet},
+						&testutil.Light{Color: color.CoolMagenta},
 					},
 				},
 				{
 					Time: aTime.Add(time.Second * 2 / 24),
-					ExpectedLights: []ifaces.Light{
-						&TestLight{
-							Color: color.Violet,
-						},
-						&TestLight{
-							Color: color.CoolMagenta,
-						},
-						&TestLight{
-							Color: color.Magenta,
-						},
+					ExpectedLights: []common.Renderable{
+						&testutil.Light{Color: color.Violet},
+						&testutil.Light{Color: color.CoolMagenta},
+						&testutil.Light{Color: color.Magenta},
 					},
 				},
 			},
@@ -120,7 +103,7 @@ func TestFutureGetStabilizeFuncs(t *testing.T) {
 	aSecond := time.Second
 	c := helper.StabilizeableTest{
 		Stabalizable: &Future{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Future{
 				TimePerLight: &aSecond,
 			},

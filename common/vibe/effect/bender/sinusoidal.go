@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 )
 
 // Sinusoidal is a Bender which provides a single unchanging bend
@@ -14,7 +14,7 @@ type Sinusoidal struct {
 	Amplitude *float64
 }
 
-var _ ifaces.Bender = (*Sinusoidal)(nil)
+var _ common.Bender = (*Sinusoidal)(nil)
 
 // Bend returns a value representing some change or bend
 func (s Sinusoidal) Bend(f float64) float64 {
@@ -24,20 +24,20 @@ func (s Sinusoidal) Bend(f float64) float64 {
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (s *Sinusoidal) GetStabilizeFuncs() []func(p ifaces.Palette) {
-	sFuncs := []func(p ifaces.Palette){}
+func (s *Sinusoidal) GetStabilizeFuncs() []func(p common.Palette) {
+	sFuncs := []func(p common.Palette){}
 	if s.Offset == nil {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			s.Offset = p.SelectShift()
 		})
 	}
 	if s.Period == nil {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			s.Period = p.SelectShift()
 		})
 	}
 	if s.Amplitude == nil {
-		sFuncs = append(sFuncs, func(p ifaces.Palette) {
+		sFuncs = append(sFuncs, func(p common.Palette) {
 			s.Amplitude = p.SelectShift()
 		})
 	}

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/show/common/ifaces"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
 	"github.com/jmbarzee/show/common/vibe/span"
@@ -51,7 +51,7 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 	aDuration := time.Second
 	c := helper.StabilizeableTest{
 		Stabalizable: &Move{},
-		ExpectedVersions: []ifaces.Stabalizable{
+		ExpectedVersions: []common.Stabalizable{
 			&Move{
 				ColorStart: color.Red,
 			},
