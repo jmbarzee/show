@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jmbarzee/color"
 	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/color"
 )
 
 // Static is a Painter which provides unchangeing colors

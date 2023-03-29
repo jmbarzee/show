@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jmbarzee/color"
 	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/color"
 	"github.com/jmbarzee/show/common/testutil"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )

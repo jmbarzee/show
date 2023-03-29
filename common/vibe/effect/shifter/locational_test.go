@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/space"
 	"github.com/jmbarzee/show/common/testutil"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
-	"github.com/jmbarzee/space"
 )
 
 func TestLocationalShift(t *testing.T) {
@@ -29,31 +29,28 @@ func TestLocationalShift(t *testing.T) {
 			Instants: []Instant{
 				{
 					Light: &testutil.Light{
-						Location: space.Cartesian{
-							X: 1,
-							Y: 2,
-							Z: 3,
-						},
+						Object: space.NewObject(
+							space.Vector{X: 1, Y: 2, Z: 3},
+							*space.NewIdentityQuaternion(),
+						),
 					},
 					ExpectedShift: aFloat * 3,
 				},
 				{
 					Light: &testutil.Light{
-						Location: space.Cartesian{
-							X: -1,
-							Y: -2,
-							Z: -3,
-						},
+						Object: space.NewObject(
+							space.Vector{X: -1, Y: -2, Z: -3},
+							*space.NewIdentityQuaternion(),
+						),
 					},
 					ExpectedShift: aFloat * 3,
 				},
 				{
 					Light: &testutil.Light{
-						Location: space.Cartesian{
-							X: 0,
-							Y: 0,
-							Z: 0,
-						},
+						Object: space.NewObject(
+							space.Vector{X: 0, Y: 0, Z: 0},
+							*space.NewIdentityQuaternion(),
+						),
 					},
 					ExpectedShift: aFloat * 3,
 				},

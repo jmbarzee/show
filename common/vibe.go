@@ -3,7 +3,7 @@ package common
 import (
 	"time"
 
-	"github.com/jmbarzee/color"
+	"github.com/jmbarzee/show/common/color"
 )
 
 // Vibe is a heavy abstraction correlating to general feelings in music

@@ -5,7 +5,7 @@ import (
 	"math"
 
 	"github.com/go-test/deep"
-	"github.com/jmbarzee/color"
+	"github.com/jmbarzee/show/common/color"
 )
 
 const (

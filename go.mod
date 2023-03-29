@@ -7,5 +7,11 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/jmbarzee/color v0.0.0-20201112203453-1dae7cefa344
 	github.com/jmbarzee/dominion v0.0.0-20210603000828-407825d4b584
-	github.com/jmbarzee/space v0.0.0-20220705025335-424ee4a7c1eb
+	github.com/stretchr/testify v1.8.1
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

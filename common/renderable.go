@@ -1,27 +1,18 @@
 package common
 
 import (
-	"github.com/jmbarzee/color"
-	"github.com/jmbarzee/space"
+	"github.com/jmbarzee/show/common/color"
+	"github.com/jmbarzee/show/common/space"
 )
 
 type Item interface {
 	Indexed
-	Pointed
+	Orientable
 }
 
 type Renderable interface {
 	Item
 	Colorable
-}
-
-// Colorable is the interface to something which is colorable
-type Colorable interface {
-	// GetColor returns the color of the light
-	GetColor() color.Color
-
-	// SetColor changes the color of the light
-	SetColor(newColor color.Color)
 }
 
 // Indexed is the interface to something which is in an ordered set
@@ -32,64 +23,53 @@ type Indexed interface {
 }
 
 type (
-	// Located is the interface to something which exists in space
-	// (should have point symmetry)
-	Located interface {
-		// GetLocation returns the physical location of the device
-		GetLocation() space.Cartesian
+	// Colored is the interface to something which is colored
+	Colored interface {
+		// GetColor returns the color of the light
+		GetColor() color.Color
 	}
+	// Colorable is the interface to something which is colorable
+	Colorable interface {
+		Colored
 
-	// Locatable is the interface to something which is in space
-	// (should have point symmetry)
-	Locatable interface {
-		Located
-
-		// SetLocation changes the physical location of the device
-		SetLocation(space.Cartesian)
+		// SetColor changes the color of the light
+		SetColor(newColor color.Color)
 	}
 )
 
 type (
-	// Pointed is the interface to something which is Pointed in space
-	// (should have rotational symmetry about an axis)
-	Pointed interface {
-		Located
-
-		// GetOrientation returns the physical orientation of the device
-		GetOrientation() space.Spherical
+	// Located is the interface to something which exists in space
+	Located interface {
+		// GetLocation returns the location of the objcet
+		GetLocation() space.Vector
 	}
 
-	// Tangible is the interface to something which is pointable in space
-	// (should have rotational symmetry about an axis)
-	Pointable interface {
-		Locatable
+	// Locatable is the interface to something which can be positioned in space
+	Locatable interface {
+		Located
 
-		// GetOrientation returns the physical orientation of the device
-		GetOrientation() space.Spherical
-		// SetOrientation changes the physical orientation of the device
-		SetOrientation(space.Spherical)
+		// SetLocation changes the location of the objcet
+		SetLocation(space.Vector)
 	}
 )
 
 type (
 	// Oriented is the interface to something which is oriented in space
-	// (Should have no symmetry)
 	Oriented interface {
-		Pointed
+		Located
 
-		// GetRotation returns the physical rotation of the device
-		GetRotation() space.Spherical
+		// GetOrientation returns the Orientation of the object
+		GetOrientation() space.Quaternion
 	}
 
 	// Orientable is the interface to something which is orientable in space
-	// (Should have no symmetry)
 	Orientable interface {
-		Pointable
+		Locatable
 
-		// GetRotation returns the physical rotation of the device
-		GetRotation() space.Spherical
-		// SetRotationchanges the physical rotation of the device
-		SetRotation(space.Spherical)
+		// GetOrientation returns the Orientation of the object
+		GetOrientation() space.Quaternion
+		// SetOrientation changes the Orientation of the object
+		SetOrientation(space.Quaternion)
 	}
 )
 
@@ -100,9 +80,9 @@ type (
 	// (Should have no symmetry)
 	Moveable interface {
 		// GetBearings returns all spacial properties of the device
-		GetBearings() (location space.Cartesian, orientation, rotation space.Spherical)
+		GetBearings() (location space.Vector, orientation space.Quaternion)
 		// Move changes all properties of the device
-		Move(location space.Cartesian, orientation, rotation space.Spherical)
+		Move(location space.Vector, orientation space.Quaternion)
 	}
 )
 

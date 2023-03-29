@@ -2,12 +2,15 @@ package node
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/repeatable"
 )
+
+const GroupOptionType = "GroupOption"
 
 // GroupOption represents a series of groups
 type GroupOption struct {
@@ -35,6 +38,7 @@ func (n GroupOption) Allocate(vibe common.Vibe) {
 		return
 	}
 	groupNum := repeatable.Option(vibe.Start(), len(n.Groups))
+	fmt.Println("Using Group:", groupNum)
 	n.Groups[groupNum].Allocate(vibe)
 }
 
@@ -99,5 +103,5 @@ func (n *GroupOption) Delete(parentID, childID uuid.UUID) error {
 
 // GetType returns the type
 func (GroupOption) GetType() string {
-	return "GroupOption"
+	return GroupOptionType
 }

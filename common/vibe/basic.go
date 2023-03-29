@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jmbarzee/color"
 	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/color"
 	"github.com/jmbarzee/show/common/repeatable"
 	"github.com/jmbarzee/show/common/vibe/effect"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
@@ -17,7 +17,7 @@ import (
 // Basic is a vibe which can produce most Effects
 type Basic struct {
 	span.Span
-	count   int // incremented by StartAdvance()
+	count   int // incremented by Duplicate()
 	Effects []common.Effect
 }
 
@@ -137,7 +137,7 @@ func (v *Basic) SelectShifter() common.Shifter {
 		//&shifter.Static{},
 		&shifter.Positional{},
 		&shifter.Locational{},
-		&shifter.Directional{},
+		// &shifter.Directional{},
 		&shifter.Temporal{},
 		&shifter.Combo{},
 	}

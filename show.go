@@ -1,7 +1,6 @@
 package show
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"sync"
@@ -10,7 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/node"
-	"github.com/jmbarzee/space"
+	"github.com/jmbarzee/show/common/space"
 )
 
 // TODO some sort of MarshallJSON
@@ -18,20 +17,17 @@ import (
 type Show struct {
 	mu *sync.RWMutex
 	// devices is the list of devices
-	devices []common.Device
+	devices map[uuid.UUID]common.Device
 	// nodeTree is the idealogical hieracy of show nodes
 	nodeTree common.Node
 }
 
-func NewShow() (*Show, error) {
-	root := node.NewGroupOption()
-
-	s := &Show{
+func NewShow() *Show {
+	return &Show{
 		mu:       &sync.RWMutex{},
-		devices:  []common.Device{},
-		nodeTree: root,
+		devices:  map[uuid.UUID]common.Device{},
+		nodeTree: node.NewGroupOption(),
 	}
-	return s, nil
 }
 
 // Allocate passes a vibe into the tree where it will be allocated to sub devices as it is Stabilized
@@ -42,9 +38,9 @@ func (s *Show) Allocate(vibe common.Vibe) {
 }
 
 // DispatchRenders dispatches renders to all connected subs
-func (s *Show) DispatchRenders(ctx context.Context, t time.Time) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *Show) DispatchRenders(t time.Time) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	for _, device := range s.devices {
 
 		if err := device.DispatchRender(t); err != nil {
@@ -53,7 +49,8 @@ func (s *Show) DispatchRenders(ctx context.Context, t time.Time) {
 	}
 }
 
-// InsertNode places a device into the tree underneath the device with parentID
+// InsertNode places a node, found from existing devices,
+// into the tree underneath the node with parentID
 func (s *Show) InsertNode(parentID, childID uuid.UUID) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -79,11 +76,50 @@ func (s *Show) InsertNode(parentID, childID uuid.UUID) error {
 	return s.nodeTree.Insert(parentID, childNode)
 }
 
+// NewNode creates a new node of the given type
+// and inserts it into the tree underneath the node with parentID
+// the id of the new node is returned
+func (s *Show) NewNode(parentID uuid.UUID, nodeType string) (uuid.UUID, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var childNode common.Node
+	switch nodeType {
+	case node.GroupOptionType:
+		childNode = node.NewGroupOption()
+	case node.GroupType:
+		childNode = node.NewGroup()
+	default:
+		return uuid.UUID{}, errors.New("Could not find specified nodeType")
+	}
+
+	return childNode.GetID(), s.nodeTree.Insert(parentID, childNode)
+}
+
 // DeleteNode removes a device from the tree underneath the device with parentID
 func (s *Show) DeleteNode(parentID, childID uuid.UUID) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return s.nodeTree.Delete(parentID, childID)
+}
+
+func (s Show) GetParentNodeID() uuid.UUID {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.nodeTree.GetID()
+}
+
+// AddDevice add a device to the list of devices which is used for dispatching renders
+func (s *Show) AddDevice(device common.Device) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	deviceID := device.GetID()
+	if _, ok := s.devices[deviceID]; ok {
+		return fmt.Errorf("Device %v was already added", deviceID)
+	}
+	s.devices[deviceID] = device
+	return nil
 }
 
 // MoveDevice changes a devices location and orientation (rotation implicitly also)

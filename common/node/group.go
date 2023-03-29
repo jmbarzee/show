@@ -8,6 +8,8 @@ import (
 	"github.com/jmbarzee/show/common"
 )
 
+const GroupType = "Group"
+
 // Group represents a group of devices who's effects will share traits
 type Group struct {
 	Basic
@@ -93,5 +95,5 @@ func (n *Group) Delete(parentID, childID uuid.UUID) error {
 
 // GetType returns the type
 func (Group) GetType() string {
-	return "Group"
+	return GroupType
 }

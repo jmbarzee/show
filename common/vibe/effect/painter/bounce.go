@@ -5,8 +5,8 @@ import (
 	"math"
 	"time"
 
-	"github.com/jmbarzee/color"
 	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/color"
 	"github.com/jmbarzee/show/common/repeatable"
 )
 

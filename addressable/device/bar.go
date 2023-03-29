@@ -4,10 +4,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jmbarzee/show/addressable"
 	"github.com/jmbarzee/show/addressable/node"
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/device"
-	"github.com/jmbarzee/space"
+	"github.com/jmbarzee/show/common/space"
 )
 
 const (
@@ -23,16 +24,16 @@ type Bar struct {
 
 	*node.Line
 
-	sender Sender
+	sender addressable.Sender
 }
 
 var _ common.Device = (*Bar)(nil)
 
 // NewBar creates a new Bar
-func NewBar(id uuid.UUID, start space.Cartesian, direction, rotation space.Spherical, sender Sender) Bar {
+func NewBar(id uuid.UUID, sender addressable.Sender, bearings *space.Object, spacing node.Spacing, leds int) Bar {
 	return Bar{
 		Basic:  device.NewBasic(id),
-		Line:   node.NewLine(ledsPerNPBar, start, direction, rotation),
+		Line:   node.NewLine(bearings, spacing, leds),
 		sender: sender,
 	}
 }
@@ -45,8 +46,8 @@ func (b Bar) GetNodes() []common.Node {
 // Render calls render on the underlying line
 func (d Bar) DispatchRender(t time.Time) error {
 	allLights := d.Line.Render(t)
-	allColors := lightsToColors(allLights)
-	return d.sender.Send(Instruction{t: t, lights: allColors})
+	allColors := addressable.LightsToColors(allLights)
+	return d.sender.Send(addressable.Instruction{Time: t, Colors: allColors})
 }
 
 // GetType returns the type
