@@ -8,7 +8,7 @@ import (
 type Effect interface {
 	Span
 
-	Stabalizable
+	Stabilizable
 
 	// Render will alter obj based on its information and alterability
 	// obj is atleast Renderable,
@@ -20,7 +20,7 @@ type Effect interface {
 
 // Painter is used by effects to select colors
 type Painter interface {
-	Stabalizable
+	Stabilizable
 
 	// Paint returns a color based on t and obj
 	// obj should be atleast Renderable,
@@ -30,7 +30,7 @@ type Painter interface {
 
 // Shifter is used by Painters to change small things over time
 type Shifter interface {
-	Stabalizable
+	Stabilizable
 
 	// Shift returns a value representing some change or shift based on t and obj
 	// obj should be atleast Tangible,
@@ -40,7 +40,7 @@ type Shifter interface {
 
 // Bender is used by Shifters to change small things over time
 type Bender interface {
-	Stabalizable
+	Stabilizable
 
 	// Bend returns a value based on f
 	Bend(f float64) float64

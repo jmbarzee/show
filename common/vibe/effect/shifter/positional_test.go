@@ -54,8 +54,8 @@ func TestPositionalShift(t *testing.T) {
 func TestPositionalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
-		Stabalizable: &Positional{},
-		ExpectedVersions: []common.Stabalizable{
+		Stabilizable: &Positional{},
+		ExpectedVersions: []common.Stabilizable{
 			&Positional{
 				Bender: &bender.Static{},
 			},

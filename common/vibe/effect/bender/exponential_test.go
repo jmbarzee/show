@@ -48,8 +48,8 @@ func TestExponentialBend(t *testing.T) {
 func TestExponentialGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
-		Stabalizable: &Exponential{},
-		ExpectedVersions: []common.Stabalizable{
+		Stabilizable: &Exponential{},
+		ExpectedVersions: []common.Stabilizable{
 			&Exponential{
 				Exponent: &aFloat,
 			},

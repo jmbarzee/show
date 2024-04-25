@@ -27,8 +27,8 @@ func TestStaticShift(t *testing.T) {
 func TestStaticGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
-		Stabalizable: &Static{},
-		ExpectedVersions: []common.Stabalizable{
+		Stabilizable: &Static{},
+		ExpectedVersions: []common.Stabilizable{
 			&Static{
 				TheShift: &aFloat,
 			},

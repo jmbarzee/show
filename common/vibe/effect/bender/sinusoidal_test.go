@@ -50,8 +50,8 @@ func TestSinusoidalBend(t *testing.T) {
 func TestSinusoidalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
-		Stabalizable: &Sinusoidal{},
-		ExpectedVersions: []common.Stabalizable{
+		Stabilizable: &Sinusoidal{},
+		ExpectedVersions: []common.Stabilizable{
 			&Sinusoidal{
 				Offset: &aFloat,
 			},

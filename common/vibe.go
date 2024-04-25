@@ -10,10 +10,10 @@ import (
 type Vibe interface {
 	Palette
 
-	Stabalizable
+	Stabilizable
 
 	// Duplicate creates a copy of a vibe and insures that
-	// the dupliacted vibe will stabalize/materialize differently
+	// the duplicated vibe will stabilize/materialize differently
 	Duplicate() Vibe
 
 	// Stabilize locks in part of the visual representation of a vibe.
@@ -52,7 +52,7 @@ type Span interface {
 	// End returns the End time
 	End() time.Time
 }
-type Stabalizable interface {
-	// GetStabilizeFuncs returns a function for all remaining unstablaized traits
+type Stabilizable interface {
+	// GetStabilizeFuncs returns a function for all remaining unstabilized traits
 	GetStabilizeFuncs() []func(p Palette)
 }

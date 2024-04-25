@@ -45,8 +45,8 @@ func TestLinearBend(t *testing.T) {
 func TestLinearGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
-		Stabalizable: &Linear{},
-		ExpectedVersions: []common.Stabalizable{
+		Stabilizable: &Linear{},
+		ExpectedVersions: []common.Stabilizable{
 			&Linear{
 				Interval: &aFloat,
 			},
