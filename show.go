@@ -22,7 +22,7 @@ type Show struct {
 	nodeTree common.Node
 }
 
-func NewShow() *Show {
+func New() *Show {
 	return &Show{
 		mu:       &sync.RWMutex{},
 		devices:  map[uuid.UUID]common.Device{},

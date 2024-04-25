@@ -30,7 +30,7 @@ type Bar struct {
 var _ common.Device = (*Bar)(nil)
 
 // NewBar creates a new Bar
-func NewBar(id uuid.UUID, sender addressable.Sender, bearings *space.Object, spacing node.Spacing, leds int) Bar {
+func NewBar(id uuid.UUID, sender addressable.Sender, bearings *space.Object, spacing addressable.Spacing, leds int) Bar {
 	return Bar{
 		Basic:  device.NewBasic(id),
 		Line:   node.NewLine(bearings, spacing, leds),

@@ -8,21 +8,6 @@ import (
 	"github.com/jmbarzee/show/common"
 )
 
-// Spacing is an alias for floats to encourage/support common
-// LED densitys of a strip
-type Spacing float64
-
-const (
-	// Spacing30 is the spacing of LEDs on a strip which has 30 LEDs per meter
-	Spacing30 Spacing = 1.0 / 30.0
-	// Spacing60 is the spacing of LEDs on a strip which has 60 LEDs per meter
-	Spacing60 Spacing = 1.0 / 60.0
-	// Spacing120 is the spacing of LEDs on a strip which has 120 LEDs per meter
-	Spacing120 Spacing = 1.0 / 120.0
-	// Spacing144 is the spacing of LEDs on a strip which has 144 LEDs per meter
-	Spacing144 Spacing = 1.0 / 144.0
-)
-
 // row holds basic functionality for any neoPixelDevice
 // row implements effect.Allocater
 // row partially implements effect.Device with PruneEffect
@@ -30,7 +15,7 @@ type row struct {
 	// total is the number of LEDs in the row
 	total int
 	// spacing is the distance between each LED
-	spacing Spacing
+	spacing addressable.Spacing
 
 	// effects is the array of effects from materializing Vibes in calls to Allocate
 	effects []common.Effect
@@ -41,7 +26,7 @@ type row struct {
 }
 
 // NewRow creates a new Row
-func NewRow(spacing Spacing, count int) *row {
+func NewRow(spacing addressable.Spacing, count int) *row {
 	return &row{
 		total:   count,
 		spacing: spacing,

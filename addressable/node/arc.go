@@ -7,21 +7,6 @@ import (
 	"github.com/jmbarzee/show/common/space"
 )
 
-// Aspect is an alias for bools to clarify Direction of LEDs in an Arc.
-// Given in terms of radians.
-type Aspect float64
-
-const (
-	// AspectOutward indicates that LEDs on an Arc are facing outward
-	AspectOutward Aspect = 0
-	// AspectUpward indicates that LEDs on an Arc are facing upward
-	AspectUpward Aspect = 0.5
-	// AspectInward indicates that LEDs on an Arc are facing inward
-	AspectInward Aspect = 1
-	// AspectDownward indicates that LEDs on an Arc are facing downward
-	AspectDownward Aspect = 1.5
-)
-
 // Arc is a representation of a angular Arc of addressable LEDs.
 // An arc with Location {0, 0, 0}, Orientation {1, 0, 0, 0}, and Aspect 0
 // rotates about the origin, starting on the positive X-axis,
@@ -40,13 +25,13 @@ type Arc struct {
 	radius float64
 
 	// aspect is the direction which LEDs on an Arc are facing
-	aspect Aspect
+	aspect addressable.Aspect
 }
 
 var _ common.Node = (*Arc)(nil)
 
 // NewArc creates a new Arc
-func NewArc(bearings *space.Object, spacing Spacing, count int, radius float64, aspect Aspect) *Arc {
+func NewArc(bearings *space.Object, spacing addressable.Spacing, count int, radius float64, aspect addressable.Aspect) *Arc {
 
 	r := &Arc{
 		Basic:  node.NewBasic(),

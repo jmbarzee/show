@@ -23,7 +23,7 @@ type Ring struct {
 var _ common.Device = (*Ring)(nil)
 
 // NewRing returns a new Ring
-func NewRing(id uuid.UUID, sender addressable.Sender, bearings *space.Object, spacing node.Spacing, leds int, radius float64, aspect node.Aspect) Ring {
+func NewRing(id uuid.UUID, sender addressable.Sender, bearings *space.Object, spacing addressable.Spacing, leds int, radius float64, aspect addressable.Aspect) Ring {
 	d := Ring{
 		Basic:  device.NewBasic(id),
 		Arc:    node.NewArc(bearings, spacing, leds, radius, aspect),

@@ -4,8 +4,6 @@ import (
 	"hash/fnv"
 	"math"
 	"time"
-
-	"github.com/jmbarzee/dominion/system"
 )
 
 // Option is an idempotent call based on a time and a number of options
@@ -53,12 +51,12 @@ func hashSum(t time.Time) uint32 {
 	hash := fnv.New32()
 	timeBinary, err := t.MarshalBinary()
 	if err != nil {
-		system.Panic(err)
+		panic(err)
 	}
 
 	_, err = hash.Write(timeBinary)
 	if err != nil {
-		system.Panic(err)
+		panic(err)
 	}
 
 	return hash.Sum32()

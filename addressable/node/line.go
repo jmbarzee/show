@@ -9,8 +9,8 @@ import (
 
 // Line is a representation of a strait line of addressable LEDs.
 // A Line with Location {0, 0, 0} and Orientation {1, 0, 0, 0}
-// streches from the origin, along the X-axis
-// with all LEDs pointing parallel with the Y-axis
+// stretches from the origin, along the X-axis
+// with all LEDs pointing downwards, parallel with the Y-axis
 type Line struct {
 	// row provides the implementation of effect.Allocater
 	*row
@@ -25,7 +25,7 @@ type Line struct {
 var _ common.Node = (*Line)(nil)
 
 // NewLine creates a new Line
-func NewLine(bearings *space.Object, spacing Spacing, count int) *Line {
+func NewLine(bearings *space.Object, spacing addressable.Spacing, count int) *Line {
 	l := &Line{
 		Basic:  node.NewBasic(),
 		Object: bearings,

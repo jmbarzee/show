@@ -77,6 +77,15 @@ func (c RGB) ToUInt32RGBW() uint32 {
 	return val
 }
 
+// ToUInt32RGBW converts an RGBA to a uint32.
+// Each portion of the color is represented by 8 bits
+func (c RGB) ToBytesRGBW() (byte, byte, byte, byte) {
+	return byte(c.R * math.MaxUint8),
+		byte(c.G * math.MaxUint8),
+		byte(c.B * math.MaxUint8),
+		byte(c.A * math.MaxUint8)
+}
+
 // FromUInt32RGBW converts and uint32 to an RGBA.
 // Each portion of the color is represented by 8 bits
 func FromUInt32RGBW(wgrb uint32) RGB {
