@@ -62,8 +62,8 @@ func TestLocationalShift(t *testing.T) {
 func TestLocationalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
-		Stabilizable: &Locational{},
-		ExpectedVersions: []common.Stabilizable{
+		Stabilizer: &Locational{},
+		ExpectedVersions: []common.Stabilizer{
 			&Locational{
 				XBender: &bender.Static{},
 			},

@@ -62,8 +62,8 @@ package shifter
 // func TestDirectionalGetStabilizeFuncs(t *testing.T) {
 // 	aFloat := 1.1
 // 	c := helper.StabilizeableTest{
-// 		Stabilizable: &Directional{},
-// 		ExpectedVersions: []common.Stabilizable{
+// 		Stabilizer: &Directional{},
+// 		ExpectedVersions: []common.Stabilizer{
 // 			&Directional{
 // 				PhiBender: &bender.Static{},
 // 			},

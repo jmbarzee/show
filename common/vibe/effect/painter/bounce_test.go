@@ -258,8 +258,8 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 	theTruth := true
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
-		Stabilizable: &Bounce{},
-		ExpectedVersions: []common.Stabilizable{
+		Stabilizer: &Bounce{},
+		ExpectedVersions: []common.Stabilizer{
 			&Bounce{
 				ColorStart: color.Red,
 			},

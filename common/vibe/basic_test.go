@@ -441,8 +441,8 @@ func TestBasicMaterialize(t *testing.T) {
 }
 func TestBasicGetStabilizeFuncs(t *testing.T) {
 	c := helper.StabilizeableTest{
-		Stabilizable: &Basic{},
-		ExpectedVersions: []ifaces.Stabilizable{
+		Stabilizer: &Basic{},
+		ExpectedVersions: []ifaces.Stabilizer{
 			&Basic{
 				Effects: []ifaces.Effect{
 					&effect.Solid{},

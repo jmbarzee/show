@@ -50,8 +50,8 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	aDuration := time.Second
 	c := helper.StabilizeableTest{
-		Stabilizable: &Move{},
-		ExpectedVersions: []common.Stabilizable{
+		Stabilizer: &Move{},
+		ExpectedVersions: []common.Stabilizer{
 			&Move{
 				ColorStart: color.Red,
 			},

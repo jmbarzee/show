@@ -42,8 +42,8 @@ func TestComboShift(t *testing.T) {
 func TestComboGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
-		Stabilizable: &Combo{},
-		ExpectedVersions: []common.Stabilizable{
+		Stabilizer: &Combo{},
+		ExpectedVersions: []common.Stabilizer{
 			&Combo{
 				A: &Static{},
 			},

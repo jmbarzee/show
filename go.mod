@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/go-test/deep v1.0.8
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.8.1
 )
 

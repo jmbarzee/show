@@ -102,8 +102,8 @@ func TestFutureEffect(t *testing.T) {
 func TestFutureGetStabilizeFuncs(t *testing.T) {
 	aSecond := time.Second
 	c := helper.StabilizeableTest{
-		Stabilizable: &Future{},
-		ExpectedVersions: []common.Stabilizable{
+		Stabilizer: &Future{},
+		ExpectedVersions: []common.Stabilizer{
 			&Future{
 				TimePerLight: &aSecond,
 			},

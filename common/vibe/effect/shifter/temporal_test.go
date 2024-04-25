@@ -72,8 +72,8 @@ func TestTemporalGetStabilizeFuncs(t *testing.T) {
 	aSecond := time.Second
 	aFloat := 1.1
 	c := helper.StabilizeableTest{
-		Stabilizable: &Temporal{},
-		ExpectedVersions: []common.Stabilizable{
+		Stabilizer: &Temporal{},
+		ExpectedVersions: []common.Stabilizer{
 			&Temporal{
 				Start: &aTime,
 			},

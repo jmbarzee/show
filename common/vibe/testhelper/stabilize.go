@@ -10,21 +10,21 @@ import (
 )
 
 type StabilizeableTest struct {
-	Stabilizable     common.Stabilizable
-	ExpectedVersions []common.Stabilizable
+	Stabilizer       common.Stabilizer
+	ExpectedVersions []common.Stabilizer
 	Palette          TestPalette
 }
 
 func RunStabilizeableTest(t *testing.T, c StabilizeableTest) {
 	for i, expectedVersion := range c.ExpectedVersions {
 
-		sFuncs := c.Stabilizable.GetStabilizeFuncs()
+		sFuncs := c.Stabilizer.GetStabilizeFuncs()
 		if len(sFuncs) > len(c.ExpectedVersions)-i {
-			t.Fatalf("Stabilizable %v failed. Unexpected number of sFuncs:\n\tExpected: %v,\n\tActual: %v", i, len(c.ExpectedVersions)-i, len(sFuncs))
+			t.Fatalf("Stabilizer %v failed. Unexpected number of sFuncs:\n\tExpected: %v,\n\tActual: %v", i, len(c.ExpectedVersions)-i, len(sFuncs))
 		}
 		sFuncs[0](c.Palette)
-		if !StructsEqual(c.Stabilizable, expectedVersion) {
-			t.Fatalf("Stabilizable %v failed. Stabilizables were not equal:\n\tExpected: %v,\n\tActual: %v", i, expectedVersion, c.Stabilizable)
+		if !StructsEqual(c.Stabilizer, expectedVersion) {
+			t.Fatalf("Stabilizer %v failed. Stabilizers were not equal:\n\tExpected: %v,\n\tActual: %v", i, expectedVersion, c.Stabilizer)
 		}
 	}
 }

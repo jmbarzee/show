@@ -102,8 +102,8 @@ func TestStaticPaint(t *testing.T) {
 
 func TestStaticGetStabilizeFuncs(t *testing.T) {
 	c := helper.StabilizeableTest{
-		Stabilizable: &Static{},
-		ExpectedVersions: []common.Stabilizable{
+		Stabilizer: &Static{},
+		ExpectedVersions: []common.Stabilizer{
 			&Static{
 				Color: color.Blue,
 			},
