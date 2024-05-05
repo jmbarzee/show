@@ -17,10 +17,10 @@ package shifter
 // 			Name: "One shift per second",
 // 			Shifter: &Directional{
 // 				PhiBender: &bender.Static{
-// 					TheBend: &aFloat,
+// 					Bend: &aFloat,
 // 				},
 // 				ThetaBender: &bender.Static{
-// 					TheBend: &aFloat,
+// 					Bend: &aFloat,
 // 				},
 // 			},
 // 			Instants: []Instant{
@@ -69,15 +69,15 @@ package shifter
 // 			},
 // 			&Directional{
 // 				PhiBender: &bender.Static{
-// 					TheBend: &aFloat, // This is a little dirty. The Benders are both/all pointing to the same struct, so TheBend is set with the first bender
+// 					Bend: &aFloat, // This is a little dirty. The Benders are both/all pointing to the same struct, so Bend is set with the first bender
 // 				},
 // 			},
 // 			&Directional{
 // 				PhiBender: &bender.Static{
-// 					TheBend: &aFloat,
+// 					Bend: &aFloat,
 // 				},
 // 				ThetaBender: &bender.Static{
-// 					TheBend: &aFloat,
+// 					Bend: &aFloat,
 // 				},
 // 			},
 // 		},

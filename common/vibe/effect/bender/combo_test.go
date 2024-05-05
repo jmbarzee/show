@@ -38,7 +38,7 @@ func TestComboBend(t *testing.T) {
 
 func TestComboStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
-	c := helper.StabilizeableTest{
+	c := helper.StabilizerTest{
 		Stabilizer: &Combo{},
 		ExpectedVersions: []common.Stabilizer{
 			&Combo{
@@ -63,5 +63,5 @@ func TestComboStabilizeFuncs(t *testing.T) {
 			Bender: &Static{},
 		},
 	}
-	helper.RunStabilizeableTest(t, c)
+	helper.RunStabilizerTest(t, c)
 }

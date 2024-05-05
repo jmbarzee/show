@@ -1,0 +1,720 @@
+@startuml
+namespace addressable {
+    class Exchanger << (S,Aquamarine) >> {
+        + Send(instruct Instruction) error
+
+    }
+    class Instruction << (S,Aquamarine) >> {
+        + Time time.Time
+        + Colors []color.Color
+
+        + GetTime() time.Time
+
+    }
+    class Instructions << (S,Aquamarine) >> {
+        - heap *instruction.Heap
+
+        + Add(c Instruction) 
+        + Advance(t time.Time) *Instruction
+
+    }
+    class Light << (S,Aquamarine) >> {
+        + Color color.Color
+        + Position int
+        + NumPositions int
+
+        + GetColor() color.Color
+        + SetColor(newColor color.Color) 
+        + GetPosition() (int, int)
+
+    }
+    interface Sender  {
+        + Send( Instruction) error
+
+    }
+    class addressable.Aspect << (T, #FF7700) >>  {
+    }
+    class addressable.Spacing << (T, #FF7700) >>  {
+    }
+}
+"addressable.Instructions" *-- "addressable.Exchanger"
+"sync.Mutex" *-- "addressable.Instructions"
+"space.Object" *-- "addressable.Light"
+
+"addressable.Sender" <|-- "addressable.Exchanger"
+"instruction.Instruction" <|-- "addressable.Instruction"
+"common.Colorable" <|-- "addressable.Light"
+"common.Colored" <|-- "addressable.Light"
+"common.Indexed" <|-- "addressable.Light"
+
+namespace bender {
+    class Combo << (S,Aquamarine) >> {
+        + A common.Bender
+        + B common.Bender
+
+        + Bend(f float64) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Exponential << (S,Aquamarine) >> {
+        + Exponent *float64
+        + Coefficient *float64
+
+        + Bend(f float64) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Linear << (S,Aquamarine) >> {
+        + Interval *float64
+
+        + Bend(f float64) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Sinusoidal << (S,Aquamarine) >> {
+        + Offset *float64
+        + Period *float64
+        + Amplitude *float64
+
+        + Bend(f float64) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Static << (S,Aquamarine) >> {
+        + Bend *float64
+
+        + Bend(f float64) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+}
+
+"common.Bender" <|-- "bender.Combo"
+"common.Bender" <|-- "bender.Exponential"
+"common.Bender" <|-- "bender.Linear"
+"common.Bender" <|-- "bender.Sinusoidal"
+"common.Bender" <|-- "bender.Static"
+
+namespace color {
+    interface Color  {
+        + HSL() HSL
+        + RGB() RGB
+
+    }
+    class HSL << (S,Aquamarine) >> {
+        + H float64
+
+        + HSL() HSL
+        + RGB() RGB
+        + SetHue(h float64) 
+        + ShiftHue(h float64) 
+        + SetSaturation(s float64) 
+        + SetLightness(l float64) 
+
+    }
+    class RGB << (S,Aquamarine) >> {
+        + R float64
+
+        + HSL() HSL
+        + RGB() RGB
+        + ToUInt32RGBW() uint32
+        + ToBytesRGBW() (byte, byte, byte, byte)
+
+    }
+}
+
+"color.Color" <|-- "color.HSL"
+"color.Color" <|-- "color.RGB"
+
+namespace common {
+    interface Bender  {
+        + Bend(f float64) float64
+
+    }
+    interface Colorable  {
+        + SetColor(newColor color.Color) 
+
+    }
+    interface Colored  {
+        + GetColor() color.Color
+
+    }
+    interface Device  {
+        + GetNodes() []Node
+        + GetType() string
+        + GetID() uuid.UUID
+        + DispatchRender( time.Time) error
+
+    }
+    interface Effect  {
+        + Render(t time.Time, obj Renderable) 
+        + Priority() int
+
+    }
+    interface Indexed  {
+        + GetPosition() (int, int)
+
+    }
+    interface Locatable  {
+        + GetLocation() space.Vector
+        + SetLocation( space.Vector) 
+
+    }
+    interface Located  {
+        + GetLocation() space.Vector
+
+    }
+    interface Moveable  {
+        + GetBearings() (space.Vector, space.Quaternion)
+        + Move(location space.Vector, orientation space.Quaternion) 
+
+    }
+    interface Node  {
+        + Allocate( Vibe) 
+        + Clean( time.Time) 
+        + GetChildren() []Node
+        + Insert(parentID uuid.UUID, newNode Node) error
+        + Delete(parentID uuid.UUID, childID uuid.UUID) error
+        + GetType() string
+        + GetID() uuid.UUID
+
+    }
+    interface Orientable  {
+        + GetOrientation() space.Quaternion
+        + SetOrientation( space.Quaternion) 
+
+    }
+    interface Oriented  {
+        + GetOrientation() space.Quaternion
+
+    }
+    interface Painter  {
+        + Paint(t time.Time, obj Renderable) 
+
+    }
+    interface Palette  {
+        + SelectBender() Bender
+        + SelectColor() color.Color
+        + SelectDuration() time.Duration
+        + SelectShift() float64
+        + SelectShifter() Shifter
+        + SelectPainter() Painter
+        + SelectEffect() Effect
+
+    }
+    interface Renderable  {
+    }
+    interface Seeder  {
+        + NextSeed() time.Time
+
+    }
+    interface Shifter  {
+        + Shift(t time.Time, obj Tangible) float64
+
+    }
+    interface Spanner  {
+        + Start() time.Time
+        + End() time.Time
+
+    }
+    interface Stabilizer  {
+        + GetStabilizeFuncs() []<font color=blue>func</font>(Palette) 
+
+    }
+    interface Tangible  {
+    }
+    interface Vibe  {
+        + Duplicate() Vibe
+        + Stabilize() Vibe
+        + Materialize() []Effect
+
+    }
+}
+"common.Stabilizer" *-- "common.Bender"
+"common.Colored" *-- "common.Colorable"
+"common.Moveable" *-- "common.Device"
+"common.Spanner" *-- "common.Effect"
+"common.Stabilizer" *-- "common.Effect"
+"common.Locatable" *-- "common.Orientable"
+"common.Located" *-- "common.Oriented"
+"common.Stabilizer" *-- "common.Painter"
+"common.Seeder" *-- "common.Palette"
+"common.Colorable" *-- "common.Renderable"
+"common.Tangible" *-- "common.Renderable"
+"common.Spanner" *-- "common.Seeder"
+"common.Stabilizer" *-- "common.Shifter"
+"common.Indexed" *-- "common.Tangible"
+"common.Orientable" *-- "common.Tangible"
+"common.Palette" *-- "common.Vibe"
+"common.Stabilizer" *-- "common.Vibe"
+
+
+namespace device {
+    class Bar << (S,Aquamarine) >> {
+        - sender addressable.Sender
+
+        + GetNodes() []common.Node
+        + DispatchRender(t time.Time) error
+        + GetType() string
+
+    }
+    class Basic << (S,Aquamarine) >> {
+        - id uuid.UUID
+
+        + GetID() uuid.UUID
+
+    }
+    class Ring << (S,Aquamarine) >> {
+        - sender addressable.Sender
+
+        + GetNodes() []common.Node
+        + DispatchRender(t time.Time) error
+        + GetType() string
+
+    }
+}
+"device.Basic" *-- "device.Bar"
+"node.Line" *-- "device.Bar"
+"device.Basic" *-- "device.Ring"
+"node.Arc" *-- "device.Ring"
+
+
+namespace effect {
+    class BasicEffect << (S,Aquamarine) >> {
+        + Rank int
+
+        + Priority() int
+        + Render( time.Time,  common.Renderable) 
+
+    }
+    class Future << (S,Aquamarine) >> {
+        + TimePerLight *time.Duration
+        + Painter common.Painter
+
+        + Render(t time.Time, obj common.Renderable) 
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Solid << (S,Aquamarine) >> {
+        + Painter common.Painter
+
+        + Render(t time.Time, obj common.Renderable) 
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+}
+"span.Span" *-- "effect.BasicEffect"
+"effect.BasicEffect" *-- "effect.Future"
+"effect.BasicEffect" *-- "effect.Solid"
+
+"common.Effect" <|-- "effect.BasicEffect"
+
+namespace instruction {
+    class Heap << (S,Aquamarine) >> {
+        + Len() int
+        + Less(i int, j int) bool
+        + Swap(i int, j int) 
+        + Push(x <font color=blue>interface</font>{}) 
+        + Pop() <font color=blue>interface</font>{}
+        + Peek() <font color=blue>interface</font>{}
+
+    }
+    interface Instruction  {
+        + GetTime() time.Time
+
+    }
+    class instruction.Heap << (T, #FF7700) >>  {
+    }
+}
+
+
+namespace node {
+    class Arc << (S,Aquamarine) >> {
+        - radius float64
+        - aspect addressable.Aspect
+
+        + SetLocation(newLocation space.Vector) 
+        + SetOrientation(newOrientation space.Quaternion) 
+        + Move(location space.Vector, orientation space.Quaternion) 
+        + BuildLights() []*addressable.Light
+        + GetType() string
+
+    }
+    class Basic << (S,Aquamarine) >> {
+        - id uuid.UUID
+
+        + GetChildren() []common.Node
+        + Insert(parentID uuid.UUID, newNode common.Node) error
+        + Delete(parentID uuid.UUID, childID uuid.UUID) error
+        + GetID() uuid.UUID
+
+    }
+    class Group << (S,Aquamarine) >> {
+        + Children []common.Node
+
+        + Allocate(vibe common.Vibe) 
+        + Clean(t time.Time) 
+        + GetChildren() []common.Node
+        + Insert(parentID uuid.UUID, newNode common.Node) error
+        + Delete(parentID uuid.UUID, childID uuid.UUID) error
+        + GetType() string
+
+    }
+    class GroupOption << (S,Aquamarine) >> {
+        + Groups []*Group
+
+        + Allocate(vibe common.Vibe) 
+        + Clean(t time.Time) 
+        + GetChildren() []common.Node
+        + Insert(parentID uuid.UUID, newNode common.Node) error
+        + Delete(parentID uuid.UUID, childID uuid.UUID) error
+        + GetType() string
+
+    }
+    class Line << (S,Aquamarine) >> {
+        + SetLocation(newLocation space.Vector) 
+        + SetOrientation(newOrientation space.Quaternion) 
+        + Move(location space.Vector, orientation space.Quaternion) 
+        + BuildLights() []*addressable.Light
+        + GetType() string
+
+    }
+    class byPriority << (S,Aquamarine) >> {
+        + Len() int
+        + Swap(i int, j int) 
+        + Less(i int, j int) bool
+
+    }
+    class byStartTime << (S,Aquamarine) >> {
+        + Len() int
+        + Swap(i int, j int) 
+        + Less(i int, j int) bool
+
+    }
+    class node.byPriority << (T, #FF7700) >>  {
+    }
+    class node.byStartTime << (T, #FF7700) >>  {
+    }
+    class row << (S,Aquamarine) >> {
+        - total int
+        - spacing addressable.Spacing
+        - effects []common.Effect
+        - lightsCache []*addressable.Light
+
+        - getLights() []*addressable.Light
+
+        + Allocate(feeling common.Vibe) 
+        + Clean(t time.Time) 
+        + Render(t time.Time) []*addressable.Light
+
+    }
+    class "[]common.Effect" as commonEffect {
+        'This class was created so that we can correctly have an alias pointing to this name. Since it contains dots that can break namespaces
+    }
+}
+"node.Basic" *-- "node.Arc"
+"node.row" *-- "node.Arc"
+"space.Object" *-- "node.Arc"
+"node.Basic" *-- "node.Group"
+"node.Basic" *-- "node.GroupOption"
+"node.Basic" *-- "node.Line"
+"node.row" *-- "node.Line"
+"space.Object" *-- "node.Line"
+
+
+namespace painter {
+    class Bounce << (S,Aquamarine) >> {
+        + ColorStart color.Color
+        + ColorEnd color.Color
+        + Up *bool
+        + Shifter common.Shifter
+
+        + Paint(t time.Time, obj common.Renderable) 
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Move << (S,Aquamarine) >> {
+        + ColorStart color.Color
+        + Shifter common.Shifter
+
+        + Paint(t time.Time, obj common.Renderable) 
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Static << (S,Aquamarine) >> {
+        + Color color.Color
+
+        + Paint(t time.Time, obj common.Renderable) 
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+}
+
+"common.Painter" <|-- "painter.Bounce"
+"common.Painter" <|-- "painter.Move"
+"common.Painter" <|-- "painter.Static"
+
+namespace palette {
+    class Basic << (S,Aquamarine) >> {
+        + Benders []common.Bender
+        + Colors []color.Color
+        + Durations []time.Duration
+        + Shifts []float64
+        + Shifters []common.Shifter
+        + Painters []common.Painter
+        + Effects []common.Effect
+
+        + SelectBender() common.Bender
+        + SelectColor() color.Color
+        + SelectDuration() time.Duration
+        + SelectShift() float64
+        + SelectShifter() common.Shifter
+        + SelectPainter() common.Painter
+        + SelectEffect() common.Effect
+
+    }
+}
+"common.Seeder" *-- "palette.Basic"
+
+"common.Palette" <|-- "palette.Basic"
+
+namespace shifter {
+    class Combo << (S,Aquamarine) >> {
+        + A common.Shifter
+        + B common.Shifter
+
+        + Shift(t time.Time, obj common.Tangible) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Locational << (S,Aquamarine) >> {
+        + XBender common.Bender
+        + YBender common.Bender
+        + ZBender common.Bender
+
+        + Shift(t time.Time, obj common.Tangible) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Positional << (S,Aquamarine) >> {
+        + Bender common.Bender
+
+        + Shift(t time.Time, obj common.Tangible) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Static << (S,Aquamarine) >> {
+        + TheShift *float64
+
+        + Shift(t time.Time, obj common.Tangible) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+    class Temporal << (S,Aquamarine) >> {
+        + Start *time.Time
+        + Interval *time.Duration
+        + Bender common.Bender
+
+        + Shift(t time.Time, obj common.Tangible) float64
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+}
+
+"common.Shifter" <|-- "shifter.Combo"
+"common.Shifter" <|-- "shifter.Locational"
+"common.Shifter" <|-- "shifter.Positional"
+"common.Shifter" <|-- "shifter.Static"
+"common.Shifter" <|-- "shifter.Temporal"
+
+namespace show {
+    class Show << (S,Aquamarine) >> {
+        - mu *sync.RWMutex
+        - devices <font color=blue>map</font>[uuid.UUID]common.Device
+        - nodeTree common.Node
+
+        + Allocate(vibe common.Vibe) 
+        + DispatchRenders(t time.Time) 
+        + InsertNode(parentID uuid.UUID, childID uuid.UUID) error
+        + NewNode(parentID uuid.UUID, nodeType string) (uuid.UUID, error)
+        + DeleteNode(parentID uuid.UUID, childID uuid.UUID) error
+        + GetParentNodeID() uuid.UUID
+        + AddDevice(device common.Device) error
+        + MoveDevice(deviceID uuid.UUID, bearing space.Object) error
+
+    }
+}
+
+
+namespace space {
+    class Object << (S,Aquamarine) >> {
+        - location Vector
+        - orientation Quaternion
+
+        + GetLocation() Vector
+        + SetLocation(newLocation Vector) 
+        + GetOrientation() Quaternion
+        + SetOrientation(newOrientation Quaternion) 
+        + GetBearings() (Vector, Quaternion)
+        + Move(location Vector, orientation Quaternion) 
+
+    }
+    class Quaternion << (S,Aquamarine) >> {
+        + W float64
+
+        + ToVector() *Vector
+        + SetW(w float64) 
+        + SetX(x float64) 
+        + SetY(y float64) 
+        + SetZ(z float64) 
+        + SetWXYZ(w float64, x float64, y float64, z float64) 
+        + Set(p Quaternion) 
+        + Scale(i float64) 
+        + IsIdentity() bool
+        + Inverse() 
+        + Conjugate() 
+        + Negate() 
+        + Length() float64
+        + Dot(p Quaternion) float64
+        + Cross(p Quaternion) *Quaternion
+        + Normalize() 
+        + Slerp(p Quaternion, t float64) *Quaternion
+        + Equals(p Quaternion) bool
+        + Clone() *Quaternion
+        + String() string
+
+    }
+    class Vector << (S,Aquamarine) >> {
+        + X float64
+
+        + ToQuaternion() *Quaternion
+        + SetX(x float64) 
+        + SetY(y float64) 
+        + SetZ(z float64) 
+        + SetXYZ(x float64, y float64, z float64) 
+        + Set(u Vector) 
+        + Length() float64
+        + Translate(u Vector) 
+        + Scale(i float64) 
+        + Normalize() 
+        + Dot(u Vector) float64
+        + Cross(u Vector) *Vector
+        + Rotate(q Quaternion) 
+        + Clone() *Vector
+        + String() string
+
+    }
+}
+
+"common.Locatable" <|-- "space.Object"
+"common.Located" <|-- "space.Object"
+"common.Moveable" <|-- "space.Object"
+"common.Orientable" <|-- "space.Object"
+"common.Oriented" <|-- "space.Object"
+
+namespace span {
+    class Seed << (S,Aquamarine) >> {
+        - count int
+
+        + NextSeed() time.Time
+
+    }
+    class Span << (S,Aquamarine) >> {
+        + StartTime time.Time
+        + EndTime time.Time
+
+        + Start() time.Time
+        + End() time.Time
+
+    }
+}
+"span.Span" *-- "span.Seed"
+
+"common.Seeder" <|-- "span.Seed"
+"common.Spanner" <|-- "span.Span"
+
+namespace testhelper {
+    class StabilizerTest << (S,Aquamarine) >> {
+        + Stabilizer common.Stabilizer
+        + ExpectedVersions []common.Stabilizer
+        + Palette TestPalette
+
+    }
+    class TestPalette << (S,Aquamarine) >> {
+        + Bender common.Bender
+        + Color color.HSL
+        + Duration time.Duration
+        + Shift float64
+        + Shifter common.Shifter
+        + Painter common.Painter
+        + Effect common.Effect
+
+        + SelectBender() common.Bender
+        + SelectColor() color.Color
+        + SelectDuration() time.Duration
+        + SelectShift() float64
+        + SelectShifter() common.Shifter
+        + SelectPainter() common.Painter
+        + SelectEffect() common.Effect
+
+    }
+}
+"span.Seed" *-- "testhelper.TestPalette"
+
+"common.Palette" <|-- "testhelper.TestPalette"
+
+namespace testutil {
+    class Light << (S,Aquamarine) >> {
+        + Color color.Color
+        + Position int
+        + NumPositions int
+
+        + GetColor() color.Color
+        + SetColor(newColor color.Color) 
+        + GetPosition() (int, int)
+
+    }
+}
+"space.Object" *-- "testutil.Light"
+
+"common.Colorable" <|-- "testutil.Light"
+"common.Colored" <|-- "testutil.Light"
+"common.Indexed" <|-- "testutil.Light"
+
+namespace vibe {
+    class Basic << (S,Aquamarine) >> {
+        - effects []common.Effect
+
+        + Duplicate() common.Vibe
+        + Stabilize() common.Vibe
+        + Materialize() []common.Effect
+        + GetStabilizeFuncs() []<font color=blue>func</font>(common.Palette) 
+        + String() string
+
+    }
+}
+"common.Palette" *-- "vibe.Basic"
+
+"common.Vibe" <|-- "vibe.Basic"
+
+"__builtin__.float64" #.. "addressable.Aspect"
+"__builtin__.float64" #.. "addressable.Spacing"
+"instruction.[]Instruction" #.. "instruction.Heap"
+"node.commonEffect" #.. "node.byPriority"
+"node.commonEffect" #.. "node.byStartTime"
+@enduml

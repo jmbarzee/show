@@ -42,6 +42,15 @@ func (p *Move) GetStabilizeFuncs() []func(p common.Palette) {
 	return sFuncs
 }
 
+// Copy returns a deep copy of the Painter
+func (p Move) Copy() common.Painter {
+	return &Move{
+		ColorStart: common.CopyColor(p.ColorStart),
+		Shifter:    common.CopyShifter(p.Shifter),
+	}
+}
+
+// String returns a string representation of the Painter
 func (p Move) String() string {
 	return fmt.Sprintf("painter.Move{ColorStart:%v, Shifter:%v}", p.ColorStart, p.Shifter)
 }

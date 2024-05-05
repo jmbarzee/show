@@ -16,7 +16,7 @@ type Combo struct {
 var _ common.Shifter = (*Combo)(nil)
 
 // Shift returns a value representing some change or shift
-func (s Combo) Shift(t time.Time, obj common.Item) float64 {
+func (s Combo) Shift(t time.Time, obj common.Tangible) float64 {
 	shift := s.A.Shift(t, obj) + s.B.Shift(t, obj)
 	return shift
 }
@@ -41,6 +41,15 @@ func (s *Combo) GetStabilizeFuncs() []func(p common.Palette) {
 	return sFuncs
 }
 
+// Copy returns a deep copy of the Shifter
+func (s Combo) Copy() common.Shifter {
+	return &Combo{
+		A: common.CopyShifter(s.A),
+		B: common.CopyShifter(s.B),
+	}
+}
+
+// String returns a string representation of the Shifter
 func (s Combo) String() string {
 	return fmt.Sprintf("shifter.Combo{A:%v, B:%v}", s.A, s.B)
 }

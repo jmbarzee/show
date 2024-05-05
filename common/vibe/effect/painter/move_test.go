@@ -49,7 +49,7 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 	aTime := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
 	aFloat := 1.1
 	aDuration := time.Second
-	c := helper.StabilizeableTest{
+	c := helper.StabilizerTest{
 		Stabilizer: &Move{},
 		ExpectedVersions: []common.Stabilizer{
 			&Move{
@@ -92,8 +92,8 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 			},
 		},
 		Palette: helper.TestPalette{
-			Span: span.Span{
-				StartTime: aTime,
+			Seed: &span.Seed{
+				Span: span.Span{StartTime: aTime},
 			},
 			Bender:   &bender.Static{},
 			Duration: aDuration,
@@ -102,5 +102,5 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 			Shifter:  &shifter.Temporal{},
 		},
 	}
-	helper.RunStabilizeableTest(t, c)
+	helper.RunStabilizerTest(t, c)
 }

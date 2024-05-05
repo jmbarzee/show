@@ -15,31 +15,40 @@ type Combo struct {
 var _ common.Bender = (*Combo)(nil)
 
 // Bend returns a value representing some change or bend
-func (s Combo) Bend(f float64) float64 {
-	bend := s.A.Bend(f) + s.B.Bend(f)
+func (b Combo) Bend(f float64) float64 {
+	bend := b.A.Bend(f) + b.B.Bend(f)
 	return bend
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (s *Combo) GetStabilizeFuncs() []func(p common.Palette) {
+func (b *Combo) GetStabilizeFuncs() []func(p common.Palette) {
 	sFuncs := []func(p common.Palette){}
-	if s.A == nil {
+	if b.A == nil {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			s.A = p.SelectBender()
+			b.A = p.SelectBender()
 		})
 	} else {
-		sFuncs = append(sFuncs, s.A.GetStabilizeFuncs()...)
+		sFuncs = append(sFuncs, b.A.GetStabilizeFuncs()...)
 	}
-	if s.B == nil {
+	if b.B == nil {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			s.B = p.SelectBender()
+			b.B = p.SelectBender()
 		})
 	} else {
-		sFuncs = append(sFuncs, s.B.GetStabilizeFuncs()...)
+		sFuncs = append(sFuncs, b.B.GetStabilizeFuncs()...)
 	}
 	return sFuncs
 }
 
-func (s Combo) String() string {
-	return fmt.Sprintf("shifter.Combo{A:%v, B:%v}", s.A, s.B)
+// Copy returns a deep copy of the Bender
+func (b Combo) Copy() common.Bender {
+	return &Combo{
+		A: common.CopyBender(b.A),
+		B: common.CopyBender(b.B),
+	}
+}
+
+// String returns a string representation of the Bender
+func (b Combo) String() string {
+	return fmt.Sprintf("shifter.Combo{A:%v, B:%v}", b.A, b.B)
 }

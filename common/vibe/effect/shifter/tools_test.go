@@ -17,7 +17,7 @@ type (
 
 	Instant struct {
 		Time          time.Time
-		Light         common.Item
+		Light         common.Tangible
 		ExpectedShift float64
 	}
 )

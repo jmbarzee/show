@@ -8,6 +8,8 @@ type Color interface {
 	HSL() HSL
 	// RGB returns a color represented by Red, Green, Blue
 	RGB() RGB
+
+	Copy() Color
 }
 
 var (

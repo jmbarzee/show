@@ -61,7 +61,7 @@ func TestLocationalShift(t *testing.T) {
 }
 func TestLocationalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
-	c := helper.StabilizeableTest{
+	c := helper.StabilizerTest{
 		Stabilizer: &Locational{},
 		ExpectedVersions: []common.Stabilizer{
 			&Locational{
@@ -77,7 +77,7 @@ func TestLocationalGetStabilizeFuncs(t *testing.T) {
 					TheBend: &aFloat,
 				},
 				YBender: &bender.Static{
-					TheBend: &aFloat, // This is a little dirty. The Benders are both/all pointing to the same struct, so TheBend is set with the first bender
+					TheBend: &aFloat, // This is a little dirty. The Benders are both/all pointing to the same struct, so Bend is set with the first bender
 				},
 			},
 			&Locational{
@@ -97,5 +97,5 @@ func TestLocationalGetStabilizeFuncs(t *testing.T) {
 			Shift:  aFloat,
 		},
 	}
-	helper.RunStabilizeableTest(t, c)
+	helper.RunStabilizerTest(t, c)
 }

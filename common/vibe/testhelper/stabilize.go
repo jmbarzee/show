@@ -9,13 +9,13 @@ import (
 	"github.com/jmbarzee/show/common/vibe/span"
 )
 
-type StabilizeableTest struct {
+type StabilizerTest struct {
 	Stabilizer       common.Stabilizer
 	ExpectedVersions []common.Stabilizer
 	Palette          TestPalette
 }
 
-func RunStabilizeableTest(t *testing.T, c StabilizeableTest) {
+func RunStabilizerTest(t *testing.T, c StabilizerTest) {
 	for i, expectedVersion := range c.ExpectedVersions {
 
 		sFuncs := c.Stabilizer.GetStabilizeFuncs()
@@ -30,7 +30,7 @@ func RunStabilizeableTest(t *testing.T, c StabilizeableTest) {
 }
 
 type TestPalette struct {
-	span.Span
+	*span.Seed
 	Bender   common.Bender
 	Color    color.HSL
 	Duration time.Duration
@@ -52,14 +52,14 @@ func (p TestPalette) SelectColor() color.Color {
 
 // SelectDuration returns a Duration
 // Should generally range from 0.1s to 10s
-func (p TestPalette) SelectDuration() *time.Duration {
-	return &p.Duration
+func (p TestPalette) SelectDuration() time.Duration {
+	return p.Duration
 }
 
 // SelectShift returns a Shift
 // Should generally range from .01 to 1
-func (p TestPalette) SelectShift() *float64 {
-	return &p.Shift
+func (p TestPalette) SelectShift() float64 {
+	return p.Shift
 }
 
 // SelectShifter returns a Shifter

@@ -8,7 +8,7 @@ import (
 	"github.com/jmbarzee/show/common/color"
 )
 
-// Static is a Painter which provides unchangeing colors
+// Static is a Painter which provides unchanging colors
 type Static struct {
 	Color color.Color
 }
@@ -31,6 +31,14 @@ func (p *Static) GetStabilizeFuncs() []func(p common.Palette) {
 	return sFuncs
 }
 
+// Copy returns a deep copy of the Painter
+func (p Static) Copy() common.Painter {
+	return &Static{
+		Color: common.CopyColor(p.Color),
+	}
+}
+
+// String returns a string representation of the Painter
 func (p Static) String() string {
 	return fmt.Sprintf("painter.Static{Color:%v}", p.Color)
 }

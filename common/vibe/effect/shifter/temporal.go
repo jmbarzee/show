@@ -17,7 +17,7 @@ type Temporal struct {
 var _ common.Shifter = (*Temporal)(nil)
 
 // Shift returns a value representing some change or shift
-func (s Temporal) Shift(t time.Time, obj common.Item) float64 {
+func (s Temporal) Shift(t time.Time, obj common.Tangible) float64 {
 	secondsPast := float64(t.Sub(*s.Start)) / float64(*s.Interval)
 	bend := s.Bender.Bend(secondsPast)
 	return bend
@@ -34,7 +34,8 @@ func (s *Temporal) GetStabilizeFuncs() []func(p common.Palette) {
 	}
 	if s.Interval == nil {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			s.Interval = p.SelectDuration()
+			t := p.SelectDuration()
+			s.Interval = &t
 		})
 	}
 	if s.Bender == nil {
@@ -47,6 +48,16 @@ func (s *Temporal) GetStabilizeFuncs() []func(p common.Palette) {
 	return sFuncs
 }
 
+// Copy returns a deep copy of the Shifter
+func (s Temporal) Copy() common.Shifter {
+	return &Temporal{
+		Start:    common.CopyTime(s.Start),
+		Interval: common.CopyDuration(s.Interval),
+		Bender:   common.CopyBender(s.Bender),
+	}
+}
+
+// String returns a string representation of the Shifter
 func (s Temporal) String() string {
-	return fmt.Sprintf("shifter.Temporal{Start:%v, Interval:%v, Bender:%v}", s.Start, s.Interval, s.Bender)
+	return fmt.Sprintf("shifter.Temporal{Start:%v, Interval:%v, Bender:%v}", *s.Start, *s.Interval, s.Bender)
 }

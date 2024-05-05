@@ -257,7 +257,7 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 	aDuration := time.Second
 	theTruth := true
 	aFloat := 1.1
-	c := helper.StabilizeableTest{
+	c := helper.StabilizerTest{
 		Stabilizer: &Bounce{},
 		ExpectedVersions: []common.Stabilizer{
 			&Bounce{
@@ -319,8 +319,8 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 			},
 		},
 		Palette: helper.TestPalette{
-			Span: span.Span{
-				StartTime: aTime,
+			Seed: &span.Seed{
+				Span: span.Span{StartTime: aTime},
 			},
 			Bender:   &bender.Linear{},
 			Duration: aDuration,
@@ -329,5 +329,5 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 			Shifter:  &shifter.Temporal{},
 		},
 	}
-	helper.RunStabilizeableTest(t, c)
+	helper.RunStabilizerTest(t, c)
 }

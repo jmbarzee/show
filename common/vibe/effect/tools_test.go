@@ -47,7 +47,9 @@ func GetLights(length int, c color.HSL) []common.Renderable {
 	lights := make([]common.Renderable, length)
 	for i := range lights {
 		lights[i] = &testutil.Light{
-			Color: c,
+			Position:     i,
+			NumPositions: length,
+			Color:        c,
 		}
 	}
 	return lights

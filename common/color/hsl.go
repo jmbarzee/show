@@ -96,3 +96,13 @@ func (c *HSL) SetLightness(l float64) {
 		c.L = l
 	}
 }
+
+// Copy returns a deep copy of an HSL
+func (c HSL) Copy() Color {
+	return &HSL{
+		H: c.H,
+		S: c.S,
+		L: c.L,
+		A: c.A,
+	}
+}

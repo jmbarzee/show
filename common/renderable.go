@@ -5,14 +5,14 @@ import (
 	"github.com/jmbarzee/show/common/space"
 )
 
-type Item interface {
-	Indexed
-	Orientable
+type Renderable interface {
+	Tangible
+	Colorable
 }
 
-type Renderable interface {
-	Item
-	Colorable
+type Tangible interface {
+	Indexed
+	Orientable
 }
 
 // Indexed is the interface to something which is in an ordered set
@@ -40,15 +40,16 @@ type (
 type (
 	// Located is the interface to something which exists in space
 	Located interface {
-		// GetLocation returns the location of the objcet
+		// GetLocation returns the location of the object
 		GetLocation() space.Vector
 	}
 
 	// Locatable is the interface to something which can be positioned in space
 	Locatable interface {
-		Located
 
-		// SetLocation changes the location of the objcet
+		// GetLocation returns the location of the object
+		GetLocation() space.Vector
+		// SetLocation changes the location of the object
 		SetLocation(space.Vector)
 	}
 )

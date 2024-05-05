@@ -160,6 +160,17 @@ func (p *Bounce) GetStabilizeFuncs() []func(p common.Palette) {
 	return sFuncs
 }
 
+// Copy returns a deep copy of the Painter
+func (p Bounce) Copy() common.Painter {
+	return &Bounce{
+		ColorStart: common.CopyColor(p.ColorStart),
+		ColorEnd:   common.CopyColor(p.ColorEnd),
+		Up:         common.CopyBool(p.Up),
+		Shifter:    common.CopyShifter(p.Shifter),
+	}
+}
+
+// String returns a string representation of the Painter
 func (p Bounce) String() string {
-	return fmt.Sprintf("painter.Bounce{ColorStart:%v, ColorEnd:%v, Up:%v, Shifter:%v}", p.ColorStart, p.ColorEnd, p.Up, p.Shifter)
+	return fmt.Sprintf("painter.Bounce{ColorStart:%v, ColorEnd:%v, Up:%v, Shifter:%v}", p.ColorStart, p.ColorEnd, &p.Up, p.Shifter)
 }

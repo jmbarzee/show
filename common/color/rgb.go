@@ -106,3 +106,13 @@ func FromUInt32RGBW(wgrb uint32) RGB {
 		A: a,
 	}
 }
+
+// Copy returns a deep copy of an RGB
+func (c RGB) Copy() Color {
+	return &RGB{
+		R: c.R,
+		G: c.G,
+		B: c.B,
+		A: c.A,
+	}
+}

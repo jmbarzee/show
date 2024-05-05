@@ -29,7 +29,8 @@ func (e *Future) GetStabilizeFuncs() []func(p common.Palette) {
 	sFuncs := []func(p common.Palette){}
 	if e.TimePerLight == nil {
 		sFuncs = append(sFuncs, func(pa common.Palette) {
-			e.TimePerLight = pa.SelectDuration()
+			t := pa.SelectDuration()
+			e.TimePerLight = &t
 		})
 	}
 	if e.Painter == nil {
@@ -43,6 +44,16 @@ func (e *Future) GetStabilizeFuncs() []func(p common.Palette) {
 	return sFuncs
 }
 
+// Copy returns a deep copy of the Effect
+func (e Future) Copy() common.Effect {
+	return &Future{
+		BasicEffect:  e.BasicEffect,
+		TimePerLight: common.CopyDuration(e.TimePerLight),
+		Painter:      common.CopyPainter(e.Painter),
+	}
+}
+
+// String returns a string representation of the Effect
 func (e Future) String() string {
-	return fmt.Sprintf("effect.Future{StartTime:%v, EndTime:%v, Rank:%v, TimePerLight:%v, Painter:%v}", e.StartTime, e.EndTime, e.Rank, e.TimePerLight, e.Painter)
+	return fmt.Sprintf("effect.Future{StartTime:%v, EndTime:%v, Rank:%v, TimePerLight:%v, Painter:%v}", e.Start(), e.End(), e.Rank, *e.TimePerLight, e.Painter)
 }

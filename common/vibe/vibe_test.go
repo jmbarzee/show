@@ -4,12 +4,13 @@ import (
 	"testing"
 	"time"
 
-	ifaces "github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
 	"github.com/jmbarzee/show/common/vibe/effect"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/painter"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
+	"github.com/jmbarzee/show/common/vibe/palette"
 	"github.com/jmbarzee/show/common/vibe/span"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
@@ -23,50 +24,47 @@ func TestBasicStabilize(t *testing.T) {
 	aFloat5 := 0.059
 	theTruth := true
 	aDuration := time.Nanosecond * 2245197264
-	aSpan1 := span.Span{
-		StartTime: aTime1,
-		EndTime:   aTime1.Add(time.Hour),
-	}
+	aSeed1 := span.NewSeed(aTime1, aTime1.Add(time.Hour))
 
 	cases := []StabilizeTest{
 		{
 			Name: "Basic Vibe",
 			ActualVibe: &Basic{
-				Span: aSpan1,
+				Palette: palette.NewRandom(aSeed1),
 			},
-			ExpectedVibes: []ifaces.Vibe{
+			ExpectedVibes: []common.Vibe{
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect: effect.BasicEffect{Span: aSpan1},
+							BasicEffect: effect.BasicEffect{Spanner: aSeed1},
 						},
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 						},
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter:      &painter.Bounce{},
 						},
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorEnd: color.RedMagenta,
@@ -75,10 +73,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorEnd: color.RedMagenta,
@@ -88,10 +86,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorEnd: color.RedMagenta,
@@ -103,10 +101,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -119,10 +117,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -136,10 +134,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -155,10 +153,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -175,10 +173,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -196,10 +194,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -219,10 +217,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -243,10 +241,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -269,10 +267,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -297,10 +295,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -327,10 +325,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -359,10 +357,10 @@ func TestBasicStabilize(t *testing.T) {
 					},
 				},
 				&Basic{
-					Span: aSpan1,
-					Effects: []ifaces.Effect{
+					Palette: palette.NewRandom(aSeed1),
+					effects: []common.Effect{
 						&effect.Future{
-							BasicEffect:  effect.BasicEffect{Span: aSpan1},
+							BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 							TimePerLight: &aDuration,
 							Painter: &painter.Bounce{
 								ColorStart: color.Red,
@@ -404,22 +402,19 @@ func TestBasicMaterialize(t *testing.T) {
 	aFloat1 := 0.17900000000000002
 	aFloat2 := 0.46900000000000003
 	aFloat3 := 0.47000000000000003
-	aSpan := span.Span{
-		StartTime: aTime1,
-		EndTime:   aTime1.Add(time.Hour),
-	}
+	aSeed1 := span.NewSeed(aTime1, aTime1.Add(time.Hour))
 
 	cases := []MaterializeTest{
 		{
 			Name: "Basic Vibe",
 			ActualVibe: &Basic{
-				Span: aSpan,
+				Palette: palette.NewRandom(aSeed1),
 			},
 			ExpectedVibe: &Basic{
-				Span: aSpan,
-				Effects: []ifaces.Effect{
+				Palette: palette.NewRandom(aSeed1),
+				effects: []common.Effect{
 					&effect.Future{
-						BasicEffect:  effect.BasicEffect{Span: aSpan},
+						BasicEffect:  effect.BasicEffect{Spanner: aSeed1},
 						TimePerLight: &aDuration,
 						Painter: &painter.Move{
 							ColorStart: color.WarmCyan,
@@ -440,24 +435,31 @@ func TestBasicMaterialize(t *testing.T) {
 	RunMaterializeTests(t, cases)
 }
 func TestBasicGetStabilizeFuncs(t *testing.T) {
-	c := helper.StabilizeableTest{
+	aTime1 := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
+	aSeed1 := span.NewSeed(aTime1, aTime1.Add(time.Hour))
+
+	c := helper.StabilizerTest{
 		Stabilizer: &Basic{},
-		ExpectedVersions: []ifaces.Stabilizer{
+		ExpectedVersions: []common.Stabilizer{
 			&Basic{
-				Effects: []ifaces.Effect{
-					&effect.Solid{},
-				},
-			},
-			&Basic{
-				Effects: []ifaces.Effect{
+				effects: []common.Effect{
 					&effect.Solid{
-						Painter: &painter.Static{},
+						BasicEffect: effect.BasicEffect{Spanner: aSeed1},
 					},
 				},
 			},
 			&Basic{
-				Effects: []ifaces.Effect{
+				effects: []common.Effect{
 					&effect.Solid{
+						BasicEffect: effect.BasicEffect{Spanner: aSeed1},
+						Painter:     &painter.Static{},
+					},
+				},
+			},
+			&Basic{
+				effects: []common.Effect{
+					&effect.Solid{
+						BasicEffect: effect.BasicEffect{Spanner: aSeed1},
 						Painter: &painter.Static{
 							Color: color.Blue,
 						},
@@ -471,5 +473,5 @@ func TestBasicGetStabilizeFuncs(t *testing.T) {
 			Effect:  &effect.Future{},
 		},
 	}
-	helper.RunStabilizeableTest(t, c)
+	helper.RunStabilizerTest(t, c)
 }

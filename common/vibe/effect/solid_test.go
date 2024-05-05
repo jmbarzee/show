@@ -100,7 +100,7 @@ func TestSolidEffect(t *testing.T) {
 }
 
 func TestSolidGetStabilizeFuncs(t *testing.T) {
-	c := helper.StabilizeableTest{
+	c := helper.StabilizerTest{
 		Stabilizer: &Solid{},
 		ExpectedVersions: []common.Stabilizer{
 			&Solid{
@@ -117,5 +117,5 @@ func TestSolidGetStabilizeFuncs(t *testing.T) {
 			Painter: &painter.Static{},
 		},
 	}
-	helper.RunStabilizeableTest(t, c)
+	helper.RunStabilizerTest(t, c)
 }

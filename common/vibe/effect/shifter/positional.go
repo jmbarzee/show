@@ -15,7 +15,7 @@ type Positional struct {
 var _ common.Shifter = (*Positional)(nil)
 
 // Shift returns a value representing some change or shift
-func (s Positional) Shift(t time.Time, obj common.Item) float64 {
+func (s Positional) Shift(t time.Time, obj common.Tangible) float64 {
 	pos, numPos := obj.GetPosition()
 	return s.Bender.Bend(float64(pos) / float64(numPos))
 }
@@ -33,6 +33,14 @@ func (s *Positional) GetStabilizeFuncs() []func(p common.Palette) {
 	return sFuncs
 }
 
+// Copy returns a deep copy of the Shifter
+func (s Positional) Copy() common.Shifter {
+	return &Positional{
+		Bender: common.CopyBender(s.Bender),
+	}
+}
+
+// String returns a string representation of the Shifter
 func (s Positional) String() string {
 	return fmt.Sprintf("shifter.Positional{Bender:%v}", s.Bender)
 }

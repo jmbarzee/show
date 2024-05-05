@@ -10,11 +10,13 @@ import (
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/painter"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
+	"github.com/jmbarzee/show/common/vibe/span"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
 func TestFutureEffect(t *testing.T) {
 	aTime := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
+	aSeed1 := span.NewSeed(aTime, aTime.Add(time.Hour))
 	aFloat := 1.0
 	aSecond := time.Second
 	a24thSecond := time.Second / 24
@@ -23,6 +25,7 @@ func TestFutureEffect(t *testing.T) {
 		{
 			Name: "Future Effect with Static Painter",
 			Effect: &Future{
+				BasicEffect:  BasicEffect{Spanner: aSeed1},
 				TimePerLight: &aSecond,
 				Painter: &painter.Static{
 					Color: color.Blue,
@@ -55,6 +58,7 @@ func TestFutureEffect(t *testing.T) {
 		{
 			Name: "Future Effect with Moving Painter",
 			Effect: &Future{
+				BasicEffect:  BasicEffect{Spanner: aSeed1},
 				TimePerLight: &a24thSecond,
 				Painter: &painter.Move{
 					ColorStart: color.Blue,
@@ -101,7 +105,7 @@ func TestFutureEffect(t *testing.T) {
 
 func TestFutureGetStabilizeFuncs(t *testing.T) {
 	aSecond := time.Second
-	c := helper.StabilizeableTest{
+	c := helper.StabilizerTest{
 		Stabilizer: &Future{},
 		ExpectedVersions: []common.Stabilizer{
 			&Future{
@@ -124,5 +128,5 @@ func TestFutureGetStabilizeFuncs(t *testing.T) {
 			Duration: aSecond,
 		},
 	}
-	helper.RunStabilizeableTest(t, c)
+	helper.RunStabilizerTest(t, c)
 }

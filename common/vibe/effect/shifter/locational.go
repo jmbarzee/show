@@ -17,7 +17,7 @@ type Locational struct {
 var _ common.Shifter = (*Locational)(nil)
 
 // Shift returns a value representing some change or shift
-func (s Locational) Shift(t time.Time, obj common.Item) float64 {
+func (s Locational) Shift(t time.Time, obj common.Tangible) float64 {
 	loc := obj.GetLocation()
 	bendX := s.XBender.Bend(loc.X)
 	bendY := s.YBender.Bend(loc.Y)
@@ -52,6 +52,16 @@ func (s *Locational) GetStabilizeFuncs() []func(p common.Palette) {
 	return sFuncs
 }
 
+// Copy returns a deep copy of the Shifter
+func (s Locational) Copy() common.Shifter {
+	return &Locational{
+		XBender: common.CopyBender(s.XBender),
+		YBender: common.CopyBender(s.YBender),
+		ZBender: common.CopyBender(s.ZBender),
+	}
+}
+
+// String returns a string representation of the Shifter
 func (s Locational) String() string {
 	return fmt.Sprintf("shifter.Locational{XBender:%v, YBender:%v, ZBender:%v}", s.XBender, s.YBender, s.ZBender)
 }

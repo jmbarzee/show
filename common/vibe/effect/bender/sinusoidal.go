@@ -17,33 +17,46 @@ type Sinusoidal struct {
 var _ common.Bender = (*Sinusoidal)(nil)
 
 // Bend returns a value representing some change or bend
-func (s Sinusoidal) Bend(f float64) float64 {
-	cycles := f / *s.Period
-	sin := math.Sin(*s.Offset + 2*math.Pi*cycles)
-	return *s.Amplitude * sin
+func (b Sinusoidal) Bend(f float64) float64 {
+	cycles := f / *b.Period
+	sin := math.Sin(*b.Offset + 2*math.Pi*cycles)
+	return *b.Amplitude * sin
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
-func (s *Sinusoidal) GetStabilizeFuncs() []func(p common.Palette) {
+func (b *Sinusoidal) GetStabilizeFuncs() []func(p common.Palette) {
 	sFuncs := []func(p common.Palette){}
-	if s.Offset == nil {
+	if b.Offset == nil {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			s.Offset = p.SelectShift()
+			shift := p.SelectShift()
+			b.Offset = &shift
 		})
 	}
-	if s.Period == nil {
+	if b.Period == nil {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			s.Period = p.SelectShift()
+			shift := p.SelectShift()
+			b.Period = &shift
 		})
 	}
-	if s.Amplitude == nil {
+	if b.Amplitude == nil {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			s.Amplitude = p.SelectShift()
+			shift := p.SelectShift()
+			b.Amplitude = &shift
 		})
 	}
 	return sFuncs
 }
 
-func (s Sinusoidal) String() string {
-	return fmt.Sprintf("shifter.Sinusoidal{Offset:%v, Period:%v, Amplitude:%v}", s.Offset, s.Period, s.Amplitude)
+// Copy returns a deep copy of the Bender
+func (b Sinusoidal) Copy() common.Bender {
+	return &Sinusoidal{
+		Offset:    common.CopyFloat64(b.Offset),
+		Period:    common.CopyFloat64(b.Period),
+		Amplitude: common.CopyFloat64(b.Amplitude),
+	}
+}
+
+// String returns a string representation of the Bender
+func (b Sinusoidal) String() string {
+	return fmt.Sprintf("shifter.Sinusoidal{Offset:%v, Period:%v, Amplitude:%v}", *b.Offset, *b.Period, *b.Amplitude)
 }
