@@ -4,13 +4,14 @@ import (
 	"fmt"
 
 	"github.com/jmbarzee/show/common"
-	"github.com/jmbarzee/show/common/repeatable"
+	"github.com/jmbarzee/show/common/vibe/span"
 )
 
 // Basic is a vibe which can produce most Effects
 type Basic struct {
 	effects []common.Effect
 
+	*span.Span
 	common.Palette
 }
 
@@ -31,7 +32,7 @@ func (v *Basic) Stabilize() common.Vibe {
 	if len(sFuncs) == 0 {
 		return &newVibe
 	}
-	option := repeatable.Option(newVibe.NextSeed(), len(sFuncs))
+	option := newVibe.Option(len(sFuncs))
 	sFuncs[option](&newVibe)
 	return &newVibe
 }
@@ -59,7 +60,9 @@ func (v *Basic) GetStabilizeFuncs() []func(p common.Palette) {
 	}
 	if len(v.effects) == 0 {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			v.effects = append(v.effects, p.SelectEffect())
+			e := p.SelectEffect()
+			e.SetSpan(v.Span)
+			v.effects = append(v.effects, e)
 		})
 	}
 	return sFuncs

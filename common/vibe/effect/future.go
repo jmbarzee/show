@@ -55,5 +55,12 @@ func (e Future) Copy() common.Effect {
 
 // String returns a string representation of the Effect
 func (e Future) String() string {
-	return fmt.Sprintf("effect.Future{StartTime:%v, EndTime:%v, Rank:%v, TimePerLight:%v, Painter:%v}", e.Start(), e.End(), e.Rank, *e.TimePerLight, e.Painter)
+	var timePerLight string
+
+	if e.TimePerLight != nil {
+		timePerLight = fmt.Sprintf("%v", *e.TimePerLight)
+	} else {
+		timePerLight = "<nil>"
+	}
+	return fmt.Sprintf("effect.Future{StartTime:%v, EndTime:%v, Rank:%v, TimePerLight:%v, Painter:%v}", e.Start(), e.End(), e.Rank, timePerLight, e.Painter)
 }

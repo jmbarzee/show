@@ -1,6 +1,7 @@
 package span
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/jmbarzee/show/common"
@@ -8,38 +9,57 @@ import (
 
 // Span represents anything that starts and Ends
 type Span struct {
-	StartTime time.Time
-	EndTime   time.Time
+	start time.Time
+	end   time.Time
+}
+
+// New is the primary way to make a new span
+func New(start, end time.Time) *Span {
+	return &Span{
+		start: start,
+		end:   end,
+	}
 }
 
 var _ common.Spanner = (*Span)(nil)
 
 // Start returns the Start time
-func (s Span) Start() time.Time { return s.StartTime }
+func (s Span) Start() time.Time { return s.start }
+
+// SetStart sets the Start time
+func (s *Span) SetStart(start time.Time) { s.start = start }
 
 // End returns the End time
-func (s Span) End() time.Time { return s.EndTime }
+func (s Span) End() time.Time { return s.end }
 
-// Seed is represents anything that starts and Ends
-type Seed struct {
-	Span
+// SetEnd sets the End time
+func (s *Span) SetEnd(end time.Time) { s.end = end }
 
-	count int // incremented to change seed
-}
+// SetSpan sets the start and end of a span from the provided span
+func (s *Span) SetSpan(ss common.Spanner) { s.end = ss.End(); s.start = ss.Start() }
 
-var _ common.Seeder = (*Seed)(nil)
+func (s *Span) UnmarshalJSON(b []byte) error {
+	v := struct {
+		Start time.Time `json:"Start,omitempty"`
+		End   time.Time `json:"End,omitempty"`
+	}{}
 
-func NewSeed(start, end time.Time) *Seed {
-	return &Seed{
-		count: 0,
-		Span: Span{
-			StartTime: start,
-			EndTime:   end,
-		},
+	err := json.Unmarshal(b, &v)
+	if err != nil {
+		return err
 	}
+
+	s.start = v.Start
+	s.end = v.End
+	return nil
 }
 
-func (s *Seed) NextSeed() time.Time {
-	s.count++
-	return s.Start().Add(time.Second * time.Duration(s.count))
+func (s Span) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Start time.Time `json:"Start,omitempty"`
+		End   time.Time `json:"End,omitempty"`
+	}{
+		Start: s.start,
+		End:   s.end,
+	})
 }

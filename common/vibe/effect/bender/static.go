@@ -39,5 +39,11 @@ func (b Static) Copy() common.Bender {
 
 // String returns a string representation of the Combo
 func (b Static) String() string {
-	return fmt.Sprintf("shifter.Static{Bend:%v}", *b.TheBend)
+	var theBend string
+	if b.TheBend != nil {
+		theBend = fmt.Sprintf("%v", *b.TheBend)
+	} else {
+		theBend = "<nil>"
+	}
+	return fmt.Sprintf("shifter.Static{Bend:%v}", theBend)
 }

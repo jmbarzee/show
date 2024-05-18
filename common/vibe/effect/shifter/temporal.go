@@ -28,7 +28,7 @@ func (s *Temporal) GetStabilizeFuncs() []func(p common.Palette) {
 	sFuncs := []func(p common.Palette){}
 	if s.Start == nil {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			t := p.Start()
+			t := p.NextSeed()
 			s.Start = &t
 		})
 	}
@@ -59,5 +59,19 @@ func (s Temporal) Copy() common.Shifter {
 
 // String returns a string representation of the Shifter
 func (s Temporal) String() string {
-	return fmt.Sprintf("shifter.Temporal{Start:%v, Interval:%v, Bender:%v}", *s.Start, *s.Interval, s.Bender)
+	var start, interval string
+
+	if s.Start != nil {
+		start = fmt.Sprintf("%v", *s.Start)
+	} else {
+		start = "<nil>"
+	}
+
+	if s.Interval != nil {
+		interval = fmt.Sprintf("%v", *s.Interval)
+	} else {
+		interval = "<nil>"
+	}
+
+	return fmt.Sprintf("shifter.Temporal{Start:%v, Interval:%v, Bender:%v}", start, interval, s.Bender)
 }

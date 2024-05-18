@@ -16,7 +16,7 @@ import (
 
 func TestFutureEffect(t *testing.T) {
 	aTime := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
-	aSeed1 := span.NewSeed(aTime, aTime.Add(time.Hour))
+	aSpan := span.New(aTime, aTime.Add(time.Hour))
 	aFloat := 1.0
 	aSecond := time.Second
 	a24thSecond := time.Second / 24
@@ -25,7 +25,7 @@ func TestFutureEffect(t *testing.T) {
 		{
 			Name: "Future Effect with Static Painter",
 			Effect: &Future{
-				BasicEffect:  BasicEffect{Spanner: aSeed1},
+				BasicEffect:  BasicEffect{Spanner: aSpan},
 				TimePerLight: &aSecond,
 				Painter: &painter.Static{
 					Color: color.Blue,
@@ -58,7 +58,7 @@ func TestFutureEffect(t *testing.T) {
 		{
 			Name: "Future Effect with Moving Painter",
 			Effect: &Future{
-				BasicEffect:  BasicEffect{Spanner: aSeed1},
+				BasicEffect:  BasicEffect{Spanner: aSpan},
 				TimePerLight: &a24thSecond,
 				Painter: &painter.Move{
 					ColorStart: color.Blue,

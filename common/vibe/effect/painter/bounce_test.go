@@ -6,9 +6,9 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
+	"github.com/jmbarzee/show/common/repeat"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
-	"github.com/jmbarzee/show/common/vibe/span"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
@@ -253,9 +253,10 @@ func TestBouncePaint(t *testing.T) {
 }
 
 func TestBounceGetStabilizeFuncs(t *testing.T) {
-	aTime := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
+	aTime1 := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
+	aTime2 := aTime1.Add(time.Millisecond * 2)
 	aDuration := time.Second
-	theTruth := true
+	theTruth := false
 	aFloat := 1.1
 	c := helper.StabilizerTest{
 		Stabilizer: &Bounce{},
@@ -283,7 +284,7 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 				ColorEnd:   color.Red,
 				Up:         &theTruth,
 				Shifter: &shifter.Temporal{
-					Start: &aTime,
+					Start: &aTime2,
 				},
 			},
 			&Bounce{
@@ -291,7 +292,7 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 				ColorEnd:   color.Red,
 				Up:         &theTruth,
 				Shifter: &shifter.Temporal{
-					Start:    &aTime,
+					Start:    &aTime2,
 					Interval: &aDuration,
 				},
 			},
@@ -300,7 +301,7 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 				ColorEnd:   color.Red,
 				Up:         &theTruth,
 				Shifter: &shifter.Temporal{
-					Start:    &aTime,
+					Start:    &aTime2,
 					Interval: &aDuration,
 					Bender:   &bender.Linear{},
 				},
@@ -310,7 +311,7 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 				ColorEnd:   color.Red,
 				Up:         &theTruth,
 				Shifter: &shifter.Temporal{
-					Start:    &aTime,
+					Start:    &aTime2,
 					Interval: &aDuration,
 					Bender: &bender.Linear{
 						Interval: &aFloat,
@@ -319,9 +320,7 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 			},
 		},
 		Palette: helper.TestPalette{
-			Seed: &span.Seed{
-				Span: span.Span{StartTime: aTime},
-			},
+			Seed:     repeat.NewSeed(aTime1),
 			Bender:   &bender.Linear{},
 			Duration: aDuration,
 			Color:    color.Red,

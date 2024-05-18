@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/repeat"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
-	"github.com/jmbarzee/show/common/vibe/span"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
@@ -68,26 +68,27 @@ func TestTemporalShift(t *testing.T) {
 }
 
 func TestTemporalGetStabilizeFuncs(t *testing.T) {
-	aTime := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
+	aTime1 := time.Date(2009, 11, 17, 20, 34, 50, 652387237, time.UTC)
+	aTime2 := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
 	aSecond := time.Second
 	aFloat := 1.1
 	c := helper.StabilizerTest{
 		Stabilizer: &Temporal{},
 		ExpectedVersions: []common.Stabilizer{
 			&Temporal{
-				Start: &aTime,
+				Start: &aTime1,
 			},
 			&Temporal{
-				Start:    &aTime,
+				Start:    &aTime1,
 				Interval: &aSecond,
 			},
 			&Temporal{
-				Start:    &aTime,
+				Start:    &aTime1,
 				Interval: &aSecond,
 				Bender:   &bender.Static{},
 			},
 			&Temporal{
-				Start:    &aTime,
+				Start:    &aTime1,
 				Interval: &aSecond,
 				Bender: &bender.Static{
 					TheBend: &aFloat,
@@ -95,9 +96,7 @@ func TestTemporalGetStabilizeFuncs(t *testing.T) {
 			},
 		},
 		Palette: helper.TestPalette{
-			Seed: &span.Seed{
-				Span: span.Span{StartTime: aTime},
-			},
+			Seed:     repeat.NewSeed(aTime2),
 			Duration: aSecond,
 			Bender:   &bender.Static{},
 			Shift:    aFloat,

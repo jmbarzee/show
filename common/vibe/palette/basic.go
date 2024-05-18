@@ -5,7 +5,6 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
-	"github.com/jmbarzee/show/common/repeatable"
 )
 
 // Basic will randomly choose from the possible options provided
@@ -39,7 +38,7 @@ var _ common.Palette = (*Basic)(nil)
 func (v *Basic) SelectEffect() common.Effect {
 	options := v.Effects
 	length := len(options)
-	option := repeatable.Option(v.NextSeed(), length)
+	option := v.Option(length)
 
 	return options[option].Copy()
 }
@@ -48,7 +47,7 @@ func (v *Basic) SelectEffect() common.Effect {
 func (v *Basic) SelectPainter() common.Painter {
 	options := v.Painters
 	length := len(options)
-	option := repeatable.Option(v.NextSeed(), length)
+	option := v.Option(length)
 
 	return options[option].Copy()
 }
@@ -57,7 +56,7 @@ func (v *Basic) SelectPainter() common.Painter {
 func (v *Basic) SelectBender() common.Bender {
 	options := v.Benders
 	length := len(options)
-	option := repeatable.Option(v.NextSeed(), length)
+	option := v.Option(length)
 	return options[option].Copy()
 }
 
@@ -65,7 +64,7 @@ func (v *Basic) SelectBender() common.Bender {
 func (v *Basic) SelectShifter() common.Shifter {
 	options := v.Shifters
 	length := len(options)
-	option := repeatable.Option(v.NextSeed(), length)
+	option := v.Option(length)
 
 	return options[option].Copy()
 }
@@ -74,7 +73,7 @@ func (v *Basic) SelectShifter() common.Shifter {
 func (v *Basic) SelectColor() color.Color {
 	options := v.Colors
 	length := len(options)
-	option := repeatable.Option(v.NextSeed(), length)
+	option := v.Option(length)
 
 	return options[option].HSL()
 }
@@ -83,10 +82,10 @@ func (v *Basic) SelectColor() color.Color {
 func (v *Basic) SelectDuration() time.Duration {
 	// min := time.Second / 10
 	// max := time.Second * 10
-	// d := repeatable.RandDuration(v.NextSeed(), min, max)
+	// d := repeat.RandDuration(v.NextSeed(), min, max)
 	options := v.Durations
 	length := len(options)
-	option := repeatable.Option(v.NextSeed(), length)
+	option := v.Option(length)
 
 	return options[option]
 }
@@ -95,10 +94,10 @@ func (v *Basic) SelectDuration() time.Duration {
 func (v *Basic) SelectShift() float64 {
 	// min := 0.005
 	// max := .5
-	// s := repeatable.RandShift(v.NextSeed(), min, max, 0.001)
+	// s := repeat.RandShift(v.NextSeed(), min, max, 0.001)
 	options := v.Shifts
 	length := len(options)
-	option := repeatable.Option(v.NextSeed(), length)
+	option := v.Option(length)
 
 	return options[option]
 }

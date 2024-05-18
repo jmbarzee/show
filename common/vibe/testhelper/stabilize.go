@@ -6,7 +6,7 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
-	"github.com/jmbarzee/show/common/vibe/span"
+	"github.com/jmbarzee/show/common/repeat"
 )
 
 type StabilizerTest struct {
@@ -30,7 +30,7 @@ func RunStabilizerTest(t *testing.T, c StabilizerTest) {
 }
 
 type TestPalette struct {
-	*span.Seed
+	*repeat.Seed
 	Bender   common.Bender
 	Color    color.HSL
 	Duration time.Duration

@@ -7,7 +7,6 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
-	"github.com/jmbarzee/show/common/repeatable"
 )
 
 // Bounce is a Painter which provides produces colors bouncing between ColorStart and ColorEnd,
@@ -146,7 +145,7 @@ func (p *Bounce) GetStabilizeFuncs() []func(p common.Palette) {
 	}
 	if p.Up == nil {
 		sFuncs = append(sFuncs, func(pa common.Palette) {
-			b := repeatable.Chance(pa.Start(), .5)
+			b := pa.Chance(.5)
 			p.Up = &b
 		})
 	}
@@ -172,5 +171,13 @@ func (p Bounce) Copy() common.Painter {
 
 // String returns a string representation of the Painter
 func (p Bounce) String() string {
-	return fmt.Sprintf("painter.Bounce{ColorStart:%v, ColorEnd:%v, Up:%v, Shifter:%v}", p.ColorStart, p.ColorEnd, &p.Up, p.Shifter)
+	var up string
+
+	if p.Up != nil {
+		up = fmt.Sprintf("%v", *p.Up)
+	} else {
+		up = "<nil>"
+	}
+
+	return fmt.Sprintf("painter.Bounce{ColorStart:%v, ColorEnd:%v, Up:%v, Shifter:%v}", p.ColorStart, p.ColorEnd, up, p.Shifter)
 }

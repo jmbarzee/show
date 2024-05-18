@@ -58,5 +58,24 @@ func (b Sinusoidal) Copy() common.Bender {
 
 // String returns a string representation of the Bender
 func (b Sinusoidal) String() string {
-	return fmt.Sprintf("shifter.Sinusoidal{Offset:%v, Period:%v, Amplitude:%v}", *b.Offset, *b.Period, *b.Amplitude)
+	var offset, period, amplitude string
+
+	if b.Offset != nil {
+		offset = fmt.Sprintf("%v", *b.Offset)
+	} else {
+		offset = "<nil>"
+	}
+
+	if b.Period != nil {
+		period = fmt.Sprintf("%v", *b.Period)
+	} else {
+		period = "<nil>"
+	}
+
+	if b.Amplitude != nil {
+		amplitude = fmt.Sprintf("%v", *b.Amplitude)
+	} else {
+		amplitude = "<nil>"
+	}
+	return fmt.Sprintf("shifter.Sinusoidal{Offset:%v, Period:%v, Amplitude:%v}", offset, period, amplitude)
 }

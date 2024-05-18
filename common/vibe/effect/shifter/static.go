@@ -40,5 +40,12 @@ func (s Static) Copy() common.Shifter {
 
 // String returns a string representation of the Shifter
 func (s Static) String() string {
-	return fmt.Sprintf("shifter.Static{TheShift:%v}", *s.TheShift)
+	var theShift string
+
+	if s.TheShift != nil {
+		theShift = fmt.Sprintf("%v", *s.TheShift)
+	} else {
+		theShift = "<nil>"
+	}
+	return fmt.Sprintf("shifter.Static{TheShift:%v}", theShift)
 }

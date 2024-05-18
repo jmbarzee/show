@@ -40,5 +40,12 @@ func (b Linear) Copy() common.Bender {
 
 // String returns a string representation of the Bender
 func (b Linear) String() string {
-	return fmt.Sprintf("shifter.Linear{Interval:%v}", *b.Interval)
+	var interval string
+
+	if b.Interval != nil {
+		interval = fmt.Sprintf("%v", *b.Interval)
+	} else {
+		interval = "<nil>"
+	}
+	return fmt.Sprintf("shifter.Linear{Interval:%v}", interval)
 }

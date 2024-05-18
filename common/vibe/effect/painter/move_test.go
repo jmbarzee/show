@@ -6,9 +6,9 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
+	"github.com/jmbarzee/show/common/repeat"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
-	"github.com/jmbarzee/show/common/vibe/span"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
@@ -46,7 +46,8 @@ func TestMovePaint(t *testing.T) {
 }
 
 func TestMoveGetStabilizeFuncs(t *testing.T) {
-	aTime := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
+	aTime1 := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
+	aTime2 := time.Date(2009, 11, 17, 20, 34, 50, 652387237, time.UTC)
 	aFloat := 1.1
 	aDuration := time.Second
 	c := helper.StabilizerTest{
@@ -62,20 +63,20 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 			&Move{
 				ColorStart: color.Red,
 				Shifter: &shifter.Temporal{
-					Start: &aTime,
+					Start: &aTime2,
 				},
 			},
 			&Move{
 				ColorStart: color.Red,
 				Shifter: &shifter.Temporal{
-					Start:    &aTime,
+					Start:    &aTime2,
 					Interval: &aDuration,
 				},
 			},
 			&Move{
 				ColorStart: color.Red,
 				Shifter: &shifter.Temporal{
-					Start:    &aTime,
+					Start:    &aTime2,
 					Interval: &aDuration,
 					Bender:   &bender.Static{},
 				},
@@ -83,7 +84,7 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 			&Move{
 				ColorStart: color.Red,
 				Shifter: &shifter.Temporal{
-					Start:    &aTime,
+					Start:    &aTime2,
 					Interval: &aDuration,
 					Bender: &bender.Static{
 						TheBend: &aFloat,
@@ -92,9 +93,7 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 			},
 		},
 		Palette: helper.TestPalette{
-			Seed: &span.Seed{
-				Span: span.Span{StartTime: aTime},
-			},
+			Seed:     repeat.NewSeed(aTime1),
 			Bender:   &bender.Static{},
 			Duration: aDuration,
 			Color:    color.Red,

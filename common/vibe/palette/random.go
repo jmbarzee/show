@@ -61,10 +61,10 @@ func NewRandom(s common.Seeder) *Basic {
 		},
 		Effects: []common.Effect{
 			&effect.Solid{
-				BasicEffect: effect.BasicEffect{Spanner: s},
+				BasicEffect: effect.BasicEffect{},
 			},
 			&effect.Future{
-				BasicEffect: effect.BasicEffect{Spanner: s},
+				BasicEffect: effect.BasicEffect{},
 			},
 		},
 	}

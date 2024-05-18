@@ -1,10 +1,11 @@
-package repeatable
+package repeat_test
 
 import (
 	"fmt"
 	"testing"
 	"time"
 
+	"github.com/jmbarzee/show/common/repeat"
 	helper "github.com/jmbarzee/show/common/vibe/testhelper"
 )
 
@@ -19,8 +20,9 @@ func TestOption(t *testing.T) {
 			t.Parallel()
 			buckets := make([]int, options)
 			totalRuns := options * totalRunsPerOption
+			seed := repeat.NewSeed(aTime)
 			for i := 0; i < totalRuns; i++ {
-				option := Option(aTime.Add(time.Duration(i)*time.Second), options)
+				option := seed.Option(options)
 				buckets[option]++
 			}
 
@@ -46,8 +48,9 @@ func TestChance(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			// t.Parallel()
 			choiceCount := 0
+			seed := repeat.NewSeed(aTime)
 			for i := 0; i < totalRuns; i++ {
-				choice := Chance(aTime.Add(time.Duration(i)*time.Second), chance)
+				choice := seed.Chance(chance)
 				if choice {
 					choiceCount++
 				}
@@ -77,8 +80,9 @@ func TestRandDuration(t *testing.T) {
 				possibleDurations := (max - min) / bucketSize
 				buckets := make([]int, possibleDurations)
 				totalRuns := int(possibleDurations) * runsPerPossibleDurations
+				seed := repeat.NewSeed(aTime)
 				for i := 0; i < totalRuns; i++ {
-					duration := RandDuration(aTime.Add(time.Duration(i)*time.Second), min, max)
+					duration := seed.RandDuration(min, max)
 					bucket := (duration - min) / bucketSize
 					buckets[bucket]++
 				}

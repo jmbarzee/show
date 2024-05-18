@@ -7,7 +7,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jmbarzee/show/common"
-	"github.com/jmbarzee/show/common/repeatable"
 )
 
 const GroupOptionType = "GroupOption"
@@ -37,7 +36,7 @@ func (n GroupOption) Allocate(vibe common.Vibe) {
 	if len(n.Groups) == 0 {
 		return
 	}
-	groupNum := repeatable.Option(vibe.Start(), len(n.Groups))
+	groupNum := vibe.Option(len(n.Groups))
 	fmt.Println("Using Group:", groupNum)
 	n.Groups[groupNum].Allocate(vibe)
 }

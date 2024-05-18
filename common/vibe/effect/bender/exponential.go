@@ -49,5 +49,17 @@ func (b Exponential) Copy() common.Bender {
 
 // String returns a string representation of the Bender
 func (b Exponential) String() string {
-	return fmt.Sprintf("shifter.Exponential{Exponent:%v, Coefficient:%v}", *b.Exponent, *b.Coefficient)
+	var exponent, coefficient string
+	if b.Coefficient != nil {
+		coefficient = fmt.Sprintf("%v", *b.Coefficient)
+	} else {
+		coefficient = "<nil>"
+	}
+
+	if b.Exponent != nil {
+		exponent = fmt.Sprintf("%v", *b.Exponent)
+	} else {
+		exponent = "<nil>"
+	}
+	return fmt.Sprintf("shifter.Exponential{Exponent:%v, Coefficient:%v}", exponent, coefficient)
 }

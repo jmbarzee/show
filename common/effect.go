@@ -16,6 +16,9 @@ type Effect interface {
 	// Priority solves rendering issues
 	Priority() int
 
+	// Set sets the start and end of a span from the provided span
+	SetSpan(ss Spanner)
+
 	// Copy returns a deep copy of a Effect
 	Copy() Effect
 }
