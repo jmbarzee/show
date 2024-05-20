@@ -1,0 +1,16 @@
+{
+  "$schema": "palette.json",
+  "Colors": [],
+  "Benders": [
+    {
+        "Type":"Exponential",
+        "Coefficient": 0
+    }
+  ],
+  "Effects": [
+    {
+        "Type": "Future",
+        "TimePerLight": 0
+    }
+  ]
+}

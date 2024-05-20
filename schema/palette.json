@@ -1,0 +1,420 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://github.com/jmbarzee/show/common/vibe/palette/basic",
+	"$ref": "#/$defs/Basic",
+	"$defs": {
+		"Basic": {
+			"properties": {
+				"Seeder": true,
+				"Effects": {
+					"items": {
+						"$ref": "#/$defs/Effect"
+					},
+					"type": "array",
+					"description": "Effects provides options to SelectEffect\nEffect spans are not set by the Basic Palette"
+				},
+				"Painters": {
+					"items": {
+						"$ref": "#/$defs/Painter"
+					},
+					"type": "array",
+					"description": "Painters provides options to SelectBender"
+				},
+				"Benders": {
+					"items": {
+						"$ref": "#/$defs/Bender"
+					},
+					"type": "array",
+					"description": "Benders provides options to SelectBender"
+				},
+				"Shifters": {
+					"items": {
+						"$ref": "#/$defs/Shifter"
+					},
+					"type": "array",
+					"description": "Shifters provides options to SelectShifter"
+				},
+				"Colors": {
+					"items": {
+						"$ref": "#/$defs/HSL"
+					},
+					"type": "array",
+					"description": "Colors provides options to SelectColor"
+				},
+				"Durations": {
+					"items": {
+						"type": "integer"
+					},
+					"type": "array",
+					"description": "Durations provides options to SelectDuration\nShould generally range from 0.1s to 10s"
+				},
+				"Shifts": {
+					"items": {
+						"type": "number"
+					},
+					"type": "array",
+					"description": "Shifts provides options to SelectShift\nShould generally range from .01 to 1"
+				}
+			},
+			"additionalProperties": false,
+			"type": "object",
+			"required": [
+				"Seeder",
+				"Effects",
+				"Painters",
+				"Benders",
+				"Shifters",
+				"Colors",
+				"Durations",
+				"Shifts"
+			],
+			"description": "Basic will randomly choose from the possible options provided when the relevant resource is requested from any functions outlined by common.Palette"
+		},
+		"Bender": {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://github.com/jmbarzee/show/common/vibe/effect/bender/bender",
+			"$ref": "#/$defs/Bender",
+			"$defs": {
+				"Bender": {
+					"properties": {},
+					"additionalProperties": false,
+					"type": "object",
+					"description": "Bender is used by Shifters to change small things over time"
+				}
+			},
+			"anyOf": [
+				{
+					"properties": {
+						"Type": {
+							"const": "Combo"
+						},
+						"A": true,
+						"B": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Combo is a Bender which provides a single unchanging bend"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Exponential"
+						},
+						"Exponent": {
+							"type": "number"
+						},
+						"Coefficient": {
+							"type": "number"
+						}
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Exponential is a Bender which provides a single unchanging bend"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Linear"
+						},
+						"Interval": {
+							"type": "number"
+						}
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Linear is a Bender which provides a single unchanging bend"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Sinusoidal"
+						},
+						"Offset": {
+							"type": "number"
+						},
+						"Period": {
+							"type": "number"
+						},
+						"Amplitude": {
+							"type": "number"
+						}
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Sinusoidal is a Bender which provides a single unchanging bend"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Static"
+						},
+						"TheBend": {
+							"type": "number"
+						}
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Static is a Bender which provides a single unchanging bend"
+				}
+			]
+		},
+		"Effect": {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://github.com/jmbarzee/show/common/vibe/effect/effect",
+			"$ref": "#/$defs/Effect",
+			"$defs": {
+				"Effect": {
+					"properties": {},
+					"additionalProperties": false,
+					"type": "object",
+					"description": "Effect is a light abstraction representing patterns of colors"
+				}
+			},
+			"anyOf": [
+				{
+					"properties": {
+						"Type": {
+							"const": "Solid"
+						},
+						"Spanner": true,
+						"Rank": {
+							"type": "integer"
+						},
+						"Painter": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Solid is an Effect which displays all lights as a single color"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Future"
+						},
+						"Spanner": true,
+						"Rank": {
+							"type": "integer"
+						},
+						"TimePerLight": {
+							"type": "integer"
+						},
+						"Painter": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Future is an Effect which displays each consecutive light as the \"future\" of the previous light"
+				}
+			]
+		},
+		"HSL": {
+			"properties": {
+				"H": {
+					"type": "number",
+					"description": "H, S, L, A all range between (0, 1)"
+				},
+				"S": {
+					"type": "number",
+					"description": "H, S, L, A all range between (0, 1)"
+				},
+				"L": {
+					"type": "number",
+					"description": "H, S, L, A all range between (0, 1)"
+				},
+				"A": {
+					"type": "number",
+					"description": "H, S, L, A all range between (0, 1)"
+				}
+			},
+			"additionalProperties": false,
+			"type": "object",
+			"required": [
+				"H",
+				"S",
+				"L",
+				"A"
+			],
+			"description": "HSL is a color represented by Hue, Saturation, and Lightness"
+		},
+		"Painter": {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://github.com/jmbarzee/show/common/vibe/effect/painter/painter",
+			"$ref": "#/$defs/Painter",
+			"$defs": {
+				"Painter": {
+					"properties": {},
+					"additionalProperties": false,
+					"type": "object",
+					"description": "Painter is used by effects to select colors"
+				}
+			},
+			"anyOf": [
+				{
+					"properties": {
+						"Type": {
+							"const": "Bounce"
+						},
+						"ColorStart": true,
+						"ColorEnd": true,
+						"Up": {
+							"type": "boolean"
+						},
+						"Shifter": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Bounce is a Painter which provides produces colors bouncing between ColorStart and ColorEnd, starting at p.ColorStart and shifting in the direction specified by Up"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Move"
+						},
+						"ColorStart": true,
+						"Shifter": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Move is a Painter which provides shifting colors starting at colorStart"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Static"
+						},
+						"Color": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Static is a Painter which provides unchanging colors"
+				}
+			]
+		},
+		"Shifter": {
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"$id": "https://github.com/jmbarzee/show/common/vibe/effect/shifter/shifter",
+			"$ref": "#/$defs/Shifter",
+			"$defs": {
+				"Shifter": {
+					"properties": {},
+					"additionalProperties": false,
+					"type": "object",
+					"description": "Shifter is used by Painters to change small things over time"
+				}
+			},
+			"anyOf": [
+				{
+					"properties": {
+						"Type": {
+							"const": "Combo"
+						},
+						"A": true,
+						"B": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Combo is a Shifter which provides shifts that relate to changing time, Directionally"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Locational"
+						},
+						"XBender": true,
+						"YBender": true,
+						"ZBender": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Locational is a Shifter which provides shifts that relate to changing time, Directionally"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Positional"
+						},
+						"Bender": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Positional is a Shifter which provides shifts that relate to changing time, Directionally"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Static"
+						},
+						"TheShift": {
+							"type": "number"
+						}
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Static is a Shifter which provides shifts that relate to changing time, Directionally"
+				},
+				{
+					"properties": {
+						"Type": {
+							"const": "Temporal"
+						},
+						"Start": {
+							"type": "string",
+							"format": "date-time"
+						},
+						"Interval": {
+							"type": "integer"
+						},
+						"Bender": true
+					},
+					"additionalProperties": false,
+					"type": "object",
+					"required": [
+						"Type"
+					],
+					"description": "Temporal is a Shifter which provides shifts that relate to changing time, Directionally"
+				}
+			]
+		}
+	}
+}
