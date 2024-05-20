@@ -6,8 +6,7 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
-	"github.com/jmbarzee/show/common/testutil"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 type (
@@ -31,7 +30,7 @@ func RunPainterTests(t *testing.T, cases []PainterTest) {
 				instant.Light = &testutil.Light{}
 				c.Painter.Paint(instant.Time, instant.Light)
 				actualColor := instant.Light.GetColor()
-				if !helper.ColorsEqual(instant.ExpectedColor, actualColor) {
+				if !testutil.ColorsEqual(instant.ExpectedColor, actualColor) {
 					t.Fatalf("instant %v failed:\n\tExpected: %v,\n\tActual: %v", i, instant.ExpectedColor, actualColor)
 				}
 			}

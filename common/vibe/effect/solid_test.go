@@ -9,7 +9,7 @@ import (
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/painter"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestSolidEffect(t *testing.T) {
@@ -100,7 +100,7 @@ func TestSolidEffect(t *testing.T) {
 }
 
 func TestSolidGetStabilizeFuncs(t *testing.T) {
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Solid{},
 		ExpectedVersions: []common.Stabilizer{
 			&Solid{
@@ -112,10 +112,10 @@ func TestSolidGetStabilizeFuncs(t *testing.T) {
 				},
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Color:   color.Blue,
 			Painter: &painter.Static{},
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }

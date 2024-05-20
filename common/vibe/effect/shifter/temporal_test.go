@@ -7,7 +7,7 @@ import (
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/repeat"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestTemporalShift(t *testing.T) {
@@ -72,7 +72,7 @@ func TestTemporalGetStabilizeFuncs(t *testing.T) {
 	aTime2 := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
 	aSecond := time.Second
 	aFloat := 1.1
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Temporal{},
 		ExpectedVersions: []common.Stabilizer{
 			&Temporal{
@@ -95,12 +95,12 @@ func TestTemporalGetStabilizeFuncs(t *testing.T) {
 				},
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Seed:     repeat.NewSeed(aTime2),
 			Duration: aSecond,
 			Bender:   &bender.Static{},
 			Shift:    aFloat,
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }

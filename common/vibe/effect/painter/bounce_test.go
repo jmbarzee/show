@@ -9,7 +9,7 @@ import (
 	"github.com/jmbarzee/show/common/repeat"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestBouncePaint(t *testing.T) {
@@ -258,7 +258,7 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 	aDuration := time.Second
 	theTruth := false
 	aFloat := 1.1
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Bounce{},
 		ExpectedVersions: []common.Stabilizer{
 			&Bounce{
@@ -319,7 +319,7 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 				},
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Seed:     repeat.NewSeed(aTime1),
 			Bender:   &bender.Linear{},
 			Duration: aDuration,
@@ -328,5 +328,5 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 			Shifter:  &shifter.Temporal{},
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }

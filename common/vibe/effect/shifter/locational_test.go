@@ -5,9 +5,8 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/space"
-	"github.com/jmbarzee/show/common/testutil"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestLocationalShift(t *testing.T) {
@@ -61,7 +60,7 @@ func TestLocationalShift(t *testing.T) {
 }
 func TestLocationalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Locational{},
 		ExpectedVersions: []common.Stabilizer{
 			&Locational{
@@ -92,10 +91,10 @@ func TestLocationalGetStabilizeFuncs(t *testing.T) {
 				},
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Bender: &bender.Static{},
 			Shift:  aFloat,
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }

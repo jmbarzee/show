@@ -6,7 +6,7 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestStaticPaint(t *testing.T) {
@@ -101,16 +101,16 @@ func TestStaticPaint(t *testing.T) {
 }
 
 func TestStaticGetStabilizeFuncs(t *testing.T) {
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Static{},
 		ExpectedVersions: []common.Stabilizer{
 			&Static{
 				Color: color.Blue,
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Color: color.Blue,
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }

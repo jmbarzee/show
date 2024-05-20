@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// Effect is a light abstraction representing paterns of colors
+// Effect is a light abstraction representing patterns of colors
 type Effect interface {
 	Spanner
 	Stabilizer

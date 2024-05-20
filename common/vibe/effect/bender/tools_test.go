@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/jmbarzee/show/common"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 type (
@@ -25,7 +25,7 @@ func RunBenderTests(t *testing.T, cases []BenderTest) {
 		t.Run(c.Name, func(t *testing.T) {
 			for i, instant := range c.Instants {
 				actualBend := c.Bender.Bend(instant.Input)
-				if !helper.FloatsEqual(instant.ExpectedBend, actualBend, helper.MinErrColor) {
+				if !testutil.FloatsEqual(instant.ExpectedBend, actualBend, testutil.MinErrColor) {
 					t.Fatalf("instant %v failed:\n\tExpected: %v,\n\tActual: %v", i, instant.ExpectedBend, actualBend)
 				}
 			}

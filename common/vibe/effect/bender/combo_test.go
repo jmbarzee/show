@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/jmbarzee/show/common"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestComboBend(t *testing.T) {
@@ -38,7 +38,7 @@ func TestComboBend(t *testing.T) {
 
 func TestComboStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Combo{},
 		ExpectedVersions: []common.Stabilizer{
 			&Combo{
@@ -58,10 +58,10 @@ func TestComboStabilizeFuncs(t *testing.T) {
 				},
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Shift:  aFloat,
 			Bender: &Static{},
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }

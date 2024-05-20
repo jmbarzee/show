@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/jmbarzee/show/common"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestExponentialBend(t *testing.T) {
@@ -47,7 +47,7 @@ func TestExponentialBend(t *testing.T) {
 
 func TestExponentialGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Exponential{},
 		ExpectedVersions: []common.Stabilizer{
 			&Exponential{
@@ -58,9 +58,9 @@ func TestExponentialGetStabilizeFuncs(t *testing.T) {
 				Coefficient: &aFloat,
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Shift: aFloat,
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }

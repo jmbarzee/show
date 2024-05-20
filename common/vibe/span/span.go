@@ -39,25 +39,25 @@ func (s *Span) SetEnd(end time.Time) { s.end = end }
 func (s *Span) SetSpan(ss common.Spanner) { s.end = ss.End(); s.start = ss.Start() }
 
 func (s *Span) UnmarshalJSON(b []byte) error {
-	v := struct {
-		Start time.Time `json:"Start,omitempty"`
-		End   time.Time `json:"End,omitempty"`
+	ss := struct {
+		Start time.Time
+		End   time.Time
 	}{}
 
-	err := json.Unmarshal(b, &v)
+	err := json.Unmarshal(b, &ss)
 	if err != nil {
 		return err
 	}
 
-	s.start = v.Start
-	s.end = v.End
+	s.start = ss.Start
+	s.end = ss.End
 	return nil
 }
 
 func (s Span) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
-		Start time.Time `json:"Start,omitempty"`
-		End   time.Time `json:"End,omitempty"`
+		Start time.Time
+		End   time.Time
 	}{
 		Start: s.start,
 		End:   s.end,
