@@ -80,9 +80,6 @@ func (v *Basic) SelectColor() color.Color {
 
 // SelectDuration returns a Duration
 func (v *Basic) SelectDuration() time.Duration {
-	// min := time.Second / 10
-	// max := time.Second * 10
-	// d := repeat.RandDuration(v.NextSeed(), min, max)
 	options := v.Durations
 	length := len(options)
 	option := v.Option(length)
@@ -92,9 +89,6 @@ func (v *Basic) SelectDuration() time.Duration {
 
 // SelectShift returns a Shift
 func (v *Basic) SelectShift() float64 {
-	// min := 0.005
-	// max := .5
-	// s := repeat.RandShift(v.NextSeed(), min, max, 0.001)
 	options := v.Shifts
 	length := len(options)
 	option := v.Option(length)

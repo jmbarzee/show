@@ -6,12 +6,11 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
-	"github.com/jmbarzee/show/common/testutil"
 	"github.com/jmbarzee/show/common/vibe/effect/bender"
 	"github.com/jmbarzee/show/common/vibe/effect/painter"
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
 	"github.com/jmbarzee/show/common/vibe/span"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestFutureEffect(t *testing.T) {
@@ -105,7 +104,7 @@ func TestFutureEffect(t *testing.T) {
 
 func TestFutureGetStabilizeFuncs(t *testing.T) {
 	aSecond := time.Second
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Future{},
 		ExpectedVersions: []common.Stabilizer{
 			&Future{
@@ -122,11 +121,11 @@ func TestFutureGetStabilizeFuncs(t *testing.T) {
 				},
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Color:    color.Blue,
 			Painter:  &painter.Static{},
 			Duration: aSecond,
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }

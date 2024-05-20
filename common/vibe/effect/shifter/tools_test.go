@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmbarzee/show/common"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 type (
@@ -27,7 +27,7 @@ func RunShifterTests(t *testing.T, cases []ShiftTest) {
 		t.Run(c.Name, func(t *testing.T) {
 			for i, instant := range c.Instants {
 				actualShift := c.Shifter.Shift(instant.Time, instant.Light)
-				if !helper.FloatsEqual(instant.ExpectedShift, actualShift, helper.MinErrColor) {
+				if !testutil.FloatsEqual(instant.ExpectedShift, actualShift, testutil.MinErrColor) {
 					t.Fatalf("instant %v failed:\n\tExpected: %v,\n\tActual: %v", i, instant.ExpectedShift, actualShift)
 				}
 			}

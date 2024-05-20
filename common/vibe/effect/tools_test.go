@@ -6,8 +6,7 @@ import (
 
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/color"
-	"github.com/jmbarzee/show/common/testutil"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 type (
@@ -34,7 +33,7 @@ func RunEffectTests(t *testing.T, cases []EffectTest) {
 
 				for j, expectedLight := range instant.ExpectedLights {
 					actualLight := c.IntialLights[j]
-					if !helper.ColorsEqual(expectedLight.GetColor(), actualLight.GetColor()) {
+					if !testutil.ColorsEqual(expectedLight.GetColor(), actualLight.GetColor()) {
 						t.Fatalf("instant %v, light %v failed:\n\tExpected: %v,\n\tActual: %v", i, j, expectedLight.GetColor(), actualLight.GetColor())
 					}
 				}

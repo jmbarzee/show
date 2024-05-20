@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/jmbarzee/show/common"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestLinearBend(t *testing.T) {
@@ -44,16 +44,16 @@ func TestLinearBend(t *testing.T) {
 
 func TestLinearGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Linear{},
 		ExpectedVersions: []common.Stabilizer{
 			&Linear{
 				Interval: &aFloat,
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Shift: aFloat,
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }

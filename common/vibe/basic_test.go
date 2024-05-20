@@ -13,7 +13,7 @@ import (
 	"github.com/jmbarzee/show/common/vibe/effect/shifter"
 	"github.com/jmbarzee/show/common/vibe/palette"
 	"github.com/jmbarzee/show/common/vibe/span"
-	helper "github.com/jmbarzee/show/common/vibe/testhelper"
+	"github.com/jmbarzee/show/common/vibe/testutil"
 )
 
 func TestBasicStabilize(t *testing.T) {
@@ -462,7 +462,7 @@ func TestBasicGetStabilizeFuncs(t *testing.T) {
 	aTime1 := time.Date(2009, 11, 17, 20, 34, 50, 651387237, time.UTC)
 	aSpan := span.New(aTime1, aTime1.Add(time.Hour))
 
-	c := helper.StabilizerTest{
+	c := testutil.StabilizerTest{
 		Stabilizer: &Basic{},
 		ExpectedVersions: []common.Stabilizer{
 			&Basic{
@@ -491,11 +491,11 @@ func TestBasicGetStabilizeFuncs(t *testing.T) {
 				},
 			},
 		},
-		Palette: helper.TestPalette{
+		Palette: testutil.TestPalette{
 			Color:   color.Blue,
 			Painter: &painter.Static{},
 			Effect:  &effect.Future{},
 		},
 	}
-	helper.RunStabilizerTest(t, c)
+	testutil.RunStabilizerTest(t, c)
 }
