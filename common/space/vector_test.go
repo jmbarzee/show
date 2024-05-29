@@ -21,8 +21,20 @@ func RunVectorTests(t *testing.T, cases []VectorTest) {
 	for i, c := range cases {
 		actual := c.operation(c.initial)
 
-		assert.Equal(t, c.expected, actual, "test("+strconv.Itoa(i)+"): The two vectors should be the same.")
+		VectorsEqual(t, i, c.expected, actual)
 	}
+}
+
+// VectorsEqual compares and diffs Vectors
+func VectorsEqual(t *testing.T, testNum int, p, q Vector) bool {
+	equal := FloatsEqual(p.X, q.X, MinErr) &&
+		FloatsEqual(p.Y, q.Y, MinErr) &&
+		FloatsEqual(p.Z, q.Z, MinErr)
+
+	if !equal {
+		assert.Equal(t, p, q, "test("+strconv.Itoa(testNum)+"): The two Quaternions should be nearly identical.")
+	}
+	return equal
 }
 
 func TestNewVector(t *testing.T) {
@@ -47,9 +59,10 @@ func TestNewVector(t *testing.T) {
 		},
 	}
 
-	for _, c := range cases {
+	for i, c := range cases {
 		actual := NewVector(c.X, c.Y, c.Z)
-		assert.Equal(t, c.expected, actual, "The two vectors should be the same.")
+
+		VectorsEqual(t, i, *c.expected, *actual)
 	}
 }
 
@@ -663,25 +676,86 @@ func TestVectorRotate(t *testing.T) {
 		{
 			operation: rotate(Quaternion{W: 1}),
 		},
+
+		// X-axis
 		{
 			initial:   Vector{X: 1, Y: 2, Z: 3},
-			operation: rotate(Quaternion{W: 1}),
+			operation: rotate(*NewRotationQuaternion(0.0, Vector{1, 0, 0})),
 			expected:  Vector{X: 1, Y: 2, Z: 3},
 		},
 		{
 			initial:   Vector{X: 1, Y: 2, Z: 3},
-			operation: rotate(Quaternion{X: 1}),
+			operation: rotate(*NewRotationQuaternion(0.5, Vector{1, 0, 0})),
+			expected:  Vector{X: 1, Y: -3, Z: 2},
+		},
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(1.0, Vector{1, 0, 0})),
 			expected:  Vector{X: 1, Y: -2, Z: -3},
 		},
 		{
 			initial:   Vector{X: 1, Y: 2, Z: 3},
-			operation: rotate(Quaternion{Y: 1}),
+			operation: rotate(*NewRotationQuaternion(1.5, Vector{1, 0, 0})),
+			expected:  Vector{X: 1, Y: 3, Z: -2},
+		},
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(2.0, Vector{1, 0, 0})),
+			expected:  Vector{X: 1, Y: 2, Z: 3},
+		},
+
+		// Y-axis
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(0.0, Vector{0, 1, 0})),
+			expected:  Vector{X: 1, Y: 2, Z: 3},
+		},
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(0.5, Vector{0, 1, 0})),
+			expected:  Vector{X: 3, Y: 2, Z: -1},
+		},
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(1.0, Vector{0, 1, 0})),
 			expected:  Vector{X: -1, Y: 2, Z: -3},
 		},
 		{
 			initial:   Vector{X: 1, Y: 2, Z: 3},
-			operation: rotate(Quaternion{Z: 1}),
+			operation: rotate(*NewRotationQuaternion(1.5, Vector{0, 1, 0})),
+			expected:  Vector{X: -3, Y: 2, Z: 1},
+		},
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(2.0, Vector{0, 1, 0})),
+			expected:  Vector{X: 1, Y: 2, Z: 3},
+		},
+
+		// Z-axis
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(0.0, Vector{0, 0, 1})),
+			expected:  Vector{X: 1, Y: 2, Z: 3},
+		},
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(0.5, Vector{0, 0, 1})),
+			expected:  Vector{X: -2, Y: 1, Z: 3},
+		},
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(1.0, Vector{0, 0, 1})),
 			expected:  Vector{X: -1, Y: -2, Z: 3},
+		},
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(1.5, Vector{0, 0, 1})),
+			expected:  Vector{X: 2, Y: -1, Z: 3},
+		},
+		{
+			initial:   Vector{X: 1, Y: 2, Z: 3},
+			operation: rotate(*NewRotationQuaternion(2.0, Vector{0, 0, 1})),
+			expected:  Vector{X: 1, Y: 2, Z: 3},
 		},
 	}
 	RunVectorTests(t, cases)

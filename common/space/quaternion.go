@@ -24,6 +24,8 @@ func NewIdentityQuaternion() *Quaternion {
 // Radians should be given in terms of pi. i.e. a full rotation is 2
 // If axis is the null vector, rotation will be about (1, 0, 0)
 func NewRotationQuaternion(radians float64, axis Vector) *Quaternion {
+	radians /= 2 // account for rotation Quaternions rotating by twice the given angle
+
 	scale, w := math.Sincos(radians * math.Pi)
 	axis.Normalize()
 	if axis.X == 0 && axis.Y == 0 && axis.Z == 0 {
@@ -33,10 +35,10 @@ func NewRotationQuaternion(radians float64, axis Vector) *Quaternion {
 	return &Quaternion{W: w, X: axis.X, Y: axis.Y, Z: axis.Z}
 }
 
-// SetFromUnitVectors sets this quaternion to the rotation from vector vFrom to vTo.
+// NewPointToPointQuaternion sets this quaternion to the rotation from vector vFrom to vTo.
 // The vectors must be normalized.
 // Returns pointer to this updated quaternion.
-func NewPointToPointQaternion(vFrom, vTo Vector) *Quaternion {
+func NewPointToPointQuaternion(vFrom, vTo Vector) *Quaternion {
 	var v1 *Vector
 	var EPS float64 = 0.000001
 
@@ -219,4 +221,15 @@ func (q Quaternion) Clone() *Quaternion {
 
 func (q Quaternion) String() string {
 	return fmt.Sprintf("{X:%4.2f, Y:%4.2f, Z:%4.2f, W: %4.2f}", q.X, q.Y, q.Z, q.W)
+}
+
+// StringRot prints the Quaternion in the rotational format
+func (q Quaternion) StringRot() string {
+	phi := math.Acos(q.W)
+	sin := math.Sin(phi)
+	r := phi / math.Pi / 2
+	i := q.X / sin
+	j := q.Y / sin
+	k := q.Z / sin
+	return fmt.Sprintf("{r:%4.2f, i:%4.2f, j:%4.2f, k: %4.2f}", r, i, j, k)
 }

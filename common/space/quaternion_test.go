@@ -1,6 +1,7 @@
 package space
 
 import (
+	"math"
 	"strconv"
 	"testing"
 
@@ -20,10 +21,29 @@ func RunQuaternionTests(t *testing.T, cases []QuaternionTest) {
 	for i, c := range cases {
 		actual := c.operation(c.initial)
 
-		assert.Equal(t, c.expected, actual, "test("+strconv.Itoa(i)+"): The two vectors should be the same.")
+		QuaternionsEqual(t, i, c.expected, actual)
 	}
 }
 
+const MinErr = 0.000000001
+
+// FloatsEqual compares floats
+func FloatsEqual(a, b float64, err float64) bool {
+	return float64(math.Abs(float64(a-b))) < err
+}
+
+// QuaternionsEqual compares and diffs Quaternions
+func QuaternionsEqual(t *testing.T, testNum int, p, q Quaternion) bool {
+	equal := FloatsEqual(p.W, q.W, MinErr) &&
+		FloatsEqual(p.X, q.X, MinErr) &&
+		FloatsEqual(p.Y, q.Y, MinErr) &&
+		FloatsEqual(p.Z, q.Z, MinErr)
+
+	if !equal {
+		assert.Equal(t, p, q, "test("+strconv.Itoa(testNum)+"): The two Quaternions should be nearly identical.")
+	}
+	return equal
+}
 func TestNewQuaternion(t *testing.T) {
 	cases := []struct {
 		W, X, Y, Z float64
@@ -58,9 +78,10 @@ func TestNewQuaternion(t *testing.T) {
 		},
 	}
 
-	for _, c := range cases {
+	for i, c := range cases {
 		actual := NewQuaternion(c.W, c.X, c.Y, c.Z)
-		assert.Equal(t, c.expected, actual, "The two quaternions should be the same.")
+
+		QuaternionsEqual(t, i, *c.expected, *actual)
 	}
 }
 func TestNewIdentityQuaternion(t *testing.T) {
@@ -74,34 +95,174 @@ func TestNewIdentityQuaternion(t *testing.T) {
 		},
 	}
 
-	for _, c := range cases {
+	for i, c := range cases {
 		actual := NewIdentityQuaternion()
-		assert.Equal(t, c.expected, actual, "The two quaternions should be the same.")
+
+		QuaternionsEqual(t, i, *c.expected, *actual)
 	}
 }
 
 func TestNewRotationQuaternion(t *testing.T) {
+	sq22 := math.Sqrt2 / 2
 	cases := []struct {
 		radians  float64
 		axis     Vector
 		expected *Quaternion
 	}{
-		// {
-		// 	expected: NewIdentityQuaternion(),
-		// },
-		// {
-		// 	radians:  0.5,
-		// 	expected: &Quaternion{W: 0, X: 1, Y: 0, Z: 0},
-		// },
+		{
+			expected: NewIdentityQuaternion(),
+		},
+
+		// X-axis
+		{
+			radians:  0.0,
+			axis:     Vector{X: 1, Y: 0, Z: 0},
+			expected: &Quaternion{W: 1, X: 0, Y: 0, Z: 0},
+		},
+		{
+			radians:  0.5,
+			axis:     Vector{X: 1, Y: 0, Z: 0},
+			expected: &Quaternion{W: sq22, X: sq22, Y: 0, Z: 0},
+		},
+		{
+			radians:  1.0,
+			axis:     Vector{X: 1, Y: 0, Z: 0},
+			expected: &Quaternion{W: 0, X: 1, Y: 0, Z: 0},
+		},
+		{
+			radians:  1.5,
+			axis:     Vector{X: 1, Y: 0, Z: 0},
+			expected: &Quaternion{W: -sq22, X: sq22, Y: 0, Z: 0},
+		},
+		{
+			radians:  2.0,
+			axis:     Vector{X: 1, Y: 0, Z: 0},
+			expected: &Quaternion{W: -1, X: 0, Y: 0, Z: 0},
+		},
+		{
+			radians:  2.5,
+			axis:     Vector{X: 1, Y: 0, Z: 0},
+			expected: &Quaternion{W: -sq22, X: -sq22, Y: 0, Z: 0},
+		},
+		{
+			radians:  3.0,
+			axis:     Vector{X: 1, Y: 0, Z: 0},
+			expected: &Quaternion{W: 0, X: -1, Y: 0, Z: 0},
+		},
+		{
+			radians:  3.5,
+			axis:     Vector{X: 1, Y: 0, Z: 0},
+			expected: &Quaternion{W: sq22, X: -sq22, Y: 0, Z: 0},
+		},
+		{
+			radians:  4.0,
+			axis:     Vector{X: 1, Y: 0, Z: 0},
+			expected: &Quaternion{W: 1, X: 0, Y: 0, Z: 0},
+		},
+
+		// Y-axis
+		{
+			radians:  0.0,
+			axis:     Vector{X: 0, Y: 1, Z: 0},
+			expected: &Quaternion{W: 1, X: 0, Y: 0, Z: 0},
+		},
+		{
+			radians:  0.5,
+			axis:     Vector{X: 0, Y: 1, Z: 0},
+			expected: &Quaternion{W: sq22, X: 0, Y: sq22, Z: 0},
+		},
+		{
+			radians:  1.0,
+			axis:     Vector{X: 0, Y: 1, Z: 0},
+			expected: &Quaternion{W: 0, X: 0, Y: 1, Z: 0},
+		},
+		{
+			radians:  1.5,
+			axis:     Vector{X: 0, Y: 1, Z: 0},
+			expected: &Quaternion{W: -sq22, X: 0, Y: sq22, Z: 0},
+		},
+		{
+			radians:  2.0,
+			axis:     Vector{X: 0, Y: 1, Z: 0},
+			expected: &Quaternion{W: -1, X: 0, Y: 0, Z: 0},
+		},
+		{
+			radians:  2.5,
+			axis:     Vector{X: 0, Y: 1, Z: 0},
+			expected: &Quaternion{W: -sq22, X: 0, Y: -sq22, Z: 0},
+		},
+		{
+			radians:  3.0,
+			axis:     Vector{X: 0, Y: 1, Z: 0},
+			expected: &Quaternion{W: 0, X: 0, Y: -1, Z: 0},
+		},
+		{
+			radians:  3.5,
+			axis:     Vector{X: 0, Y: 1, Z: 0},
+			expected: &Quaternion{W: sq22, X: 0, Y: -sq22, Z: 0},
+		},
+		{
+			radians:  4.0,
+			axis:     Vector{X: 0, Y: 1, Z: 0},
+			expected: &Quaternion{W: 1, X: 0, Y: 0, Z: 0},
+		},
+
+		// Z-axis
+		{
+			radians:  0.0,
+			axis:     Vector{X: 0, Y: 0, Z: 1},
+			expected: &Quaternion{W: 1, X: 0, Y: 0, Z: 0},
+		},
+		{
+			radians:  0.5,
+			axis:     Vector{X: 0, Y: 0, Z: 1},
+			expected: &Quaternion{W: sq22, X: 0, Y: 0, Z: sq22},
+		},
+		{
+			radians:  1.0,
+			axis:     Vector{X: 0, Y: 0, Z: 1},
+			expected: &Quaternion{W: 0, X: 0, Y: 0, Z: 1},
+		},
+		{
+			radians:  1.5,
+			axis:     Vector{X: 0, Y: 0, Z: 1},
+			expected: &Quaternion{W: -sq22, X: 0, Y: 0, Z: sq22},
+		},
+		{
+			radians:  2.0,
+			axis:     Vector{X: 0, Y: 0, Z: 1},
+			expected: &Quaternion{W: -1, X: 0, Y: 0, Z: 0},
+		},
+		{
+			radians:  2.5,
+			axis:     Vector{X: 0, Y: 0, Z: 1},
+			expected: &Quaternion{W: -sq22, X: 0, Y: 0, Z: -sq22},
+		},
+		{
+			radians:  3.0,
+			axis:     Vector{X: 0, Y: 0, Z: 1},
+			expected: &Quaternion{W: 0, X: 0, Y: 0, Z: -1},
+		},
+		{
+			radians:  3.5,
+			axis:     Vector{X: 0, Y: 0, Z: 1},
+			expected: &Quaternion{W: sq22, X: 0, Y: 0, Z: -sq22},
+		},
+		{
+			radians:  4.0,
+			axis:     Vector{X: 0, Y: 0, Z: 1},
+			expected: &Quaternion{W: 1, X: 0, Y: 0, Z: 0},
+		},
 	}
 
-	for _, c := range cases {
+	for i, c := range cases {
 		actual := NewRotationQuaternion(c.radians, c.axis)
-		assert.Equal(t, c.expected, actual, "The two quaternions should be the same.")
+
+		QuaternionsEqual(t, i, *c.expected, *actual)
 	}
 }
 
-func TestNewPointToPointQaternion(t *testing.T) {
+func TestNewPointToPointQuaternion(t *testing.T) {
 	cases := []struct {
 		v, u     Vector
 		expected *Quaternion
@@ -114,9 +275,10 @@ func TestNewPointToPointQaternion(t *testing.T) {
 		// },
 	}
 
-	for _, c := range cases {
-		actual := NewPointToPointQaternion(c.v, c.u)
-		assert.Equal(t, c.expected, actual, "The two quaternions should be the same.")
+	for i, c := range cases {
+		actual := NewPointToPointQuaternion(c.v, c.u)
+
+		QuaternionsEqual(t, i, *c.expected, *actual)
 	}
 }
 
