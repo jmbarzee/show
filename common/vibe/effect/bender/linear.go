@@ -6,7 +6,7 @@ import (
 	"github.com/jmbarzee/show/common"
 )
 
-// Linear is a Bender which provides a single unchanging bend
+// Linear is a Bender which provides a bend which changes linearly
 type Linear struct {
 	Interval *float64
 }

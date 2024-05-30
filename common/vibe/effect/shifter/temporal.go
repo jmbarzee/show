@@ -7,7 +7,7 @@ import (
 	"github.com/jmbarzee/show/common"
 )
 
-// Temporal is a Shifter which provides shifts that relate to changing time, Directionally
+// Temporal is a Shifter which provides shifts that relate to changing time
 type Temporal struct {
 	Start    *time.Time
 	Interval *time.Duration

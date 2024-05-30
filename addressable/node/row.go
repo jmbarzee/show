@@ -50,7 +50,7 @@ func (r *row) Clean(t time.Time) {
 			continue
 		}
 
-		unEndedEffects = append(unEndedEffects)
+		unEndedEffects = append(unEndedEffects, e)
 	}
 
 	r.effects = unEndedEffects

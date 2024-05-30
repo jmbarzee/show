@@ -136,3 +136,8 @@ func (s *Show) MoveDevice(deviceID uuid.UUID, bearing space.Object) error {
 	}
 	return fmt.Errorf("Device %v not found", deviceID.String())
 }
+
+// Clean removes all stored resources which ended before t
+func (s *Show) Clean(t time.Time) {
+	s.nodeTree.Clean(t)
+}

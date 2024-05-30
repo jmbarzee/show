@@ -47,7 +47,8 @@ func (b Bar) GetNodes() []common.Node {
 func (d Bar) DispatchRender(t time.Time) error {
 	allLights := d.Line.Render(t)
 	allColors := addressable.LightsToColors(allLights)
-	return d.sender.Send(addressable.Instruction{Time: t, Colors: allColors})
+	instruction := addressable.Instruction{Time: t, Colors: allColors}
+	return d.sender.Send(instruction)
 }
 
 // GetType returns the type
