@@ -57,8 +57,26 @@ func (v *Basic) SelectBender() common.Bender {
 	return options[option].Copy()
 }
 
-// SelectShifter returns a Shifter
-func (v *Basic) SelectShifter() common.Shifter {
+// SelectShifterHue returns a Shifter which is aimed to shift hues
+func (v *Basic) SelectShifterHue() common.Shifter {
+	options := v.Shifters
+	length := len(options)
+	option := v.Option(length)
+
+	return options[option].Copy()
+}
+
+// SelectShifterLightness returns a Shifter which is aimed to shift lightness
+func (v *Basic) SelectShifterLightness() common.Shifter {
+	options := v.Shifters
+	length := len(options)
+	option := v.Option(length)
+
+	return options[option].Copy()
+}
+
+// SelectShifterSaturation returns a Shifter which is aimed to shift saturation
+func (v *Basic) SelectShifterSaturation() common.Shifter {
 	options := v.Shifters
 	length := len(options)
 	option := v.Option(length)

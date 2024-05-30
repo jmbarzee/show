@@ -54,7 +54,7 @@ func TestSolidEffect(t *testing.T) {
 			Effect: &Solid{
 				Painter: &painter.Move{
 					ColorStart: color.Blue,
-					Shifter: &shifter.Temporal{
+					HueShifter: &shifter.Temporal{
 						Start:    &aTime,
 						Interval: &aSecond,
 						Bender: &bender.Linear{

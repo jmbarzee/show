@@ -22,7 +22,7 @@ func TestMovePaint(t *testing.T) {
 			Name: "Paint all the colors",
 			Painter: &Move{
 				ColorStart: color.Red,
-				Shifter: &shifter.Temporal{
+				HueShifter: &shifter.Temporal{
 					Start:    &aTime,
 					Interval: &aSecond,
 					Bender: &bender.Linear{
@@ -58,24 +58,24 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 			},
 			&Move{
 				ColorStart: color.Red,
-				Shifter:    &shifter.Temporal{},
+				HueShifter: &shifter.Temporal{},
 			},
 			&Move{
 				ColorStart: color.Red,
-				Shifter: &shifter.Temporal{
+				HueShifter: &shifter.Temporal{
 					Start: &aTime2,
 				},
 			},
 			&Move{
 				ColorStart: color.Red,
-				Shifter: &shifter.Temporal{
+				HueShifter: &shifter.Temporal{
 					Start:    &aTime2,
 					Interval: &aDuration,
 				},
 			},
 			&Move{
 				ColorStart: color.Red,
-				Shifter: &shifter.Temporal{
+				HueShifter: &shifter.Temporal{
 					Start:    &aTime2,
 					Interval: &aDuration,
 					Bender: &bender.Static{
@@ -85,11 +85,11 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 			},
 		},
 		Palette: testutil.TestPalette{
-			Seed:     repeat.NewSeed(aTime1),
-			Bender:   &bender.Static{TheBend: aFloat},
-			Duration: aDuration,
-			Color:    color.Red,
-			Shifter:  &shifter.Temporal{},
+			Seed:       repeat.NewSeed(aTime1),
+			Bender:     &bender.Static{TheBend: aFloat},
+			Duration:   aDuration,
+			Color:      color.Red,
+			ShifterHue: &shifter.Temporal{},
 		},
 	}
 	testutil.RunStabilizerTest(t, c)

@@ -7,10 +7,19 @@ import (
 	"github.com/jmbarzee/show/common"
 )
 
+type ShifterType int
+
+const (
+	Hue ShifterType = iota
+	Lightness
+	Saturation
+)
+
 // Combo is a Shifter which provides shifts that relate to changing time, Directionally
 type Combo struct {
-	A common.Shifter
-	B common.Shifter
+	Type ShifterType
+	A    common.Shifter
+	B    common.Shifter
 }
 
 var _ common.Shifter = (*Combo)(nil)
@@ -26,14 +35,28 @@ func (s *Combo) GetStabilizeFuncs() []func(p common.Palette) {
 	sFuncs := []func(p common.Palette){}
 	if s.A == nil {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			s.A = p.SelectShifter()
+			switch s.Type {
+			case Hue:
+				s.A = p.SelectShifterHue()
+			case Lightness:
+				s.A = p.SelectShifterLightness()
+			case Saturation:
+				s.A = p.SelectShifterSaturation()
+			}
 		})
 	} else {
 		sFuncs = append(sFuncs, s.A.GetStabilizeFuncs()...)
 	}
 	if s.B == nil {
 		sFuncs = append(sFuncs, func(p common.Palette) {
-			s.B = p.SelectShifter()
+			switch s.Type {
+			case Hue:
+				s.B = p.SelectShifterHue()
+			case Lightness:
+				s.B = p.SelectShifterLightness()
+			case Saturation:
+				s.B = p.SelectShifterSaturation()
+			}
 		})
 	} else {
 		sFuncs = append(sFuncs, s.B.GetStabilizeFuncs()...)

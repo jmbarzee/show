@@ -310,11 +310,11 @@ func TestBounceGetStabilizeFuncs(t *testing.T) {
 			},
 		},
 		Palette: testutil.TestPalette{
-			Seed:     repeat.NewSeed(aTime1),
-			Bender:   &bender.Linear{Coefficient: aFloat},
-			Duration: aDuration,
-			Color:    color.Red,
-			Shifter:  &shifter.Temporal{},
+			Seed:       repeat.NewSeed(aTime1),
+			Bender:     &bender.Linear{Coefficient: aFloat},
+			Duration:   aDuration,
+			Color:      color.Red,
+			ShifterHue: &shifter.Temporal{},
 		},
 	}
 	testutil.RunStabilizerTest(t, c)

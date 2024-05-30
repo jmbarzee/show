@@ -31,10 +31,14 @@ type Palette interface {
 	SelectEffect() Effect
 	// SelectPainter returns a Painter
 	SelectPainter() Painter
+	// SelectShifterHue returns a Shifter which is aimed to shift hues
+	SelectShifterHue() Shifter
+	// SelectShifterLightness returns a Shifter which is aimed to shift lightness
+	SelectShifterLightness() Shifter
+	// SelectShifterSaturation returns a Shifter which is aimed to shift saturation
+	SelectShifterSaturation() Shifter
 	// SelectBender returns a Bender
 	SelectBender() Bender
-	// SelectShifter returns a Shifter
-	SelectShifter() Shifter
 
 	// SelectColor returns a Color
 	SelectColor() color.Color

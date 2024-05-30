@@ -61,7 +61,7 @@ func TestFutureEffect(t *testing.T) {
 				TimePerLight: &a24thSecond,
 				Painter: &painter.Move{
 					ColorStart: color.Blue,
-					Shifter: &shifter.Temporal{
+					HueShifter: &shifter.Temporal{
 						Start:    &aTime,
 						Interval: &aSecond,
 						Bender: &bender.Linear{

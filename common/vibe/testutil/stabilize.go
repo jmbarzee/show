@@ -31,12 +31,14 @@ func RunStabilizerTest(t *testing.T, c StabilizerTest) {
 
 type TestPalette struct {
 	*repeat.Seed
-	Bender   common.Bender
-	Color    color.HSL
-	Duration time.Duration
-	Shifter  common.Shifter
-	Painter  common.Painter
-	Effect   common.Effect
+	Bender            common.Bender
+	Color             color.HSL
+	Duration          time.Duration
+	ShifterHue        common.Shifter
+	ShifterLightness  common.Shifter
+	ShifterSaturation common.Shifter
+	Painter           common.Painter
+	Effect            common.Effect
 }
 
 // SelectBender returns a Bender
@@ -56,8 +58,18 @@ func (p TestPalette) SelectDuration() time.Duration {
 }
 
 // SelectShifter returns a Shifter
-func (p TestPalette) SelectShifter() common.Shifter {
-	return p.Shifter
+func (p TestPalette) SelectShifterHue() common.Shifter {
+	return p.ShifterHue
+}
+
+// SelectShifter returns a Shifter
+func (p TestPalette) SelectShifterLightness() common.Shifter {
+	return p.ShifterLightness
+}
+
+// SelectShifter returns a Shifter
+func (p TestPalette) SelectShifterSaturation() common.Shifter {
+	return p.ShifterSaturation
 }
 
 // SelectPainter returns a Painter

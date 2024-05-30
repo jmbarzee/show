@@ -151,7 +151,7 @@ func (p *Bounce) GetStabilizeFuncs() []func(p common.Palette) {
 	}
 	if p.Shifter == nil {
 		sFuncs = append(sFuncs, func(pa common.Palette) {
-			p.Shifter = pa.SelectShifter()
+			p.Shifter = pa.SelectShifterHue()
 		})
 	} else {
 		sFuncs = append(sFuncs, p.Shifter.GetStabilizeFuncs()...)

@@ -279,7 +279,7 @@ func TestBasicMaterialize(t *testing.T) {
 						TimePerLight: &aDuration,
 						Painter: &painter.Move{
 							ColorStart: color.WarmCyan,
-							Shifter: &shifter.Positional{
+							HueShifter: &shifter.Positional{
 								Bender: &bender.Sinusoidal{
 									Offset:    0.5,
 									Period:    1.0,

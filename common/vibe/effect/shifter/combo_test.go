@@ -58,7 +58,7 @@ func TestComboGetStabilizeFuncs(t *testing.T) {
 			},
 		},
 		Palette: testutil.TestPalette{
-			Shifter: &Static{TheShift: aFloat},
+			ShifterHue: &Static{TheShift: aFloat},
 		},
 	}
 	testutil.RunStabilizerTest(t, c)
