@@ -21,7 +21,7 @@ func TestTemporalShift(t *testing.T) {
 				Start:    &aTime,
 				Interval: &aSecond,
 				Bender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 			},
 			Instants: []Instant{
@@ -45,21 +45,21 @@ func TestTemporalShift(t *testing.T) {
 				Start:    &aTime,
 				Interval: &aSecond,
 				Bender: &bender.Linear{
-					Interval: &aFloat,
+					Coefficient: aFloat,
 				},
 			},
 			Instants: []Instant{
 				{
 					Time:          aTime.Add(0 * time.Second),
-					ExpectedShift: 0 / aFloat,
+					ExpectedShift: 0 * aFloat,
 				},
 				{
 					Time:          aTime.Add(1 * time.Second),
-					ExpectedShift: 1 / aFloat,
+					ExpectedShift: 1 * aFloat,
 				},
 				{
 					Time:          aTime.Add(1 * time.Hour),
-					ExpectedShift: 3600 / aFloat,
+					ExpectedShift: 3600 * aFloat,
 				},
 			},
 		},
@@ -85,21 +85,15 @@ func TestTemporalGetStabilizeFuncs(t *testing.T) {
 			&Temporal{
 				Start:    &aTime1,
 				Interval: &aSecond,
-				Bender:   &bender.Static{},
-			},
-			&Temporal{
-				Start:    &aTime1,
-				Interval: &aSecond,
 				Bender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 			},
 		},
 		Palette: testutil.TestPalette{
 			Seed:     repeat.NewSeed(aTime2),
 			Duration: aSecond,
-			Bender:   &bender.Static{},
-			Shift:    aFloat,
+			Bender:   &bender.Static{TheBend: aFloat},
 		},
 	}
 	testutil.RunStabilizerTest(t, c)

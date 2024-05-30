@@ -13,7 +13,7 @@ func TestStaticShift(t *testing.T) {
 		{
 			Name: "One shift per second",
 			Shifter: &Static{
-				TheShift: &aFloat,
+				TheShift: aFloat,
 			},
 			Instants: []Instant{
 				{
@@ -27,15 +27,11 @@ func TestStaticShift(t *testing.T) {
 func TestStaticGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := testutil.StabilizerTest{
-		Stabilizer: &Static{},
-		ExpectedVersions: []common.Stabilizer{
-			&Static{
-				TheShift: &aFloat,
-			},
+		Stabilizer: &Static{
+			TheShift: aFloat,
 		},
-		Palette: testutil.TestPalette{
-			Shift: aFloat,
-		},
+		ExpectedVersions: []common.Stabilizer{},
+		Palette:          testutil.TestPalette{},
 	}
 	testutil.RunStabilizerTest(t, c)
 }

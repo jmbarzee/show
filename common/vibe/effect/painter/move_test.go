@@ -26,7 +26,7 @@ func TestMovePaint(t *testing.T) {
 					Start:    &aTime,
 					Interval: &aSecond,
 					Bender: &bender.Linear{
-						Interval: &aFloat,
+						Coefficient: aFloat,
 					},
 				},
 			},
@@ -78,26 +78,17 @@ func TestMoveGetStabilizeFuncs(t *testing.T) {
 				Shifter: &shifter.Temporal{
 					Start:    &aTime2,
 					Interval: &aDuration,
-					Bender:   &bender.Static{},
-				},
-			},
-			&Move{
-				ColorStart: color.Red,
-				Shifter: &shifter.Temporal{
-					Start:    &aTime2,
-					Interval: &aDuration,
 					Bender: &bender.Static{
-						TheBend: &aFloat,
+						TheBend: aFloat,
 					},
 				},
 			},
 		},
 		Palette: testutil.TestPalette{
 			Seed:     repeat.NewSeed(aTime1),
-			Bender:   &bender.Static{},
+			Bender:   &bender.Static{TheBend: aFloat},
 			Duration: aDuration,
 			Color:    color.Red,
-			Shift:    aFloat,
 			Shifter:  &shifter.Temporal{},
 		},
 	}

@@ -16,13 +16,13 @@ func TestLocationalShift(t *testing.T) {
 			Name: "One shift per second",
 			Shifter: &Locational{
 				XBender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 				YBender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 				ZBender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 			},
 			Instants: []Instant{
@@ -64,36 +64,32 @@ func TestLocationalGetStabilizeFuncs(t *testing.T) {
 		Stabilizer: &Locational{},
 		ExpectedVersions: []common.Stabilizer{
 			&Locational{
-				XBender: &bender.Static{},
-			},
-			&Locational{
 				XBender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 			},
 			&Locational{
 				XBender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 				YBender: &bender.Static{
-					TheBend: &aFloat, // This is a little dirty. The Benders are both/all pointing to the same struct, so Bend is set with the first bender
+					TheBend: aFloat,
 				},
 			},
 			&Locational{
 				XBender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 				YBender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 				ZBender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 			},
 		},
 		Palette: testutil.TestPalette{
-			Bender: &bender.Static{},
-			Shift:  aFloat,
+			Bender: &bender.Static{TheBend: aFloat},
 		},
 	}
 	testutil.RunStabilizerTest(t, c)

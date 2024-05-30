@@ -16,9 +16,9 @@ func TestSinusoidalBend(t *testing.T) {
 		{
 			Name: "Paint Black",
 			Bender: &Sinusoidal{
-				Offset:    &offset,
-				Period:    &period,
-				Amplitude: &amplitude,
+				Offset:    offset,
+				Period:    period,
+				Amplitude: amplitude,
 			},
 			Instants: []Instant{
 				{
@@ -50,24 +50,13 @@ func TestSinusoidalBend(t *testing.T) {
 func TestSinusoidalGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := testutil.StabilizerTest{
-		Stabilizer: &Sinusoidal{},
-		ExpectedVersions: []common.Stabilizer{
-			&Sinusoidal{
-				Offset: &aFloat,
-			},
-			&Sinusoidal{
-				Offset: &aFloat,
-				Period: &aFloat,
-			},
-			&Sinusoidal{
-				Offset:    &aFloat,
-				Period:    &aFloat,
-				Amplitude: &aFloat,
-			},
+		Stabilizer: &Sinusoidal{
+			Offset:    aFloat,
+			Period:    aFloat,
+			Amplitude: aFloat,
 		},
-		Palette: testutil.TestPalette{
-			Shift: aFloat,
-		},
+		ExpectedVersions: []common.Stabilizer{},
+		Palette:          testutil.TestPalette{},
 	}
 	testutil.RunStabilizerTest(t, c)
 }

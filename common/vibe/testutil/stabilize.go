@@ -34,7 +34,6 @@ type TestPalette struct {
 	Bender   common.Bender
 	Color    color.HSL
 	Duration time.Duration
-	Shift    float64
 	Shifter  common.Shifter
 	Painter  common.Painter
 	Effect   common.Effect
@@ -54,12 +53,6 @@ func (p TestPalette) SelectColor() color.Color {
 // Should generally range from 0.1s to 10s
 func (p TestPalette) SelectDuration() time.Duration {
 	return p.Duration
-}
-
-// SelectShift returns a Shift
-// Should generally range from .01 to 1
-func (p TestPalette) SelectShift() float64 {
-	return p.Shift
 }
 
 // SelectShifter returns a Shifter

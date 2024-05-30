@@ -27,9 +27,6 @@ type Basic struct {
 	// Durations provides options to SelectDuration
 	// Should generally range from 0.1s to 10s
 	Durations []time.Duration
-	// Shifts provides options to SelectShift
-	// Should generally range from .01 to 1
-	Shifts []float64
 }
 
 var _ common.Palette = (*Basic)(nil)
@@ -81,15 +78,6 @@ func (v *Basic) SelectColor() color.Color {
 // SelectDuration returns a Duration
 func (v *Basic) SelectDuration() time.Duration {
 	options := v.Durations
-	length := len(options)
-	option := v.Option(length)
-
-	return options[option]
-}
-
-// SelectShift returns a Shift
-func (v *Basic) SelectShift() float64 {
-	options := v.Shifts
 	length := len(options)
 	option := v.Option(length)
 

@@ -17,7 +17,7 @@ func TestPositionalShift(t *testing.T) {
 			Name: "One shift per second",
 			Shifter: &Positional{
 				Bender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 			},
 			Instants: []Instant{
@@ -34,7 +34,7 @@ func TestPositionalShift(t *testing.T) {
 			Name: "One shift per second",
 			Shifter: &Positional{
 				Bender: &bender.Linear{
-					Interval: &aFloat,
+					Coefficient: aFloat,
 				},
 			},
 			Instants: []Instant{
@@ -43,7 +43,7 @@ func TestPositionalShift(t *testing.T) {
 						Position:     aPosition,
 						NumPositions: numPositions,
 					},
-					ExpectedShift: float64(aPosition) / aFloat / float64(numPositions),
+					ExpectedShift: float64(aPosition) * aFloat / float64(numPositions),
 				},
 			},
 		},
@@ -56,17 +56,13 @@ func TestPositionalGetStabilizeFuncs(t *testing.T) {
 		Stabilizer: &Positional{},
 		ExpectedVersions: []common.Stabilizer{
 			&Positional{
-				Bender: &bender.Static{},
-			},
-			&Positional{
 				Bender: &bender.Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 			},
 		},
 		Palette: testutil.TestPalette{
-			Bender: &bender.Static{},
-			Shift:  aFloat,
+			Bender: &bender.Static{TheBend: aFloat},
 		},
 	}
 	testutil.RunStabilizerTest(t, c)

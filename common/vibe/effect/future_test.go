@@ -65,7 +65,7 @@ func TestFutureEffect(t *testing.T) {
 						Start:    &aTime,
 						Interval: &aSecond,
 						Bender: &bender.Linear{
-							Interval: &aFloat,
+							Coefficient: aFloat,
 						},
 					},
 				},

@@ -15,20 +15,20 @@ func TestComboBend(t *testing.T) {
 			Name: "Paint Black",
 			Bender: &Combo{
 				A: &Static{
-					TheBend: &aFloat1,
+					TheBend: aFloat1,
 				},
 				B: &Linear{
-					Interval: &aFloat2,
+					Coefficient: aFloat2,
 				},
 			},
 			Instants: []Instant{
 				{
 					Input:        0.0,
-					ExpectedBend: aFloat1 + 0.0/aFloat2,
+					ExpectedBend: aFloat1 + 0.0*aFloat2,
 				},
 				{
 					Input:        1.0,
-					ExpectedBend: aFloat1 + 1.0/aFloat2,
+					ExpectedBend: aFloat1 + 1.0*aFloat2,
 				},
 			},
 		},
@@ -42,25 +42,21 @@ func TestComboStabilizeFuncs(t *testing.T) {
 		Stabilizer: &Combo{},
 		ExpectedVersions: []common.Stabilizer{
 			&Combo{
-				A: &Static{},
-			},
-			&Combo{
 				A: &Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 			},
 			&Combo{
 				A: &Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 				B: &Static{
-					TheBend: &aFloat,
+					TheBend: aFloat,
 				},
 			},
 		},
 		Palette: testutil.TestPalette{
-			Shift:  aFloat,
-			Bender: &Static{},
+			Bender: &Static{TheBend: aFloat},
 		},
 	}
 	testutil.RunStabilizerTest(t, c)

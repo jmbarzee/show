@@ -15,8 +15,8 @@ func TestExponentialBend(t *testing.T) {
 		{
 			Name: "Paint Black",
 			Bender: &Exponential{
-				Exponent:    &exponent,
-				Coefficient: &coefficient,
+				Exponent:    exponent,
+				Coefficient: coefficient,
 			},
 			Instants: []Instant{
 				{
@@ -48,19 +48,12 @@ func TestExponentialBend(t *testing.T) {
 func TestExponentialGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := testutil.StabilizerTest{
-		Stabilizer: &Exponential{},
-		ExpectedVersions: []common.Stabilizer{
-			&Exponential{
-				Exponent: &aFloat,
-			},
-			&Exponential{
-				Exponent:    &aFloat,
-				Coefficient: &aFloat,
-			},
+		Stabilizer: &Exponential{
+			Exponent:    aFloat,
+			Coefficient: aFloat,
 		},
-		Palette: testutil.TestPalette{
-			Shift: aFloat,
-		},
+		ExpectedVersions: []common.Stabilizer{},
+		Palette:          testutil.TestPalette{},
 	}
 	testutil.RunStabilizerTest(t, c)
 }

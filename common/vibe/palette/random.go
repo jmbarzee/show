@@ -14,38 +14,25 @@ import (
 // NewRandom Provides a Palette which selects from all
 // possible colors, effects, etc.
 func NewRandom(s common.Seeder) *Basic {
-	durations := []time.Duration{
-		time.Second / 10,
-		time.Second / 5,
-		time.Second / 2,
-		time.Second,
-		time.Second * 2,
-		time.Second * 5,
-		time.Second * 10,
-	}
-
-	shifts := []float64{
-		0.005,
-		0.01,
-		0.02,
-		0.05,
-		0.1,
-		0.2,
-		0.5,
-	}
-
 	return &Basic{
 		Seeder: s,
 		Benders: []common.Bender{
 			//&bender.Static{},
-			&bender.Linear{},
-			&bender.Exponential{},
-			&bender.Sinusoidal{},
+			&bender.Linear{Coefficient: 1.1},
+			&bender.Exponential{Exponent: 2.0, Coefficient: 1.1},
+			&bender.Sinusoidal{Offset: 0.5, Period: 1.0, Amplitude: 1.4},
 			&bender.Combo{},
 		},
-		Colors:    color.AllColors,
-		Durations: durations,
-		Shifts:    shifts,
+		Colors: color.AllColors,
+		Durations: []time.Duration{
+			time.Second / 10,
+			time.Second / 5,
+			time.Second / 2,
+			time.Second,
+			time.Second * 2,
+			time.Second * 5,
+			time.Second * 10,
+		},
 		Shifters: []common.Shifter{
 			//&shifter.Static{},
 			&shifter.Positional{},
@@ -60,12 +47,8 @@ func NewRandom(s common.Seeder) *Basic {
 			&painter.Bounce{},
 		},
 		Effects: []common.Effect{
-			&effect.Solid{
-				BasicEffect: effect.BasicEffect{},
-			},
-			&effect.Future{
-				BasicEffect: effect.BasicEffect{},
-			},
+			&effect.Solid{},
+			&effect.Future{},
 		},
 	}
 

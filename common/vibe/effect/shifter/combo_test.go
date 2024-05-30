@@ -17,11 +17,11 @@ func TestComboShift(t *testing.T) {
 			Name: "One shift per second",
 			Shifter: &Combo{
 				A: &Static{
-					TheShift: &aFloat,
+					TheShift: aFloat,
 				},
 				B: &Positional{
 					Bender: &bender.Linear{
-						Interval: &aFloat,
+						Coefficient: aFloat,
 					},
 				},
 			},
@@ -31,7 +31,7 @@ func TestComboShift(t *testing.T) {
 						Position:     aPosition,
 						NumPositions: numPositions,
 					},
-					ExpectedShift: aFloat + float64(aPosition)/aFloat/float64(numPositions),
+					ExpectedShift: aFloat + float64(aPosition)*aFloat/float64(numPositions),
 				},
 			},
 		},
@@ -44,25 +44,21 @@ func TestComboGetStabilizeFuncs(t *testing.T) {
 		Stabilizer: &Combo{},
 		ExpectedVersions: []common.Stabilizer{
 			&Combo{
-				A: &Static{},
-			},
-			&Combo{
 				A: &Static{
-					TheShift: &aFloat,
+					TheShift: aFloat,
 				},
 			},
 			&Combo{
 				A: &Static{
-					TheShift: &aFloat,
+					TheShift: aFloat,
 				},
 				B: &Static{
-					TheShift: &aFloat,
+					TheShift: aFloat,
 				},
 			},
 		},
 		Palette: testutil.TestPalette{
-			Shifter: &Static{},
-			Shift:   aFloat,
+			Shifter: &Static{TheShift: aFloat},
 		},
 	}
 	testutil.RunStabilizerTest(t, c)

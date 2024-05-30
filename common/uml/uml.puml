@@ -201,7 +201,6 @@ namespace common {
         + SelectBender() Bender
         + SelectColor() color.Color
         + SelectDuration() time.Duration
-        + SelectShift() float64
         + SelectShifter() Shifter
         + SelectPainter() Painter
         + SelectEffect() Effect
@@ -477,7 +476,6 @@ namespace palette {
         + SelectBender() common.Bender
         + SelectColor() color.Color
         + SelectDuration() time.Duration
-        + SelectShift() float64
         + SelectShifter() common.Shifter
         + SelectPainter() common.Painter
         + SelectEffect() common.Effect
@@ -667,7 +665,6 @@ namespace testhelper {
         + SelectBender() common.Bender
         + SelectColor() color.Color
         + SelectDuration() time.Duration
-        + SelectShift() float64
         + SelectShifter() common.Shifter
         + SelectPainter() common.Painter
         + SelectEffect() common.Effect

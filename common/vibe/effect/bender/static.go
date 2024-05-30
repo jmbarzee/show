@@ -8,42 +8,29 @@ import (
 
 // Static is a Bender which provides a single unchanging bend
 type Static struct {
-	TheBend *float64
+	TheBend float64
 }
 
 var _ common.Bender = (*Static)(nil)
 
 // Bend returns a value representing some change or bend
-func (b Static) Bend(f float64) float64 {
-	return *b.TheBend
+func (b Static) Bend(_ float64) float64 {
+	return b.TheBend
 }
 
 // GetStabilizeFuncs returns StabilizeFunc for all remaining unstablaized traits
 func (b *Static) GetStabilizeFuncs() []func(p common.Palette) {
-	sFuncs := []func(p common.Palette){}
-	if b.TheBend == nil {
-		sFuncs = append(sFuncs, func(p common.Palette) {
-			shift := p.SelectShift()
-			b.TheBend = &shift
-		})
-	}
-	return sFuncs
+	return []func(p common.Palette){}
 }
 
 // Copy returns a deep copy of the Bender
 func (b Static) Copy() common.Bender {
 	return &Static{
-		TheBend: common.CopyFloat64(b.TheBend),
+		TheBend: b.TheBend,
 	}
 }
 
 // String returns a string representation of the Combo
 func (b Static) String() string {
-	var theBend string
-	if b.TheBend != nil {
-		theBend = fmt.Sprintf("%v", *b.TheBend)
-	} else {
-		theBend = "<nil>"
-	}
-	return fmt.Sprintf("shifter.Static{Bend:%v}", theBend)
+	return fmt.Sprintf("shifter.Static{Bend:%v}", b.TheBend)
 }

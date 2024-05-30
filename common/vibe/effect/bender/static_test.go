@@ -13,7 +13,7 @@ func TestStaticBend(t *testing.T) {
 		{
 			Name: "Paint Black",
 			Bender: &Static{
-				TheBend: &aFloat,
+				TheBend: aFloat,
 			},
 			Instants: []Instant{
 				{
@@ -45,15 +45,11 @@ func TestStaticBend(t *testing.T) {
 func TestStaticGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := testutil.StabilizerTest{
-		Stabilizer: &Static{},
-		ExpectedVersions: []common.Stabilizer{
-			&Static{
-				TheBend: &aFloat,
-			},
+		Stabilizer: &Static{
+			TheBend: aFloat,
 		},
-		Palette: testutil.TestPalette{
-			Shift: aFloat,
-		},
+		ExpectedVersions: []common.Stabilizer{},
+		Palette:          testutil.TestPalette{},
 	}
 	testutil.RunStabilizerTest(t, c)
 }

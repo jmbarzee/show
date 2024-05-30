@@ -13,28 +13,28 @@ func TestLinearBend(t *testing.T) {
 		{
 			Name: "Paint Black",
 			Bender: &Linear{
-				Interval: &aFloat,
+				Coefficient: aFloat,
 			},
 			Instants: []Instant{
 				{
 					Input:        -2.0,
-					ExpectedBend: -2.0 / aFloat,
+					ExpectedBend: -2.0 * aFloat,
 				},
 				{
 					Input:        -1.0,
-					ExpectedBend: -1.0 / aFloat,
+					ExpectedBend: -1.0 * aFloat,
 				},
 				{
 					Input:        0.0,
-					ExpectedBend: 0.0 / aFloat,
+					ExpectedBend: 0.0 * aFloat,
 				},
 				{
 					Input:        1.0,
-					ExpectedBend: 1.0 / aFloat,
+					ExpectedBend: 1.0 * aFloat,
 				},
 				{
 					Input:        2.0,
-					ExpectedBend: 2.0 / aFloat,
+					ExpectedBend: 2.0 * aFloat,
 				},
 			},
 		},
@@ -45,15 +45,11 @@ func TestLinearBend(t *testing.T) {
 func TestLinearGetStabilizeFuncs(t *testing.T) {
 	aFloat := 1.1
 	c := testutil.StabilizerTest{
-		Stabilizer: &Linear{},
-		ExpectedVersions: []common.Stabilizer{
-			&Linear{
-				Interval: &aFloat,
-			},
+		Stabilizer: &Linear{
+			Coefficient: aFloat,
 		},
-		Palette: testutil.TestPalette{
-			Shift: aFloat,
-		},
+		ExpectedVersions: []common.Stabilizer{},
+		Palette:          testutil.TestPalette{},
 	}
 	testutil.RunStabilizerTest(t, c)
 }

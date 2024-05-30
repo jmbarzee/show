@@ -41,9 +41,6 @@ type Palette interface {
 	// SelectDuration returns a Duration
 	// Should generally range from 0.1s to 10s
 	SelectDuration() time.Duration
-	// SelectShift returns a Shift
-	// Should generally range from .01 to 1
-	SelectShift() float64
 }
 
 // Seeder can produce changing seeds for repeatable randomization
