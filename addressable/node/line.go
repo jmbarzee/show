@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/google/uuid"
 	"github.com/jmbarzee/show/addressable"
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/node"
@@ -34,6 +35,15 @@ func NewLine(bearings *space.Object, spacing addressable.Spacing, count int) *Li
 
 	l.lightsCache = l.BuildLights()
 	return l
+}
+
+// GetNodeInfo returns the NodeInfo of this Node or a child node,
+// if the given ID is a match
+func (l Line) GetNodeInfo(nodeID uuid.UUID) common.NodeInfo {
+	if l.GetID() == nodeID {
+		return l
+	}
+	return nil
 }
 
 // SetLocation changes the location of the Line as well as rebuild the lightCache.
@@ -89,5 +99,5 @@ func (Line) GetType() string {
 
 // lineGetNextLEDLocation
 func lineGetNextLEDLocation() *space.Vector {
-	return &space.Vector{1, 0, 0}
+	return &space.Vector{X: 1, Y: 0, Z: 0}
 }

@@ -43,6 +43,11 @@ func (b Bar) GetNodes() []common.Node {
 	return []common.Node{b.Line}
 }
 
+// GetNodeInfos returns all the Nodes which the device holds
+func (b Bar) GetNodeInfos() []common.NodeInfo {
+	return []common.NodeInfo{b.Line}
+}
+
 // Render calls render on the underlying line
 func (d Bar) DispatchRender(t time.Time) error {
 	allLights := d.Line.Render(t)

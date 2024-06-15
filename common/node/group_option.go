@@ -17,7 +17,7 @@ type GroupOption struct {
 	Groups []*Group
 }
 
-var _ common.Node = (*Group)(nil)
+var _ common.Node = (*GroupOption)(nil)
 
 // NewGroupOption creates a new GroupOption with a unique ID
 func NewGroupOption(groups ...*Group) *GroupOption {
@@ -48,9 +48,33 @@ func (n GroupOption) Clean(t time.Time) {
 	}
 }
 
+// GetNodeInfo returns the NodeInfo of this Node or a child node,
+// if the given ID is a match
+func (n GroupOption) GetNodeInfo(nodeID uuid.UUID) common.NodeInfo {
+	if n.id == nodeID {
+		return n
+	}
+	for _, child := range n.Groups {
+		nodeInfo := child.GetNodeInfo(nodeID)
+		if nodeInfo != nil {
+			return nodeInfo
+		}
+	}
+	return nil
+}
+
 // GetChildren returns all groups under the GroupOption
 func (n GroupOption) GetChildren() []common.Node {
 	nodes := make([]common.Node, len(n.Groups))
+	for i, group := range n.Groups {
+		nodes[i] = group
+	}
+	return nodes
+}
+
+// GetChildrenInfo returns all groups under the GroupOption
+func (n GroupOption) GetChildrenInfo() []common.NodeInfo {
+	nodes := make([]common.NodeInfo, len(n.Groups))
 	for i, group := range n.Groups {
 		nodes[i] = group
 	}

@@ -1,6 +1,8 @@
 package addressable
 
 import (
+	"time"
+
 	"github.com/jmbarzee/show/common/color"
 )
 
@@ -8,8 +10,12 @@ type Sender interface {
 	Send(Instruction) error
 }
 
+type Receiver interface {
+	Receive(time.Time) *Instruction
+}
+
 type Exchanger struct {
-	Instructions
+	instructions Instructions
 }
 
 var _ Sender = (*Exchanger)(nil)
@@ -19,8 +25,12 @@ func NewExchanger() Exchanger {
 }
 
 func (e Exchanger) Send(instruct Instruction) error {
-	e.Add(instruct)
+	e.instructions.Add(instruct)
 	return nil
+}
+
+func (e Exchanger) Receive(t time.Time) *Instruction {
+	return e.instructions.Advance(t)
 }
 
 func LightsToColors(lights []*Light) []color.Color {

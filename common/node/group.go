@@ -47,9 +47,33 @@ func (n Group) Clean(t time.Time) {
 	}
 }
 
+// GetNodeInfo returns the NodeInfo of this Node or a child node,
+// if the given ID is a match
+func (n Group) GetNodeInfo(nodeID uuid.UUID) common.NodeInfo {
+	if n.id == nodeID {
+		return n
+	}
+	for _, child := range n.Children {
+		nodeInfo := child.GetNodeInfo(nodeID)
+		if nodeInfo != nil {
+			return nodeInfo
+		}
+	}
+	return nil
+}
+
 // GetChildren returns all groups under the GroupOption
 func (n Group) GetChildren() []common.Node {
 	return n.Children
+}
+
+// GetChildren returns all groups under the GroupOption
+func (n Group) GetChildrenInfo() []common.NodeInfo {
+	nodes := make([]common.NodeInfo, len(n.Children))
+	for i, child := range n.Children {
+		nodes[i] = child
+	}
+	return nodes
 }
 
 // Insert will insert a node underneath a parent node.

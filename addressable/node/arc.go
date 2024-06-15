@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/google/uuid"
 	"github.com/jmbarzee/show/addressable"
 	"github.com/jmbarzee/show/common"
 	"github.com/jmbarzee/show/common/node"
@@ -42,6 +43,15 @@ func NewArc(bearings *space.Object, spacing addressable.Spacing, count int, radi
 	}
 	r.lightsCache = r.BuildLights()
 	return r
+}
+
+// GetNodeInfo returns the NodeInfo of this Node or a child node,
+// if the given ID is a match
+func (a Arc) GetNodeInfo(nodeID uuid.UUID) common.NodeInfo {
+	if a.GetID() == nodeID {
+		return a
+	}
+	return nil
 }
 
 // Note that Object.Move() will not rebuild the cache. Use this wrapper instead
@@ -108,15 +118,15 @@ func (Arc) GetType() string {
 
 // arcGetFirstLEDLocation
 func arcGetFirstLEDLocation() space.Vector {
-	return space.Vector{1, 0, 0}
+	return space.Vector{X: 1, Y: 0, Z: 0}
 }
 
 // arcGetFirstLEDLocation
 func arcGetFirstLEDAspectRotationAxis() space.Vector {
-	return space.Vector{0, 0, 1}
+	return space.Vector{X: 0, Y: 0, Z: 1}
 }
 
 // arcGetFirstLEDLocation
 func arcGetFirstLEDPositionalRotationAxis() space.Vector {
-	return space.Vector{0, 1, 0}
+	return space.Vector{X: 0, Y: 1, Z: 0}
 }

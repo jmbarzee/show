@@ -18,7 +18,7 @@ type Show struct {
 	mu *sync.RWMutex
 	// devices is the list of devices
 	devices map[uuid.UUID]common.Device
-	// nodeTree is the idealogical hieracy of show nodes
+	// nodeTree is the ideological hierarchy of show nodes
 	nodeTree common.Node
 }
 
@@ -96,17 +96,24 @@ func (s *Show) NewNode(parentID uuid.UUID, nodeType string) (uuid.UUID, error) {
 	return childNode.GetID(), s.nodeTree.Insert(parentID, childNode)
 }
 
-// DeleteNode removes a device from the tree underneath the device with parentID
-func (s *Show) DeleteNode(parentID, childID uuid.UUID) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	return s.nodeTree.Delete(parentID, childID)
-}
-
-func (s Show) GetParentNodeID() uuid.UUID {
+// Returns the info of the root node
+func (s Show) GetRootNodeInfo() common.NodeInfo {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	return s.nodeTree.GetID()
+
+	return s.nodeTree
+}
+
+// GetNodeInfo returns the info about a node, if found in the tree
+func (s *Show) GetNodeInfo(nodeID uuid.UUID) (common.NodeInfo, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	nodeInfo := s.nodeTree.GetNodeInfo(nodeID)
+	if nodeInfo == nil {
+		return nil, fmt.Errorf("Node %v not found", nodeID.String())
+	}
+	return nodeInfo, nil
 }
 
 // AddDevice add a device to the list of devices which is used for dispatching renders
@@ -137,7 +144,47 @@ func (s *Show) MoveDevice(deviceID uuid.UUID, bearing space.Object) error {
 	return fmt.Errorf("Device %v not found", deviceID.String())
 }
 
+// GetDeviceInfo returns the info about a device, if found
+func (s *Show) GetDeviceInfo(deviceID uuid.UUID) (common.DeviceInfo, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for _, device := range s.devices {
+		if device.GetID() != deviceID {
+			continue
+		}
+		return device, nil
+	}
+	return nil, fmt.Errorf("Device %v not found", deviceID.String())
+}
+
+// GetDeviceInfoAll returns the info for all devices
+func (s *Show) GetDeviceInfoAll() []common.DeviceInfo {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	devices := make([]common.DeviceInfo, len(s.devices))
+
+	i := 0
+	for _, device := range s.devices {
+		devices[i] = device
+		i++
+	}
+	return devices
+}
+
+// DeleteNode removes a device from the tree underneath the device with parentID
+func (s *Show) DeleteNode(parentID, childID uuid.UUID) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	return s.nodeTree.Delete(parentID, childID)
+}
+
 // Clean removes all stored resources which ended before t
 func (s *Show) Clean(t time.Time) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	s.nodeTree.Clean(t)
 }

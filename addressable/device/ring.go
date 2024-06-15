@@ -35,14 +35,17 @@ func NewRing(id uuid.UUID, sender addressable.Sender, bearings *space.Object, sp
 
 // GetNodes returns all the Nodes which the device holds
 func (d Ring) GetNodes() []common.Node {
-	return []common.Node{
-		d.Arc,
-	}
+	return []common.Node{d.Arc}
+}
+
+// GetNodeInfos returns all the Nodes which the device holds
+func (d Ring) GetNodeInfos() []common.NodeInfo {
+	return []common.NodeInfo{d.Arc}
 }
 
 // DispatchRender calls render on each of the rings and then appends all the lights
 func (d Ring) DispatchRender(t time.Time) error {
-	allLights := append(d.Arc.Render(t))
+	allLights := d.Arc.Render(t)
 	allColors := addressable.LightsToColors(allLights)
 	return d.sender.Send(addressable.Instruction{Time: t, Colors: allColors})
 }

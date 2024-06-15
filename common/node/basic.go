@@ -28,6 +28,11 @@ func (Basic) GetChildren() []common.Node {
 	return nil
 }
 
+// GetChildrenInfo returns any children under the node
+func (Basic) GetChildrenInfo() []common.NodeInfo {
+	return nil
+}
+
 // Insert will insert a node underneath a parent node.
 func (d Basic) Insert(parentID uuid.UUID, newNode common.Node) error {
 	if parentID == d.id {
