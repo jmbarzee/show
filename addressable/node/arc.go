@@ -1,6 +1,8 @@
 package node
 
 import (
+	"encoding/json"
+
 	"github.com/google/uuid"
 	"github.com/jmbarzee/show/addressable"
 	"github.com/jmbarzee/show/common"
@@ -32,10 +34,10 @@ type Arc struct {
 var _ common.Node = (*Arc)(nil)
 
 // NewArc creates a new Arc
-func NewArc(bearings *space.Object, spacing addressable.Spacing, count int, radius float64, aspect addressable.Aspect) *Arc {
+func NewArc(id uuid.UUID, bearings *space.Object, spacing addressable.Spacing, count int, radius float64, aspect addressable.Aspect) *Arc {
 
 	r := &Arc{
-		Basic:  node.NewBasic(),
+		Basic:  node.Basic{ID: id},
 		Object: bearings,
 		row:    NewRow(spacing, count),
 		radius: radius,
@@ -129,4 +131,45 @@ func arcGetFirstLEDAspectRotationAxis() space.Vector {
 // arcGetFirstLEDLocation
 func arcGetFirstLEDPositionalRotationAxis() space.Vector {
 	return space.Vector{X: 0, Y: 1, Z: 0}
+}
+
+type arcJSON struct {
+	ID          uuid.UUID
+	TotalLights int
+	Spacing     addressable.Spacing
+	Location    space.Vector
+	Orientation space.Quaternion
+	Radius      float64
+	Aspect      addressable.Aspect
+}
+
+func (n *Arc) MarshalJSON() ([]byte, error) {
+	temp := &arcJSON{}
+
+	temp.ID = n.ID
+	temp.TotalLights = n.total
+	temp.Spacing = n.spacing
+	temp.Location = n.GetLocation()
+	temp.Orientation = n.GetOrientation()
+	temp.Radius = n.radius
+	temp.Aspect = n.aspect
+
+	return json.Marshal(temp)
+}
+
+func (n *Arc) UnmarshalJSON(data []byte) error {
+	temp := &arcJSON{}
+
+	if err := json.Unmarshal(data, temp); err != nil {
+		return err
+	}
+
+	n.ID = temp.ID
+	n.Object = space.NewObject(temp.Location, temp.Orientation)
+	n.row = NewRow(temp.Spacing, temp.TotalLights)
+
+	n.radius = temp.Radius
+	n.aspect = temp.Aspect
+
+	return nil
 }

@@ -77,11 +77,15 @@ type (
 var _ Orientable = (*space.Object)(nil)
 
 type (
+	Moved interface {
+		// GetBearings returns all spacial properties of the device
+		GetBearings() (location space.Vector, orientation space.Quaternion)
+	}
+
 	// Moveable is the interface to something which is moveable in space
 	// (Should have no symmetry)
 	Moveable interface {
-		// GetBearings returns all spacial properties of the device
-		GetBearings() (location space.Vector, orientation space.Quaternion)
+		Moved
 		// Move changes all properties of the device
 		Move(location space.Vector, orientation space.Quaternion)
 	}

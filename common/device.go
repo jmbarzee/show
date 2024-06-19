@@ -1,6 +1,7 @@
 package common
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -8,7 +9,7 @@ import (
 
 // DeviceInfo is the read-only portion of a Device
 type DeviceInfo interface {
-	Moveable
+	Moved
 
 	// GetType returns the type
 	GetType() string
@@ -22,12 +23,17 @@ type DeviceInfo interface {
 // Device represents a physical device with lights
 // A device is made up of at least a single Node
 type Device interface {
+	Moveable
 	DeviceInfo
 
 	// GetNodes returns all the Nodes which the device holds
 	GetNodes() []Node
 	// DispatchRender produces and dispatches Instructions
 	DispatchRender(time.Time) error
+
+	// JSON for persistance
+	json.Marshaler
+	json.Unmarshaler
 }
 
 // NodeInfo is the read-only portion of a Node
@@ -63,4 +69,8 @@ type Node interface {
 	Insert(parentID uuid.UUID, newNode Node) error
 	// Delete will delete a node underneath a parent node.
 	Delete(parentID, childID uuid.UUID) error
+
+	// JSON for persistance
+	json.Marshaler
+	json.Unmarshaler
 }

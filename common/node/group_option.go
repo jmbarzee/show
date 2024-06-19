@@ -1,6 +1,7 @@
 package node
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -51,7 +52,7 @@ func (n GroupOption) Clean(t time.Time) {
 // GetNodeInfo returns the NodeInfo of this Node or a child node,
 // if the given ID is a match
 func (n GroupOption) GetNodeInfo(nodeID uuid.UUID) common.NodeInfo {
-	if n.id == nodeID {
+	if n.ID == nodeID {
 		return n
 	}
 	for _, child := range n.Groups {
@@ -83,7 +84,7 @@ func (n GroupOption) GetChildrenInfo() []common.NodeInfo {
 
 // Insert will insert a node underneath a parent node.
 func (n *GroupOption) Insert(parentID uuid.UUID, newNode common.Node) error {
-	if parentID == n.id {
+	if parentID == n.ID {
 		group := NewGroup(newNode)
 		n.Groups = append(n.Groups, group)
 		return nil
@@ -93,16 +94,16 @@ func (n *GroupOption) Insert(parentID uuid.UUID, newNode common.Node) error {
 		err := group.Insert(parentID, newNode)
 		if err == nil {
 			return nil
-		} else if errors.Is(err, ParentCantHaveChildrenError) {
+		} else if errors.Is(err, ErrorParentCantHaveChildren) {
 			return err
 		}
 	}
-	return FindParentNodeError
+	return ErrorFindParentNode
 }
 
 // Delete will delete a node underneath a parent node.
 func (n *GroupOption) Delete(parentID, childID uuid.UUID) error {
-	if parentID == n.id {
+	if parentID == n.ID {
 		for i, group := range n.Groups {
 			if group.GetID() == childID {
 				length := len(n.Groups)
@@ -111,20 +112,49 @@ func (n *GroupOption) Delete(parentID, childID uuid.UUID) error {
 				n.Groups = n.Groups[:length-1]
 			}
 		}
-		return FindChildNodeError
+		return ErrorFindChildNode
 	}
 	for _, group := range n.Groups {
 		err := group.Delete(parentID, childID)
 		if err == nil {
 			return nil
-		} else if errors.Is(err, ParentCantHaveChildrenError) {
+		} else if errors.Is(err, ErrorParentCantHaveChildren) {
 			return err
 		}
 	}
-	return FindParentNodeError
+	return ErrorFindParentNode
 }
 
 // GetType returns the type
 func (GroupOption) GetType() string {
 	return GroupOptionType
+}
+
+type groupOptionJSON struct {
+	ID     uuid.UUID
+	Type   string
+	Groups []*Group
+}
+
+func (n *GroupOption) MarshalJSON() ([]byte, error) {
+	temp := &groupOptionJSON{}
+
+	temp.ID = n.ID
+	temp.Type = n.GetType()
+	temp.Groups = n.Groups
+
+	return json.Marshal(temp)
+}
+
+func (n *GroupOption) UnmarshalJSON(data []byte) error {
+	temp := &groupOptionJSON{}
+
+	if err := json.Unmarshal(data, temp); err != nil {
+		return err
+	}
+
+	n.ID = temp.ID
+	n.Groups = temp.Groups
+
+	return nil
 }

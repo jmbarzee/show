@@ -1,6 +1,8 @@
 package device
 
 import (
+	"bytes"
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,8 +22,6 @@ const (
 
 // Bar is a strait bar of lights
 type Bar struct {
-	device.Basic
-
 	*node.Line
 
 	sender addressable.Sender
@@ -29,11 +29,15 @@ type Bar struct {
 
 var _ common.Device = (*Bar)(nil)
 
+// Register Bar as node for persistence through JSON
+func init() {
+	device.Register(func() common.Device { return &Bar{} })
+}
+
 // NewBar creates a new Bar
-func NewBar(id uuid.UUID, sender addressable.Sender, bearings *space.Object, spacing addressable.Spacing, leds int) Bar {
-	return Bar{
-		Basic:  device.NewBasic(id),
-		Line:   node.NewLine(bearings, spacing, leds),
+func NewBar(id uuid.UUID, sender addressable.Sender, bearings *space.Object, spacing addressable.Spacing, leds int) *Bar {
+	return &Bar{
+		Line:   node.NewLine(id, bearings, spacing, leds),
 		sender: sender,
 	}
 }
@@ -59,4 +63,54 @@ func (d Bar) DispatchRender(t time.Time) error {
 // GetType returns the type
 func (Bar) GetType() string {
 	return "npBar"
+}
+
+type barJSON struct {
+	*node.Line
+}
+
+func (d Bar) MarshalJSON() ([]byte, error) {
+	temp := &barJSON{}
+
+	temp.Line = d.Line
+
+	partial, err := json.Marshal(temp)
+	if err != nil {
+		return nil, err
+	}
+
+	wrappedInjection, err := json.Marshal(&struct {
+		Type string
+	}{
+		Type: d.GetType(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	injection := wrappedInjection[1 : len(wrappedInjection)-1]
+
+	full := bytes.Join([][]byte{
+		{'{'},
+		injection,
+		{','},
+		partial[1:],
+	}, []byte{})
+
+	// fmt.Printf("%s\n", full)
+	return full, nil
+}
+
+func (d *Bar) UnmarshalJSON(data []byte) error {
+	temp := &barJSON{}
+
+	temp.Line = &node.Line{}
+
+	err := json.Unmarshal(data, temp)
+	if err != nil {
+		return err
+	}
+
+	d.Line = temp.Line
+	return nil
 }

@@ -1,6 +1,7 @@
 package device
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,8 +14,6 @@ import (
 
 // Ring is a ring of LEDs
 type Ring struct {
-	device.Basic
-
 	*node.Arc
 
 	sender addressable.Sender
@@ -22,11 +21,15 @@ type Ring struct {
 
 var _ common.Device = (*Ring)(nil)
 
+// Register Ring as node for persistence through JSON
+func init() {
+	device.Register(func() common.Device { return Ring{} })
+}
+
 // NewRing returns a new Ring
 func NewRing(id uuid.UUID, sender addressable.Sender, bearings *space.Object, spacing addressable.Spacing, leds int, radius float64, aspect addressable.Aspect) Ring {
 	d := Ring{
-		Basic:  device.NewBasic(id),
-		Arc:    node.NewArc(bearings, spacing, leds, radius, aspect),
+		Arc:    node.NewArc(id, bearings, spacing, leds, radius, aspect),
 		sender: sender,
 	}
 
@@ -53,4 +56,16 @@ func (d Ring) DispatchRender(t time.Time) error {
 // GetType returns the type
 func (d Ring) GetType() string {
 	return "npRing"
+}
+
+func (d Ring) MarshalJSON() ([]byte, error) {
+	temp := &struct {
+		*node.Arc
+		Type string
+	}{}
+
+	temp.Arc = d.Arc
+	temp.Type = d.GetType()
+
+	return json.Marshal(temp)
 }

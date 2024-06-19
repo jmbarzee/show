@@ -1,6 +1,7 @@
 package node
 
 import (
+	"encoding/json"
 	"errors"
 	"time"
 
@@ -50,7 +51,7 @@ func (n Group) Clean(t time.Time) {
 // GetNodeInfo returns the NodeInfo of this Node or a child node,
 // if the given ID is a match
 func (n Group) GetNodeInfo(nodeID uuid.UUID) common.NodeInfo {
-	if n.id == nodeID {
+	if n.ID == nodeID {
 		return n
 	}
 	for _, child := range n.Children {
@@ -78,7 +79,7 @@ func (n Group) GetChildrenInfo() []common.NodeInfo {
 
 // Insert will insert a node underneath a parent node.
 func (n *Group) Insert(parentID uuid.UUID, newNode common.Node) error {
-	if parentID == n.id {
+	if parentID == n.ID {
 		n.Children = append(n.Children, newNode)
 		return nil
 	}
@@ -86,38 +87,75 @@ func (n *Group) Insert(parentID uuid.UUID, newNode common.Node) error {
 		err := child.Insert(parentID, newNode)
 		if err == nil {
 			return nil
-		} else if errors.Is(err, ParentCantHaveChildrenError) {
+		} else if errors.Is(err, ErrorParentCantHaveChildren) {
 			return err
 		}
 	}
-	return FindParentNodeError
+	return ErrorFindParentNode
 }
 
 // Delete will delete a node underneath a parent node.
 func (n *Group) Delete(parentID, childID uuid.UUID) error {
-	if parentID == n.id {
+	if parentID == n.ID {
 		for i, child := range n.Children {
 			if child.GetID() == childID {
 				length := len(n.Children)
 				n.Children[i] = n.Children[length-1] // Copy last element to index i.
 				n.Children[length-1] = nil           // Erase last element (write zero value).
 				n.Children = n.Children[:length-1]
+				return nil
 			}
 		}
-		return FindChildNodeError
+		return ErrorFindChildNode
 	}
+
 	for _, child := range n.Children {
 		err := child.Delete(parentID, childID)
 		if err == nil {
 			return nil
-		} else if errors.Is(err, ParentCantHaveChildrenError) {
+		} else if errors.Is(err, ErrorParentCantHaveChildren) {
 			return err
 		}
 	}
-	return FindParentNodeError
+	return ErrorFindParentNode
 }
 
 // GetType returns the type
 func (Group) GetType() string {
 	return GroupType
+}
+
+func (n *Group) MarshalJSON() ([]byte, error) {
+	temp := &struct {
+		ID       uuid.UUID
+		Type     string
+		Children []common.Node
+	}{}
+
+	temp.ID = n.ID
+	temp.Type = n.GetType()
+	temp.Children = n.Children
+
+	return json.Marshal(temp)
+}
+
+func (n *Group) UnmarshalJSON(data []byte) error {
+	temp := &struct {
+		ID       uuid.UUID
+		Children []json.RawMessage
+	}{}
+
+	err := json.Unmarshal(data, temp)
+	if err != nil {
+		return err
+	}
+	children, err := UnmarshalJSONs(temp.Children)
+	if err != nil {
+		return err
+	}
+
+	n.ID = temp.ID
+	n.Children = children
+
+	return nil
 }

@@ -1,6 +1,7 @@
 package show
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"sync"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jmbarzee/show/common"
+	"github.com/jmbarzee/show/common/device"
 	"github.com/jmbarzee/show/common/node"
 	"github.com/jmbarzee/show/common/space"
 )
@@ -55,6 +57,15 @@ func (s *Show) InsertNode(parentID, childID uuid.UUID) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	childNode, err := s.findNode(childID)
+	if err != nil {
+		return nil
+	}
+
+	return s.nodeTree.Insert(parentID, childNode)
+}
+
+func (s *Show) findNode(childID uuid.UUID) (common.Node, error) {
 	var childNode common.Node
 	for _, device := range s.devices {
 		nodes := device.GetNodes()
@@ -70,10 +81,17 @@ func (s *Show) InsertNode(parentID, childID uuid.UUID) error {
 	}
 
 	if childNode == nil {
-		return errors.New("Could not find specified Child")
+		return nil, errors.New("Could not find specified Child")
 	}
+	return childNode, nil
+}
 
-	return s.nodeTree.Insert(parentID, childNode)
+// DeleteNode removes a device from the tree underneath the device with parentID
+func (s *Show) DeleteNode(parentID, childID uuid.UUID) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	return s.nodeTree.Delete(parentID, childID)
 }
 
 // NewNode creates a new node of the given type
@@ -90,7 +108,7 @@ func (s *Show) NewNode(parentID uuid.UUID, nodeType string) (uuid.UUID, error) {
 	case node.GroupType:
 		childNode = node.NewGroup()
 	default:
-		return uuid.UUID{}, errors.New("Could not find specified nodeType")
+		return uuid.Nil, errors.New("Could not find specified nodeType")
 	}
 
 	return childNode.GetID(), s.nodeTree.Insert(parentID, childNode)
@@ -173,18 +191,112 @@ func (s *Show) GetDeviceInfoAll() []common.DeviceInfo {
 	return devices
 }
 
-// DeleteNode removes a device from the tree underneath the device with parentID
-func (s *Show) DeleteNode(parentID, childID uuid.UUID) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	return s.nodeTree.Delete(parentID, childID)
-}
-
 // Clean removes all stored resources which ended before t
 func (s *Show) Clean(t time.Time) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	s.nodeTree.Clean(t)
+}
+
+type showJSON struct {
+	Devices  []common.Device
+	NodeTree common.Node
+}
+
+func (s *Show) MarshalJSON() ([]byte, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	temp := &struct {
+		Devices  []common.Device
+		NodeTree common.Node
+	}{}
+
+	temp.Devices = make([]common.Device, 0, len(s.devices))
+	for _, d := range s.devices {
+		temp.Devices = append(temp.Devices, d)
+	}
+	temp.NodeTree = s.nodeTree
+
+	return json.Marshal(temp)
+}
+
+func (s *Show) UnmarshalJSON(data []byte) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	temp := &struct {
+		Devices  []json.RawMessage
+		NodeTree json.RawMessage
+	}{}
+
+	err := json.Unmarshal(data, temp)
+	if err != nil {
+		return err
+	}
+
+	devices, err := device.UnmarshalJSONs(temp.Devices)
+	if err != nil {
+		return err
+	}
+
+	s.devices = map[uuid.UUID]common.Device{}
+	for _, d := range devices {
+		s.devices[d.GetID()] = d
+	}
+
+	root, err := node.UnmarshalJSON(temp.NodeTree)
+	if err != nil {
+		return err
+	}
+
+	err = s.unpackGenerics(root)
+	if err != nil {
+		return err
+	}
+
+	s.nodeTree = root
+	return nil
+}
+
+func (s *Show) unpackGenerics(parent common.Node) error {
+	children := parent.GetChildren()
+	childrenIDsToSwap := []uuid.UUID{}
+
+	for _, child := range children {
+		switch child.(type) {
+		case *node.Generic:
+			childID := child.GetID()
+			childrenIDsToSwap = append(childrenIDsToSwap, childID)
+
+		default:
+			err := s.unpackGenerics(child)
+			if err != nil {
+				return err
+			}
+
+		}
+	}
+
+	parentID := parent.GetID()
+	for _, childID := range childrenIDsToSwap {
+		// Swap Generic with real Node from existing device
+		realChild, err := s.findNode(childID)
+		if err != nil {
+			return err
+		}
+
+		err = parent.Delete(parentID, childID)
+		if err != nil {
+			return err
+		}
+
+		err = parent.Insert(parentID, realChild)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

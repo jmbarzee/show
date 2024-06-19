@@ -1,6 +1,8 @@
 package node
 
 import (
+	"encoding/json"
+
 	"github.com/google/uuid"
 	"github.com/jmbarzee/show/addressable"
 	"github.com/jmbarzee/show/common"
@@ -26,9 +28,9 @@ type Line struct {
 var _ common.Node = (*Line)(nil)
 
 // NewLine creates a new Line
-func NewLine(bearings *space.Object, spacing addressable.Spacing, count int) *Line {
+func NewLine(id uuid.UUID, bearings *space.Object, spacing addressable.Spacing, count int) *Line {
 	l := &Line{
-		Basic:  node.NewBasic(),
+		Basic:  node.Basic{ID: id},
 		Object: bearings,
 		row:    NewRow(spacing, count),
 	}
@@ -100,4 +102,39 @@ func (Line) GetType() string {
 // lineGetNextLEDLocation
 func lineGetNextLEDLocation() *space.Vector {
 	return &space.Vector{X: 1, Y: 0, Z: 0}
+}
+
+type lineJSON struct {
+	ID          uuid.UUID
+	TotalLights int
+	Spacing     addressable.Spacing
+	Location    space.Vector
+	Orientation space.Quaternion
+}
+
+func (n *Line) MarshalJSON() ([]byte, error) {
+	temp := &lineJSON{}
+
+	temp.ID = n.ID
+	temp.TotalLights = n.total
+	temp.Spacing = n.spacing
+	temp.Location = n.GetLocation()
+	temp.Orientation = n.GetOrientation()
+
+	return json.Marshal(temp)
+}
+
+func (n *Line) UnmarshalJSON(data []byte) error {
+	temp := &lineJSON{}
+
+	err := json.Unmarshal(data, temp)
+	if err != nil {
+		return err
+	}
+
+	n.ID = temp.ID
+	n.Object = space.NewObject(temp.Location, temp.Orientation)
+	n.row = NewRow(temp.Spacing, temp.TotalLights)
+
+	return nil
 }
