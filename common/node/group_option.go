@@ -3,7 +3,6 @@ package node
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -38,7 +37,6 @@ func (n GroupOption) Allocate(vibe common.Vibe) {
 		return
 	}
 	groupNum := vibe.Option(len(n.Groups))
-	fmt.Println("Using Group:", groupNum)
 	n.Groups[groupNum].Allocate(vibe)
 }
 

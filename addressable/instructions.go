@@ -35,14 +35,15 @@ func NewInstructions() Instructions {
 // Add inserts a Instruction into a Instructions
 func (p Instructions) Add(c Instruction) {
 	p.Lock()
+	defer p.Unlock()
 	heap.Push(p.heap, c)
-	p.Unlock()
 }
 
 // Advance drops all Instructions before t and returns the most recent Instruction
 func (p Instructions) Advance(t time.Time) *Instruction {
 	var change *Instruction
 	p.Lock()
+	defer p.Unlock()
 
 	if p.heap.Len() > 0 {
 		var past Instruction
@@ -62,6 +63,5 @@ func (p Instructions) Advance(t time.Time) *Instruction {
 		}
 	}
 
-	p.Unlock()
 	return change
 }
